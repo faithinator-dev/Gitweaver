@@ -162,12 +162,11 @@ app.post('/api/update-file', async (req, res) => {
 });
 
 // Get file content
-app.get('/api/repos/:owner/:repo/contents/*', async (req, res) => {
+app.get('/api/repos/:owner/:repo/contents/:path(*)', async (req, res) => {
     const octokit = getOctokit(req);
     if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { owner, repo } = req.params;
-    const filePath = req.params[0]; // Captures the rest of the path
+    const { owner, repo, path: filePath } = req.params;
 
     try {
         const { data } = await octokit.rest.repos.getContent({ owner, repo, path: filePath });
