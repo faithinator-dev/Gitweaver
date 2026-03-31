@@ -1,11 +1,18 @@
 {
   "name": "gitweaver",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
+  "description": "A streamlined GitHub repository management tool designed for automated repository creation and remote content management.",
+  "license": "MIT",
+  "author": "GitWeaver Development Team",
   "type": "commonjs",
   "main": "server.js",
+  "keywords": [
+    "github",
+    "automation",
+    "repository-manager",
+    "git",
+    "saas"
+  ],
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"

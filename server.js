@@ -101,20 +101,24 @@ app.post('/api/create-repo', async (req, res) => {
     const octokit = getOctokit(req);
     if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { name } = req.body;
+    const { name, description, private: isPrivate, default_branch, license_template, gitignore_template } = req.body;
     if (!name) return res.status(400).json({ error: 'Repository name is required' });
 
     try {
-        console.log(`Attempting to create repo: ${name}`);
+        console.log(`Processing repository creation: ${name}`);
         const { data } = await octokit.rest.repos.createForAuthenticatedUser({
             name,
-            private: false,
-            auto_init: true // This creates an initial commit with a README
+            description: description || '',
+            private: isPrivate === true,
+            default_branch: default_branch || 'main',
+            auto_init: !!(license_template || gitignore_template), // Auto-init if templates are selected
+            license_template: license_template || undefined,
+            gitignore_template: gitignore_template || undefined
         });
-        console.log(`Repo created: ${data.full_name}`);
+        console.log(`Repository created: ${data.full_name}`);
         res.status(201).json({ message: 'Repository created successfully', repo: data });
     } catch (error) {
-        console.error('Create Repo Detailed Error:', error.message, error.status);
+        console.error('Repository Creation Error:', error.message, error.status);
         const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
         res.status(error.status || 500).json({ error: `GitHub API Error: ${errorMessage}` });
     }
@@ -154,6 +158,131 @@ app.post('/api/update-file', async (req, res) => {
     } catch (error) {
         console.error('Update File Error:', error);
         res.status(500).json({ error: 'Failed to update file' });
+    }
+});
+
+// Get file content
+app.get('/api/repos/:owner/:repo/contents/*', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo } = req.params;
+    const filePath = req.params[0]; // Captures the rest of the path
+
+    try {
+        const { data } = await octokit.rest.repos.getContent({ owner, repo, path: filePath });
+        // GitHub returns content in base64 for files
+        if (data.content) {
+            data.decodedContent = Buffer.from(data.content, 'base64').toString('utf-8');
+        }
+        res.json(data);
+    } catch (error) {
+        console.error('Fetch Content Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to fetch file content' });
+    }
+});
+
+// Get recent commits
+app.get('/api/repos/:owner/:repo/commits', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo } = req.params;
+
+    try {
+        const { data } = await octokit.rest.repos.listCommits({ owner, repo, per_page: 10 });
+        res.json(data);
+    } catch (error) {
+        console.error('Fetch Commits Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to fetch commits' });
+    }
+});
+
+// List branches
+app.get('/api/repos/:owner/:repo/branches', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo } = req.params;
+
+    try {
+        const { data } = await octokit.rest.repos.listBranches({ owner, repo });
+        res.json(data);
+    } catch (error) {
+        console.error('Fetch Branches Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to fetch branches' });
+    }
+});
+
+// Create a branch
+app.post('/api/repos/:owner/:repo/branches', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo } = req.params;
+    const { branch, from_branch } = req.body;
+
+    try {
+        // 1. Get the SHA of the source branch
+        const { data: refData } = await octokit.rest.git.getRef({
+            owner,
+            repo,
+            ref: `heads/${from_branch || 'main'}`
+        });
+
+        // 2. Create the new reference
+        const { data } = await octokit.rest.git.createRef({
+            owner,
+            repo,
+            ref: `refs/heads/${branch}`,
+            sha: refData.object.sha
+        });
+
+        res.status(201).json(data);
+    } catch (error) {
+        console.error('Create Branch Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to create branch' });
+    }
+});
+
+// Delete a branch
+app.delete('/api/repos/:owner/:repo/branches/:branch', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo, branch } = req.params;
+
+    try {
+        await octokit.rest.git.deleteRef({
+            owner,
+            repo,
+            ref: `heads/${branch}`
+        });
+        res.json({ message: `Branch ${branch} deleted successfully` });
+    } catch (error) {
+        console.error('Delete Branch Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to delete branch' });
+    }
+});
+
+// Update repository (e.g., default branch)
+app.patch('/api/repos/:owner/:repo', async (req, res) => {
+    const octokit = getOctokit(req);
+    if (!octokit) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { owner, repo } = req.params;
+    const { default_branch } = req.body;
+
+    try {
+        const { data } = await octokit.rest.repos.update({
+            owner,
+            repo,
+            default_branch
+        });
+        res.json(data);
+    } catch (error) {
+        console.error('Update Repo Error:', error);
+        res.status(error.status || 500).json({ error: 'Failed to update repository' });
     }
 });
 

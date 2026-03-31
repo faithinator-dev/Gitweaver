@@ -17,14 +17,279 @@ body {
     box-shadow: 0 1px 3px rgba(31,35,40,0.12);
 }
 
-header {
+header.hero {
     text-align: center;
     border-bottom: 1px solid #d0d7de;
     margin-bottom: 2rem;
+    padding: 3rem 1rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
+    border-radius: 6px 6px 0 0;
+}
+
+.tagline {
+    font-size: 1.25rem;
+    color: #57606a;
+    max-width: 600px;
+    margin: 0.5rem auto 1.5rem;
+}
+
+#auth-section { margin-top: 1.5rem; }
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.feature-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.feature-item p {
+    font-size: 0.95rem;
+    color: #57606a;
+}
+
+.btn-large {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.section-hint {
+    font-size: 0.9rem;
+    color: #57606a;
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row select, .form-row input {
+    flex: 1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #57606a;
+}
+
+.form-group select {
+    padding: 8px;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-bar input, .filter-bar select {
+    padding: 6px 12px;
+    font-size: 13px;
+    width: auto;
+}
+
+.repo-card .metadata {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 12px;
+    color: #57606a;
+    margin-bottom: 1rem;
+}
+
+.repo-card .lang-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.repo-card .lang-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #57606a;
+}
+
+.repo-card .updated-at {
+    font-style: italic;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 2rem;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 1000px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.close-modal {
+    color: #57606a;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover { color: #24292f; }
+
+.modal-header {
+    border-bottom: 1px solid #d0d7de;
+    margin-bottom: 1.5rem;
     padding-bottom: 1rem;
 }
 
-h1 { margin-bottom: 0.5rem; }
+.modal-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #57606a;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+    color: #24292f;
+    border-bottom-color: #fd8c73;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Commits List */
+.commit-item {
+    padding: 1rem;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    background: #f6f8fa;
+}
+
+.commit-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.commit-author { font-weight: 600; font-size: 14px; }
+.commit-date { font-size: 12px; color: #57606a; }
+.commit-message { font-family: monospace; font-size: 13px; margin: 0; white-space: pre-wrap; }
+
+/* Branch Styles */
+.branch-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.branch-actions input { flex: 1; }
+
+.branch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #d0d7de;
+}
+
+.branch-name { font-family: monospace; font-weight: 600; }
+.branch-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: #dafbe1;
+    color: #1a7f37;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
+/* Editor Styles */
+.editor-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.editor-controls input { flex: 1; }
+
+#modal-file-content {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #0d1117;
+    color: #e6edf3;
+    resize: vertical;
+}
+
+.preview-area {
+    border: 1px solid #d0d7de;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    display: none;
+}
+
+.repo-card { cursor: pointer; transition: transform 0.2s; }
+.repo-card:hover { transform: translateY(-2px); border-color: #0969da; }
+
+h1 { margin-bottom: 0.5rem; font-size: 2.5rem; }
 h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 2rem; }
 
 #auth-section { margin-top: 1rem; }
