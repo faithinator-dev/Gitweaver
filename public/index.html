@@ -18,29 +18,37 @@
         </header>
 
         <main id="dashboard" style="display: none;">
-            <section id="repo-list-section">
-                <h2>Your Repositories</h2>
-                <div id="repo-list">Loading repositories...</div>
-            </section>
+            <div class="dashboard-grid">
+                <!-- Left Column: Actions -->
+                <div class="left-column">
+                    <section id="create-repo-section">
+                        <h2>Create Repository</h2>
+                        <form id="create-repo-form">
+                            <input type="text" id="repo-name" placeholder="Repository Name" required>
+                            <button type="submit" class="btn btn-primary">Create Repo</button>
+                        </form>
+                    </section>
 
-            <section id="create-repo-section">
-                <h2>Create Repository</h2>
-                <form id="create-repo-form">
-                    <input type="text" id="repo-name" placeholder="Repository Name" required>
-                    <button type="submit" class="btn btn-primary">Create Repo</button>
-                </form>
-            </section>
+                    <section id="update-file-section">
+                        <h2>Edit Website Content</h2>
+                        <form id="update-file-form">
+                            <input type="text" id="owner-name" placeholder="GitHub Owner/Username" required>
+                            <input type="text" id="target-repo" placeholder="Target Repository Name" required>
+                            <input type="text" id="file-name" placeholder="Filename (e.g., index.html)" required>
+                            <textarea id="file-content" placeholder="Enter content here..." rows="10" required></textarea>
+                            <button type="submit" class="btn btn-success">Publish to GitHub</button>
+                        </form>
+                    </section>
+                </div>
 
-            <section id="update-file-section">
-                <h2>Edit Website Content</h2>
-                <form id="update-file-form">
-                    <input type="text" id="owner-name" placeholder="GitHub Owner/Username" required>
-                    <input type="text" id="target-repo" placeholder="Target Repository Name" required>
-                    <input type="text" id="file-name" placeholder="Filename (e.g., index.html)" required>
-                    <textarea id="file-content" placeholder="Enter content here..." rows="10" required></textarea>
-                    <button type="submit" class="btn btn-success">Publish to GitHub</button>
-                </form>
-            </section>
+                <!-- Right Column: Repository List -->
+                <div class="right-column">
+                    <section id="repo-list-section">
+                        <h2>Your Repositories</h2>
+                        <div id="repo-list">Loading repositories...</div>
+                    </section>
+                </div>
+            </div>
         </main>
 
         <div id="status-message"></div>

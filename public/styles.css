@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px; /* Increased max-width for side-by-side layout */
     margin: 2rem auto;
     padding: 2rem;
     background: #ffffff;
@@ -28,6 +28,24 @@ h1 { margin-bottom: 0.5rem; }
 h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 2rem; }
 
 #auth-section { margin-top: 1rem; }
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 2.5rem;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Stack on mobile */
+    }
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+}
 
 .btn {
     display: inline-block;
@@ -68,6 +86,7 @@ input, textarea {
 
 .status-success { background-color: #dafbe1; color: #1a7f37; border: 1px solid #4ac26b; }
 .status-error { background-color: #ffebe9; color: #cf222e; border: 1px solid #ff8182; }
+
 #repo-list-section { margin-bottom: 2rem; }
 .repo-list-items {
     display: grid;
@@ -114,4 +133,3 @@ input, textarea {
 .integration-box h4 { margin-top: 0; color: #7d8590; font-size: 12px; text-transform: uppercase; }
 .integration-box pre { margin: 0; white-space: pre-wrap; word-break: break-all; }
 .copy-hint { font-size: 10px; color: #8b949e; margin-top: 5px; }
-
