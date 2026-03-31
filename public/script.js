@@ -49,12 +49,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             repoListContainer.innerHTML = '<ul class="repo-list-items">' + 
-                repos.map(repo => `
-                    <li>
-                        <strong>${repo.name}</strong> (${repo.private ? 'Private' : 'Public'})
-                        <br><small>${repo.description || 'No description'}</small>
+                repos.map(repo => {
+                    const gitUrl = repo.clone_url;
+                    const defaultBranch = repo.default_branch || 'main';
+                    return `
+                    <li class="repo-card">
+                        <div class="repo-header">
+                            <h3>${repo.name} <span class="visibility">${repo.private ? 'Private' : 'Public'}</span></h3>
+                            <a href="${repo.html_url}" target="_blank" class="repo-link">View on GitHub →</a>
+                        </div>
+                        <p><small>${repo.description || 'No description'}</small></p>
+                        
+                        <div class="integration-box">
+                            <h4>Git Integration Commands</h4>
+                            <pre>git remote add origin ${gitUrl}
+git branch -M ${defaultBranch}
+git push -u origin ${defaultBranch}</pre>
+                            <div class="copy-hint">Run these in your local project terminal to connect.</div>
+                        </div>
                     </li>
-                `).join('') + '</ul>';
+                `}).join('') + '</ul>';
         } catch (error) {
             console.error('Load Repos Error:', error);
             repoListContainer.innerHTML = 'Error loading repositories.';
