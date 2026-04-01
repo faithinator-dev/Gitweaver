@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const { Octokit } = require("octokit");
 const path = require("path");
 
@@ -9,6 +10,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
+  : true;
+
+app.use(
+  cors({
+    origin: corsOrigins,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser(process.env.SESSION_SECRET || "secret"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -324,6 +335,27 @@ app.patch("/api/repos/:owner/:repo", async (req, res) => {
     res
       .status(error.status || 500)
       .json({ error: "Failed to update repository" });
+  }
+});
+
+// List repository contents
+app.get("/api/repos/:owner/:repo/contents", async (req, res) => {
+  const octokit = getOctokit(req);
+  if (!octokit) return res.status(401).json({ error: "Unauthorized" });
+
+  const { owner, repo } = req.params;
+  const filePath = req.query.path || "";
+
+  try {
+    const { data } = await octokit.rest.repos.getContent({
+      owner,
+      repo,
+      path: filePath,
+    });
+    res.json(data);
+  } catch (error) {
+    console.error("List Contents Error:", error);
+    res.status(error.status || 500).json({ error: "Failed to list contents" });
   }
 });
 

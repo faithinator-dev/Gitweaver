@@ -211,14 +211,22 @@
                             <div id="branches-list">Loading...</div>
                         </div>
                         <div id="tab-editor" class="modal-tab-content">
-                            <div class="action-bar">
-                                <input type="text" id="editor-file-path" placeholder="Path (e.g. src/index.js)">
-                                <button id="load-file-btn" class="btn btn-secondary">Load</button>
-                            </div>
-                            <textarea id="modal-file-content" rows="15"></textarea>
-                            <div class="commit-action">
-                                <input type="text" id="modal-commit-message" placeholder="Commit message">
-                                <button id="save-file-btn" class="btn btn-success">Commit Changes</button>
+                            <div class="editor-layout">
+                                <div class="file-browser">
+                                    <div class="browser-header">File Explorer</div>
+                                    <div id="file-tree" class="file-tree">Loading files...</div>
+                                </div>
+                                <div class="editor-main">
+                                    <div class="action-bar">
+                                        <input type="text" id="editor-file-path" placeholder="Path (e.g. src/index.js)">
+                                        <button id="load-file-btn" class="btn btn-secondary">Load</button>
+                                    </div>
+                                    <textarea id="modal-file-content" rows="15"></textarea>
+                                    <div class="commit-action">
+                                        <input type="text" id="modal-commit-message" placeholder="Commit message">
+                                        <button id="save-file-btn" class="btn btn-success">Commit Changes</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

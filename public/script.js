@@ -121,6 +121,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         modalTabContents[0].classList.add('active');
     };
 
+    const loadFileTree = async (owner, repo, path = "") => {
+        const treeContainer = document.getElementById('file-tree');
+        treeContainer.innerHTML = 'Loading...';
+        
+        try {
+            const res = await fetch(`/api/repos/${owner}/${repo}/contents?path=${encodeURIComponent(path)}`);
+            const items = await res.json();
+            
+            let html = "";
+            
+            // Add "Back" button if not at root
+            if (path !== "") {
+                const parentPath = path.split('/').slice(0, -1).join('/');
+                html += `<div class="tree-item back-btn" onclick="loadFileTree('${owner}', '${repo}', '${parentPath}')">.. (Back)</div>`;
+            }
+
+            if (Array.isArray(items)) {
+                // Sort: Folders first, then files
+                items.sort((a, b) => {
+                    if (a.type === b.type) return a.name.localeCompare(b.name);
+                    return a.type === 'dir' ? -1 : 1;
+                });
+
+                html += items.map(item => {
+                    if (item.type === 'dir') {
+                        return `<div class="tree-item folder" onclick="loadFileTree('${owner}', '${repo}', '${item.path}')">${item.name}</div>`;
+                    } else {
+                        return `<div class="tree-item file" onclick="loadFileClick('${item.path}')">${item.name}</div>`;
+                    }
+                }).join('');
+            }
+
+            treeContainer.innerHTML = html || '<div class="empty">Empty directory</div>';
+        } catch (e) {
+            treeContainer.innerHTML = 'Error loading files.';
+        }
+    };
+
+    window.loadFileTree = loadFileTree; // Make global for onclick
+
+    window.loadFileClick = (path) => {
+        document.getElementById('editor-file-path').value = path;
+        document.getElementById('load-file-btn').click();
+    };
+
     closeModal.onclick = () => { repoModal.style.display = 'none'; currentRepo = null; };
     window.onclick = (e) => { if (e.target == repoModal) closeModal.onclick(); };
 
@@ -134,6 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             if (tabId === 'commits') loadCommits(currentRepo.owner, currentRepo.name);
             if (tabId === 'branches') loadBranches(currentRepo.owner, currentRepo.name);
+            if (tabId === 'editor') loadFileTree(currentRepo.owner, currentRepo.name);
         };
     });
 
