@@ -62,13 +62,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         repoListContainer.innerHTML = '<div class="loading">Fetching repository inventory...</div>';
         try {
             const response = await fetch('/api/repos');
-            if (!response.ok) throw new Error('Failed to fetch repositories');
             
-            allRepos = await response.json();
+            // Check if response is JSON
+            const contentType = response.headers.get("content-type");
+            let data;
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                throw new Error(`Unexpected response format from server (Status ${response.status}). Details: ${text.substring(0, 100)}`);
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error || `Error ${response.status}: Failed to fetch repositories`);
+            }
+            
+            allRepos = data;
             renderRepositories(allRepos);
             updateLanguageFilter(allRepos);
         } catch (error) {
-            repoListContainer.innerHTML = '<div class="error">Synchronization failed.</div>';
+            console.error('Sync Error:', error);
+            repoListContainer.innerHTML = `<div class="error">Synchronization failed. Reason: ${error.message}</div>`;
         }
     }
 
