@@ -3,110 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitWeaver - GitHub Repository Manager</title>
+    <title>GitWeaver - GitHub Management Console</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="container">
-        <!-- Hero Section -->
-        <header class="hero">
-            <h1>GitWeaver</h1>
-            <p class="tagline">Streamline your GitHub repository management and automate your development lifecycle.</p>
-            <div id="auth-section">
-                <a href="/auth/github" class="btn btn-primary btn-large" id="login-btn">Login with GitHub</a>
-                <a href="/auth/logout" class="btn btn-secondary" id="logout-btn" style="display: none;">Sign Out</a>
-            </div>
-        </header>
+<body class="app-layout">
+    <!-- Sidebar Navigation (Visible when logged in) -->
+    <nav class="sidebar" id="sidebar" style="display: none;">
+        <div class="sidebar-header">
+            <span class="logo-text">GitWeaver</span>
+        </div>
+        <ul class="nav-links">
+            <li><button class="nav-btn active" data-view="dashboard-view">Dashboard</button></li>
+            <li><button class="nav-btn" data-view="create-view">Create Repository</button></li>
+            <li><button class="nav-btn" data-view="editor-view">Quick Editor</button></li>
+            <li><button class="nav-btn" data-view="guide-view">How to Use</button></li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="/auth/logout" class="btn-logout">Sign Out</a>
+        </div>
+    </nav>
 
-        <!-- Product Overview (Visible when not logged in) -->
-        <section id="landing-content">
-            <div class="features-grid">
-                <div class="feature-item">
-                    <h3>Swift Provisioning</h3>
-                    <p>Initialize repositories with custom templates, visibility, and default branches in seconds.</p>
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+        <!-- Landing Page (Logged Out) -->
+        <div id="landing-content" class="container">
+            <header class="hero">
+                <h1>GitWeaver</h1>
+                <p class="tagline">Enterprise-grade GitHub repository orchestration and content management.</p>
+                <div id="auth-section">
+                    <a href="/auth/github" class="btn btn-primary btn-large" id="login-btn">Login with GitHub</a>
                 </div>
-                <div class="feature-item">
-                    <h3>Remote Management</h3>
-                    <p>Modify and publish repository content directly from your browser with our integrated content editor.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Instant Configuration</h3>
-                    <p>Obtain precise Git remote commands immediately after creation to synchronize your local environment.</p>
-                </div>
-            </div>
-        </section>
+            </header>
 
-        <!-- Application Dashboard -->
-        <main id="dashboard" style="display: none;">
-            <div class="dashboard-grid">
-                <!-- Action Column -->
-                <div class="left-column">
-                    <section id="create-repo-section">
-                        <h2>Create New Repository</h2>
-                        <form id="create-repo-form">
-                            <input type="text" id="repo-name" placeholder="Repository Name" required>
-                            <input type="text" id="repo-description" placeholder="Description (Optional)">
-                            
+            <section class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📁</div>
+                    <h3>Automated Provisioning</h3>
+                    <p>Initialize repositories with precise templates and branch configurations in one click.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✍️</div>
+                    <h3>Headless Editor</h3>
+                    <p>Modify repository files directly through the console without local cloning requirements.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Rapid Integration</h3>
+                    <p>Access immediate remote configuration commands for local repository synchronization.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- App Views (Logged In) -->
+        <main id="app-content" style="display: none;">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view active">
+                <div class="view-header">
+                    <h2>Repository Dashboard</h2>
+                    <div class="filter-bar">
+                        <input type="text" id="repo-search" placeholder="Search by repository name...">
+                        <select id="filter-language">
+                            <option value="all">All Languages</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="repo-list" class="repo-grid">Loading repository data...</div>
+            </div>
+
+            <!-- Create Repository View -->
+            <div id="create-view" class="view">
+                <div class="view-header">
+                    <h2>Provision New Repository</h2>
+                    <p class="view-description">Configure and deploy a new repository to your GitHub account.</p>
+                </div>
+                <section class="form-container">
+                    <form id="create-repo-form" class="standard-form">
+                        <div class="form-section">
+                            <label for="repo-name">Repository Identity</label>
+                            <input type="text" id="repo-name" placeholder="Name (e.g., project-alpha)" required>
+                            <input type="text" id="repo-description" placeholder="Short description of the project">
+                        </div>
+                        
+                        <div class="form-section">
+                            <label>Deployment Configuration</label>
                             <div class="form-row">
-                                <select id="repo-visibility">
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                </select>
-                                <input type="text" id="default-branch" placeholder="Default branch (e.g. main)" value="main">
+                                <div class="form-group">
+                                    <label for="repo-visibility">Visibility</label>
+                                    <select id="repo-visibility">
+                                        <option value="public">Public</option>
+                                        <option value="private">Private</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="default-branch">Default Branch</label>
+                                    <input type="text" id="default-branch" value="main">
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label>Templates (Optional)</label>
-                                <div class="form-row">
+                        <div class="form-section">
+                            <label>Initialization Templates</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="gitignore-template">.gitignore</label>
                                     <select id="gitignore-template">
-                                        <option value="">No .gitignore</option>
+                                        <option value="">None</option>
                                         <option value="Node">Node.js</option>
                                         <option value="Python">Python</option>
                                         <option value="Go">Go</option>
-                                        <option value="Rust">Rust</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="license-template">License</label>
                                     <select id="license-template">
-                                        <option value="">No License</option>
+                                        <option value="">None</option>
                                         <option value="mit">MIT</option>
                                         <option value="apache-2.0">Apache 2.0</option>
-                                        <option value="gpl-3.0">GPL v3</option>
                                     </select>
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn btn-primary">Create Repository</button>
-                        </form>
-                    </section>
-
-                    <section id="update-file-section">
-                        <h2>Content Editor</h2>
-                        <p class="section-hint">Update repository files or publish new content to GitHub.</p>
-                        <form id="update-file-form">
-                            <input type="text" id="owner-name" placeholder="GitHub Owner/Username" required>
-                            <input type="text" id="target-repo" placeholder="Target Repository Name" required>
-                            <input type="text" id="file-name" placeholder="Filename (e.g., index.html)" required>
-                            <textarea id="file-content" placeholder="Paste or type content here..." rows="10" required></textarea>
-                            <input type="text" id="commit-message" placeholder="Commit message (Optional)">
-                            <button type="submit" class="btn btn-success">Publish Changes</button>
-                        </form>
-                    </section>
-                </div>
-
-                <!-- Repository List Column -->
-                <div class="right-column">
-                    <section id="repo-list-section">
-                        <div class="section-header">
-                            <h2>Your Active Repositories</h2>
-                            <div class="filter-bar">
-                                <input type="text" id="repo-search" placeholder="Filter by name...">
-                                <select id="filter-language">
-                                    <option value="all">All Languages</option>
-                                </select>
-                            </div>
                         </div>
-                        <div id="repo-list">Loading repository data...</div>
+
+                        <button type="submit" class="btn btn-primary">Deploy Repository</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Quick Editor View -->
+            <div id="editor-view" class="view">
+                <div class="view-header">
+                    <h2>Remote Content Editor</h2>
+                    <p class="view-description">Directly modify repository files without leaving the console.</p>
+                </div>
+                <section class="form-container">
+                    <form id="update-file-form" class="standard-form">
+                        <div class="form-row">
+                            <input type="text" id="owner-name" placeholder="GitHub Owner" required>
+                            <input type="text" id="target-repo" placeholder="Repository Name" required>
+                            <input type="text" id="file-name" placeholder="File Path (e.g., index.html)" required>
+                        </div>
+                        <textarea id="file-content" placeholder="Source code content..." rows="12" required></textarea>
+                        <input type="text" id="commit-message" placeholder="Commit message (Optional)">
+                        <button type="submit" class="btn btn-success">Publish Changes</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Guide View (How to Use) -->
+            <div id="guide-view" class="view">
+                <div class="view-header">
+                    <h2>Usage Documentation</h2>
+                </div>
+                <div class="guide-content">
+                    <section class="guide-step">
+                        <h3>1. Authentication</h3>
+                        <p>Authenticate with GitHub to grant GitWeaver scoped access to your repositories. We use OAuth 2.0 to ensure your credentials remain private and secure.</p>
+                    </section>
+                    <section class="guide-step">
+                        <h3>2. Managing Repositories</h3>
+                        <p>The <strong>Dashboard</strong> provides a high-level overview of your active projects. You can search by name or filter by primary programming language.</p>
+                    </section>
+                    <section class="guide-step">
+                        <h3>3. Creating Projects</h3>
+                        <p>Use the <strong>Create Repository</strong> view to provision new projects. Selecting a template (.gitignore or License) will automatically initialize the repository with an initial commit.</p>
+                    </section>
+                    <section class="guide-step">
+                        <h3>4. Local Project Integration (VS Code)</h3>
+                        <p>To link an existing local project to your new repository:</p>
+                        <ol>
+                            <li>Open your project folder in <strong>VS Code</strong>.</li>
+                            <li>Open the integrated terminal (<code>Ctrl + `</code> or <code>Terminal > New Terminal</code>).</li>
+                            <li>Copy the <strong>Remote Configuration Commands</strong> from the repository card on your dashboard.</li>
+                            <li>Paste and execute them in the terminal. This establishes the link between your local files and your GitHub account.</li>
+                        </ol>
+                    </section>
+                    <section class="guide-step">
+                        <h3>5. Direct Editing & Publishing</h3>
+                        <p>The <strong>Quick Editor</strong> allows for rapid changes to repository content without a local setup. Provide the file path and owner to load or update specific files directly on GitHub.</p>
                     </section>
                 </div>
             </div>
@@ -116,37 +190,37 @@
         <div id="repo-modal" class="modal">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
-                <div id="modal-body">
-                    <div class="modal-header">
-                        <h2 id="modal-repo-name">Repository Name</h2>
-                        <div class="modal-tabs">
-                            <button class="tab-btn active" data-tab="commits">Commits</button>
-                            <button class="tab-btn" data-tab="branches">Branches</button>
-                            <button class="tab-btn" data-tab="editor">Editor</button>
-                        </div>
+                <div class="modal-body-container">
+                    <div class="modal-sidebar">
+                        <h2 id="modal-repo-name">Repository</h2>
+                        <ul class="modal-nav">
+                            <li><button class="modal-tab-btn active" data-tab="commits">Activity</button></li>
+                            <li><button class="modal-tab-btn" data-tab="branches">Branches</button></li>
+                            <li><button class="modal-tab-btn" data-tab="editor">Code Editor</button></li>
+                        </ul>
                     </div>
-                    
-                    <div id="tab-commits" class="tab-content active">
-                        <div id="commits-list">Loading commits...</div>
-                    </div>
-                    
-                    <div id="tab-branches" class="tab-content">
-                        <div class="branch-actions">
-                            <input type="text" id="new-branch-name" placeholder="New branch name">
-                            <button id="create-branch-btn" class="btn btn-secondary">Create Branch</button>
+                    <div class="modal-main">
+                        <div id="tab-commits" class="modal-tab-content active">
+                            <div id="commits-list">Loading...</div>
                         </div>
-                        <div id="branches-list">Loading branches...</div>
-                    </div>
-
-                    <div id="tab-editor" class="tab-content">
-                        <div class="editor-controls">
-                            <input type="text" id="editor-file-path" placeholder="File path (e.g. README.md)">
-                            <button id="load-file-btn" class="btn btn-secondary">Load File</button>
+                        <div id="tab-branches" class="modal-tab-content">
+                            <div class="action-bar">
+                                <input type="text" id="new-branch-name" placeholder="New branch name">
+                                <button id="create-branch-btn" class="btn btn-secondary">Create</button>
+                            </div>
+                            <div id="branches-list">Loading...</div>
                         </div>
-                        <textarea id="modal-file-content" rows="15" placeholder="File content will appear here..."></textarea>
-                        <div class="preview-area" id="editor-preview"></div>
-                        <input type="text" id="modal-commit-message" placeholder="Commit message">
-                        <button id="save-file-btn" class="btn btn-success">Save Changes</button>
+                        <div id="tab-editor" class="modal-tab-content">
+                            <div class="action-bar">
+                                <input type="text" id="editor-file-path" placeholder="Path (e.g. src/index.js)">
+                                <button id="load-file-btn" class="btn btn-secondary">Load</button>
+                            </div>
+                            <textarea id="modal-file-content" rows="15"></textarea>
+                            <div class="commit-action">
+                                <input type="text" id="modal-commit-message" placeholder="Commit message">
+                                <button id="save-file-btn" class="btn btn-success">Commit Changes</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -154,6 +228,7 @@
 
         <div id="status-message"></div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
