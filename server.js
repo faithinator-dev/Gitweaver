@@ -365,6 +365,6 @@ app.get("/auth/logout", (req, res) => {
   res.redirect("/");
 });
 
-app.listen(port, () => {
-  console.log(`GitWeaver server running at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`GitWeaver server running on port ${port}`);
 });

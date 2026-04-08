@@ -153,7 +153,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }).join('');
             }
 
-            treeContainer.innerHTML = html || '<div class="empty">Empty directory</div>';
+            if (!html) {
+                const repoUrl = `https://github.com/${owner}/${repo}.git`;
+                html = `
+                    <div class="empty-repo-commands">
+                        <h3>Create a new repository on the command line</h3>
+                        <code>echo "# ${repo}" >> README.md</code>
+                        <code>git init</code>
+                        <code>git add README.md</code>
+                        <code>git commit -m "first commit"</code>
+                        <code>git branch -M main</code>
+                        <code>git remote add origin ${repoUrl}</code>
+                        <code>git push -u origin main</code>
+
+                        <h3 style="margin-top: 1rem;">Push an existing repository from the command line</h3>
+                        <code>git remote add origin ${repoUrl}</code>
+                        <code>git branch -M main</code>
+                        <code>git push -u origin main</code>
+                    </div>
+                `;
+            }
+
+            treeContainer.innerHTML = html;
         } catch (e) {
             treeContainer.innerHTML = 'Error loading files.';
         }
