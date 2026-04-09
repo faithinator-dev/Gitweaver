@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById(viewId).classList.add('active');
         const activeBtn = Array.from(navBtns).find(b => b.dataset.view === viewId);
         if (activeBtn) activeBtn.classList.add('active');
+
+        if (viewId === 'analytics-view') loadAnalytics();
     };
 
     navBtns.forEach(btn => {
@@ -105,6 +107,102 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             </div>
         `).join('');
+    }
+
+    // --- Analytics Logic ---
+    async function loadAnalytics() {
+        loadHealthScores();
+        loadTrending();
+    }
+
+    function calculateHealth(repo) {
+        const lastUpdate = new Date(repo.updated_at);
+        const daysSinceUpdate = (new Date() - lastUpdate) / (1000 * 60 * 60 * 24);
+        
+        let score = 100;
+        if (daysSinceUpdate > 30) score -= 20;
+        if (daysSinceUpdate > 90) score -= 30;
+        if (repo.open_issues_count > 10) score -= 10;
+        
+        let status = 'good';
+        if (score < 80) status = 'warning';
+        if (score < 50) status = 'danger';
+        
+        return { score, status, daysSinceUpdate: Math.floor(daysSinceUpdate) };
+    }
+
+    function loadHealthScores() {
+        const list = document.getElementById('health-score-list');
+        if (!allRepos.length) {
+            list.innerHTML = 'No repositories found.';
+            return;
+        }
+
+        list.innerHTML = allRepos.slice(0, 10).map(repo => {
+            const health = calculateHealth(repo);
+            return `
+                <div class="analytics-list-item">
+                    <div class="item-info">
+                        <span class="item-name">${repo.name}</span>
+                        <span class="item-meta">Updated ${health.daysSinceUpdate} days ago • ${repo.stargazers_count} stars</span>
+                    </div>
+                    <span class="health-badge health-${health.status}">${health.score}%</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadTrending() {
+        const list = document.getElementById('trending-list');
+        try {
+            const res = await fetch('/api/trending');
+            const trending = await res.json();
+            list.innerHTML = trending.map(repo => `
+                <div class="analytics-list-item">
+                    <div class="item-info">
+                        <a href="${repo.html_url}" target="_blank" class="item-name">${repo.full_name}</a>
+                        <span class="item-meta">${repo.description?.substring(0, 60)}...</span>
+                    </div>
+                    <div class="item-info" style="align-items: flex-end;">
+                        <span class="item-name">★ ${repo.stargazers_count}</span>
+                        <span class="item-meta">${repo.language || 'N/A'}</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) { list.innerHTML = 'Failed to load trending.'; }
+    }
+
+    // CSV Export
+    document.getElementById('export-health-csv').onclick = () => {
+        const headers = ['Repository', 'Stars', 'Forks', 'Health Score', 'Last Updated'];
+        const rows = allRepos.map(repo => {
+            const health = calculateHealth(repo);
+            return [repo.name, repo.stargazers_count, repo.forks_count, `${health.score}%`, repo.updated_at];
+        });
+        downloadCSV('repo_health_report.csv', headers, rows);
+    };
+
+    document.getElementById('export-saas-csv').onclick = () => {
+        const headers = ['Metric', 'Value', 'Trend'];
+        const rows = [
+            ['MRR', '$12,450', '+12%'],
+            ['Churn Rate', '2.4%', '+0.1%'],
+            ['Active Users', '1,240', '+5%']
+        ];
+        downloadCSV('saas_metrics_report.csv', headers, rows);
+    };
+
+    function downloadCSV(filename, headers, rows) {
+        const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     // 5. Modal Management

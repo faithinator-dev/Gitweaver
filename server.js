@@ -359,6 +359,30 @@ app.get("/api/repos/:owner/:repo/contents", async (req, res) => {
   }
 });
 
+// GitHub Trending API (Search by stars)
+app.get("/api/trending", async (req, res) => {
+  const octokit = getOctokit(req);
+  // Optional auth for trending, but better with it
+  const auth = octokit || new Octokit();
+
+  try {
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    const dateStr = lastWeek.toISOString().split("T")[0];
+
+    const { data } = await auth.rest.search.repos({
+      q: `created:>${dateStr}`,
+      sort: "stars",
+      order: "desc",
+      per_page: 10,
+    });
+    res.json(data.items);
+  } catch (error) {
+    console.error("Trending API Error:", error);
+    res.status(500).json({ error: "Failed to fetch trending repos" });
+  }
+});
+
 // Logout
 app.get("/auth/logout", (req, res) => {
   res.clearCookie("github_token");

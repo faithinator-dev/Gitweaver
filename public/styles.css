@@ -530,3 +530,115 @@ input, textarea, select {
     color: var(--text-main);
     word-break: break-all;
 }
+
+/* Analytics Dashboard Styles */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 2rem;
+}
+
+.analytics-card {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+.metrics-row {
+    display: flex;
+    gap: 2rem;
+}
+
+.metric-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0.25rem 0;
+}
+
+.metric-trend {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.metric-trend.positive { color: var(--success-color); }
+.metric-trend.negative { color: #cf222e; }
+
+.analytics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.analytics-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f6f8fa;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary-color);
+}
+
+.item-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.health-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.health-good { background: #dafbe1; color: #1a7f37; }
+.health-warning { background: #fff8c5; color: #9a6700; }
+.health-danger { background: #ffebe9; color: #cf222e; }
+
+.btn-small {
+    padding: 4px 10px;
+    font-size: 12px;
+}

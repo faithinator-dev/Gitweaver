@@ -12,9 +12,11 @@
     <nav class="sidebar" id="sidebar" style="display: none;">
         <div class="sidebar-header">
             <span class="logo-text">GitWeaver</span>
+            <button id="theme-toggle" class="btn-icon" title="Toggle Dark Mode">🌓</button>
         </div>
         <ul class="nav-links">
             <li><button class="nav-btn active" data-view="dashboard-view">Dashboard</button></li>
+            <li><button class="nav-btn" data-view="analytics-view">Analytics</button></li>
             <li><button class="nav-btn" data-view="create-view">Create Repository</button></li>
             <li><button class="nav-btn" data-view="editor-view">Quick Editor</button></li>
             <li><button class="nav-btn" data-view="guide-view">How to Use</button></li>
@@ -69,6 +71,57 @@
                     </div>
                 </div>
                 <div id="repo-list" class="repo-grid">Loading repository data...</div>
+            </div>
+
+            <!-- Analytics View -->
+            <div id="analytics-view" class="view">
+                <div class="view-header">
+                    <h2>Analytics & Insights</h2>
+                    <p class="view-description">Monitor repository health, SaaS metrics, and GitHub trends.</p>
+                </div>
+                
+                <div class="analytics-grid">
+                    <!-- SaaS Metrics Section -->
+                    <section class="analytics-card">
+                        <div class="card-header">
+                            <h3>SaaS Performance</h3>
+                            <button id="export-saas-csv" class="btn btn-secondary btn-small">Export CSV</button>
+                        </div>
+                        <div class="metrics-row">
+                            <div class="metric-item">
+                                <span class="metric-label">MRR</span>
+                                <span class="metric-value">$12,450</span>
+                                <span class="metric-trend positive">+12% vs last month</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Churn Rate</span>
+                                <span class="metric-value">2.4%</span>
+                                <span class="metric-trend negative">+0.1% vs last month</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Repo Health Section -->
+                    <section class="analytics-card">
+                        <div class="card-header">
+                            <h3>Repository Health Scores</h3>
+                            <button id="export-health-csv" class="btn btn-secondary btn-small">Export CSV</button>
+                        </div>
+                        <div id="health-score-list" class="analytics-list">
+                            Loading health data...
+                        </div>
+                    </section>
+
+                    <!-- GitHub Trending Section -->
+                    <section class="analytics-card">
+                        <div class="card-header">
+                            <h3>GitHub Trending</h3>
+                        </div>
+                        <div id="trending-list" class="analytics-list">
+                            Loading trending repositories...
+                        </div>
+                    </section>
+                </div>
             </div>
 
             <!-- Create Repository View -->
