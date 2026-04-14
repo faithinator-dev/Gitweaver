@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // 0. Service Worker, Theme & Shortcuts
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    themeToggle.onclick = () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            switchView('dashboard-view');
+            document.getElementById('repo-search').focus();
+        }
+    });
+
     const sidebar = document.getElementById('sidebar');
     const appContent = document.getElementById('app-content');
     const landingContent = document.getElementById('landing-content');
@@ -366,6 +388,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) { showStatus('Deployment failed.', true); }
     };
+
+    const importCsvForm = document.getElementById('import-csv-form');
+    if (importCsvForm) {
+        importCsvForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('csv-file').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const text = e.target.result;
+                const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+                showStatus(`Importing ${lines.length} repositories...`);
+                let successCount = 0;
+
+                for (const line of lines) {
+                    const [name, description, isPrivate] = line.split(',');
+                    if (!name || name.toLowerCase() === 'name') continue; // skip header
+
+                    try {
+                        await fetch('/api/create-repo', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: name.trim(),
+                                description: description ? description.trim() : '',
+                                private: isPrivate && isPrivate.trim().toLowerCase() === 'true'
+                            })
+                        });
+                        successCount++;
+                    } catch(err) { console.error('Import failed for', name); }
+                }
+                showStatus(`Imported ${successCount} repositories.`);
+                importCsvForm.reset();
+                switchView('dashboard-view');
+                loadRepositories();
+            };
+            reader.readAsText(file);
+        };
+    }
+
 
     // 8. Search & Filters
     const repoSearch = document.getElementById('repo-search');

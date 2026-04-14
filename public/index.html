@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitWeaver - GitHub Management Console</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body class="app-layout">
@@ -64,7 +65,7 @@
                 <div class="view-header">
                     <h2>Repository Dashboard</h2>
                     <div class="filter-bar">
-                        <input type="text" id="repo-search" placeholder="Search by repository name...">
+                        <input type="text" id="repo-search" placeholder="Search repos (Cmd+K/Ctrl+K)...">
                         <select id="filter-language">
                             <option value="all">All Languages</option>
                         </select>
@@ -130,7 +131,8 @@
                     <h2>Provision New Repository</h2>
                     <p class="view-description">Configure and deploy a new repository to your GitHub account.</p>
                 </div>
-                <section class="form-container">
+                
+                <section class="form-container" style="margin-bottom: 2rem;">
                     <form id="create-repo-form" class="standard-form">
                         <div class="form-section">
                             <label for="repo-name">Repository Identity</label>
@@ -181,6 +183,17 @@
                         <button type="submit" class="btn btn-primary">Deploy Repository</button>
                     </form>
                 </section>
+
+                <section class="form-container">
+                    <form id="import-csv-form" class="standard-form">
+                        <div class="form-section">
+                            <label for="csv-file">Import Repositories from CSV</label>
+                            <p class="view-description" style="font-size: 13px; margin-top: 0;">Upload a CSV file with columns: <code>name, description, private(true/false)</code></p>
+                            <input type="file" id="csv-file" accept=".csv" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Bulk Import</button>
+                    </form>
+                </section>
             </div>
 
             <!-- Quick Editor View -->
@@ -196,7 +209,10 @@
                             <input type="text" id="target-repo" placeholder="Repository Name" required>
                             <input type="text" id="file-name" placeholder="File Path (e.g., index.html)" required>
                         </div>
-                        <textarea id="file-content" placeholder="Source code content..." rows="12" required></textarea>
+                        <div class="editor-wrapper">
+                            <div id="autocomplete-suggestion"></div>
+                            <textarea id="file-content" placeholder="Source code content..." rows="12" required></textarea>
+                        </div>
                         <input type="text" id="commit-message" placeholder="Commit message (Optional)">
                         <button type="submit" class="btn btn-success">Publish Changes</button>
                     </form>
@@ -251,6 +267,9 @@
                             <li><button class="modal-tab-btn" data-tab="branches">Branches</button></li>
                             <li><button class="modal-tab-btn" data-tab="editor">Code Editor</button></li>
                         </ul>
+                        <div style="margin-top: 2rem;">
+                            <button id="download-zip-btn" class="btn btn-secondary" style="width: 100%;">📥 Download ZIP</button>
+                        </div>
                     </div>
                     <div class="modal-main">
                         <div id="tab-commits" class="modal-tab-content active">
@@ -274,7 +293,10 @@
                                         <input type="text" id="editor-file-path" placeholder="Path (e.g. src/index.js)">
                                         <button id="load-file-btn" class="btn btn-secondary">Load</button>
                                     </div>
-                                    <textarea id="modal-file-content" rows="15"></textarea>
+                                    <div class="editor-wrapper" style="flex:1;">
+                                        <div id="modal-autocomplete-suggestion"></div>
+                                        <textarea id="modal-file-content" style="height:100%; resize:none; padding:10px; box-sizing:border-box; width:100%;"></textarea>
+                                    </div>
                                     <div class="commit-action">
                                         <input type="text" id="modal-commit-message" placeholder="Commit message">
                                         <button id="save-file-btn" class="btn btn-success">Commit Changes</button>

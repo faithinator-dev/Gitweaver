@@ -359,6 +359,36 @@ app.get("/api/repos/:owner/:repo/contents", async (req, res) => {
   }
 });
 
+// Download ZIP
+app.get("/api/repos/:owner/:repo/zip", async (req, res) => {
+  const octokit = getOctokit(req);
+  if (!octokit) return res.status(401).json({ error: "Unauthorized" });
+
+  const { owner, repo } = req.params;
+
+  try {
+    const response = await octokit.rest.repos.downloadZipballArchive({
+      owner,
+      repo,
+      ref: "main" // Defaulting to main, could be dynamic
+    });
+    res.redirect(response.url);
+  } catch (error) {
+    // If 'main' fails, try 'master'
+    try {
+      const response = await octokit.rest.repos.downloadZipballArchive({
+        owner,
+        repo,
+        ref: "master"
+      });
+      res.redirect(response.url);
+    } catch (e) {
+      console.error("Download ZIP Error:", e);
+      res.status(e.status || 500).json({ error: "Failed to download repository" });
+    }
+  }
+});
+
 // GitHub Trending API (Search by stars)
 app.get("/api/trending", async (req, res) => {
   const octokit = getOctokit(req);
