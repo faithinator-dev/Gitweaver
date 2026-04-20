@@ -112,7 +112,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     allNavBtns.forEach(btn => {
-        btn.onclick = () => switchView(btn.dataset.view);
+        btn.onclick = () => {
+            switchView(btn.dataset.view);
+            if (window.innerWidth <= 768) {
+                closeMobileMenu();
+            }
+        };
     });
 
     // --- 4. Auth & Initial Load ---

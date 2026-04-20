@@ -24,12 +24,16 @@
                 <img src="/favicon.svg" alt="GW" class="workspace-avatar">
                 <span class="logo-text">GitWeaver</span>
             </div>
-            <button id="sidebar-toggle" class="btn-icon" aria-label="Collapse Sidebar">
+            <button id="sidebar-toggle" class="btn-icon desktop-only" aria-label="Collapse Sidebar">
                 <i data-lucide="chevron-left"></i>
+            </button>
+            <button id="mobile-menu-btn" class="btn-icon mobile-only" aria-label="Open Menu">
+                <i data-lucide="menu"></i>
             </button>
         </div>
         
-        <div class="nav-section">
+        <div class="sidebar-content-wrapper">
+            <div class="nav-section">
             <span class="nav-section-title">Overview</span>
             <ul class="nav-links">
                 <li><button class="nav-btn active" data-view="dashboard-view" aria-current="page">

@@ -85,6 +85,18 @@ body {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    z-index: 1001;
+}
+
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+.sidebar-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .workspace-indicator {
@@ -854,137 +866,89 @@ body {
 }
 
 @media (max-width: 768px) {
-    .app-layout {
-        flex-direction: column;
-    }
-
     .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .sidebar.collapsed {
-        width: 100%;
-    }
-
-    .sidebar-header {
         height: 60px;
+        background: var(--bg-secondary);
+        z-index: 1000;
+        overflow: visible;
+        transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    #sidebar-toggle {
-        display: none; /* Hide toggle on mobile, show full menu or use a burger later */
+    .sidebar.mobile-active {
+        height: 100vh;
+        background: var(--bg-primary);
     }
 
-    .nav-section {
-        display: none; /* Hide nav sections on mobile by default, or simplify */
-    }
-    
-    .sidebar-footer {
-        display: none;
-    }
-
-    /* Mobile Bottom Navigation */
-    .mobile-nav {
-        display: flex;
+    .sidebar-content-wrapper {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        background: var(--bg-secondary);
+        height: 70vh;
+        background: var(--bg-primary);
         border-top: 1px solid var(--border-color);
-        z-index: 1000;
-        justify-content: space-around;
-        padding: 0.5rem 0;
-    }
-
-    .mobile-nav .nav-btn {
+        border-radius: 20px 20px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
         flex-direction: column;
-        gap: 4px;
-        font-size: 10px;
-        padding: 4px;
-        align-items: center;
-        width: auto;
+        z-index: 1002;
+        box-shadow: 0 -10px 25px rgba(0,0,0,0.1);
+        padding: 1.5rem;
     }
 
-    .mobile-nav .nav-icon {
-        font-size: 1.25rem;
+    .sidebar.mobile-active .sidebar-content-wrapper {
+        transform: translateY(0);
+    }
+
+    /* Drawer Overlay */
+    .sidebar::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s;
+        z-index: 1001;
+    }
+
+    .sidebar.mobile-active::before {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-only { display: block; }
+    .desktop-only { display: none; }
+
+    .sidebar-header {
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-section {
+        display: block !important;
+        padding: 1rem 0;
+    }
+
+    .sidebar-footer {
+        display: flex !important;
+        margin-top: auto;
+        padding: 1rem 0;
+    }
+
+    .mobile-nav {
+        display: none !important; /* Replacing with slide-up menu */
     }
 
     .main-wrapper {
-        margin-left: 0 !important;
-        padding: 1.5rem;
-        padding-bottom: 5rem; /* Space for bottom nav */
-    }
-
-    .view-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .filter-bar {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    #repo-search {
-        width: 100%;
-    }
-
-    .metrics-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .analytics-row {
-        grid-template-columns: 1fr;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .modal-content {
-        width: 100vw;
-        height: 100vh;
-        max-width: none;
-        border-radius: 0;
-    }
-
-    .modal-body-container {
-        flex-direction: column;
-    }
-
-    .modal-sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .modal-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0.5rem;
-    }
-
-    .modal-tab-btn {
-        white-space: nowrap;
-        width: auto;
-    }
-
-    .ide-layout {
-        flex-direction: column;
-    }
-
-    .ide-sidebar {
-        width: 100%;
-        height: 150px;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        padding-top: 80px;
     }
 }
 
