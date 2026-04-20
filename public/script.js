@@ -93,23 +93,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- 3. View Management ---
     const views = document.querySelectorAll('.view');
-    const navBtns = document.querySelectorAll('.nav-btn');
+    const allNavBtns = document.querySelectorAll('.nav-btn'); // Includes sidebar and mobile-nav
 
     const switchView = (viewId) => {
         views.forEach(v => v.classList.remove('active'));
-        navBtns.forEach(b => b.classList.remove('active'));
+        allNavBtns.forEach(b => b.classList.remove('active'));
         
         const targetView = document.getElementById(viewId);
         if (targetView) targetView.classList.add('active');
         
-        const activeBtn = Array.from(navBtns).find(b => b.dataset.view === viewId);
-        if (activeBtn) activeBtn.classList.add('active');
+        // Update active state on ALL buttons targeting this view
+        document.querySelectorAll(`.nav-btn[data-view="${viewId}"]`).forEach(btn => {
+            btn.classList.add('active');
+        });
 
         if (viewId === 'analytics-view') loadAnalytics();
         initIcons();
     };
 
-    navBtns.forEach(btn => {
+    allNavBtns.forEach(btn => {
         btn.onclick = () => switchView(btn.dataset.view);
     });
 
