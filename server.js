@@ -109,8 +109,31 @@ app.get("/api/repos", async (req, res) => {
     });
     res.json(data);
   } catch (error) {
-    console.error("List Repos Error:", error);
-    res.status(500).json({ error: "Failed to fetch repositories" });
+    const status = error.status || error.response?.status || 500;
+    const githubMessage = error.response?.data?.message || error.message;
+
+    console.error("List Repos Error:", {
+      status,
+      message: githubMessage,
+      documentation_url: error.response?.data?.documentation_url,
+    });
+
+    if (status === 401) {
+      // Token is invalid/expired/revoked, force clean re-auth flow.
+      res.clearCookie("github_token");
+      return res.status(401).json({
+        error: "GitHub session expired or invalid. Please sign in again.",
+      });
+    }
+
+    if (status === 403 && /rate limit/i.test(githubMessage || "")) {
+      return res.status(403).json({
+        error:
+          "GitHub API rate limit reached. Please wait a few minutes and try again.",
+      });
+    }
+
+    res.status(status).json({ error: `Failed to fetch repositories: ${githubMessage}` });
   }
 });
 

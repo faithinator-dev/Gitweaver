@@ -98,6 +98,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error(data.error || 'GitHub session expired. Please sign in again.');
+                }
                 throw new Error(data.error || `Error ${response.status}: Failed to fetch repositories`);
             }
             
@@ -107,6 +110,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Sync Error:', error);
             repoListContainer.innerHTML = `<div class="error">Synchronization failed. Reason: ${error.message}</div>`;
+
+            // If auth is stale, route user through logout/login flow to refresh cookie and token.
+            if (/session expired|sign in again|unauthorized|bad credentials/i.test(error.message)) {
+                setTimeout(() => {
+                    window.location.href = '/auth/logout';
+                }, 1500);
+            }
         }
     }
 
