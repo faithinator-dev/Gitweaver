@@ -4,13 +4,14 @@
   "description": "Enterprise-grade GitHub repository orchestration",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#24292f",
-  "theme_color": "#24292f",
+  "background_color": "#ffffff",
+  "theme_color": "#0070f3",
   "icons": [
     {
-      "src": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
