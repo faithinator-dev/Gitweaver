@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitWeaver - GitHub Management Console</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="app-layout">
     <!-- Sidebar Navigation -->
@@ -20,9 +23,7 @@
                 <span class="logo-text">GitWeaver</span>
             </div>
             <button id="sidebar-toggle" class="btn-icon" aria-label="Collapse Sidebar">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <i data-lucide="chevron-left"></i>
             </button>
         </div>
         
@@ -30,10 +31,10 @@
             <span class="nav-section-title">Overview</span>
             <ul class="nav-links">
                 <li><button class="nav-btn active" data-view="dashboard-view" aria-current="page">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <i data-lucide="layout-dashboard" class="nav-icon"></i> Dashboard
                 </button></li>
                 <li><button class="nav-btn" data-view="analytics-view">
-                    <span class="nav-icon">📈</span> Analytics
+                    <i data-lucide="bar-chart-3" class="nav-icon"></i> Analytics
                 </button></li>
             </ul>
         </div>
@@ -42,10 +43,10 @@
             <span class="nav-section-title">Management</span>
             <ul class="nav-links">
                 <li><button class="nav-btn" data-view="create-view">
-                    <span class="nav-icon">➕</span> Provisioning
+                    <i data-lucide="plus-circle" class="nav-icon"></i> Provisioning
                 </button></li>
                 <li><button class="nav-btn" data-view="editor-view">
-                    <span class="nav-icon">📝</span> Rapid Edit
+                    <i data-lucide="edit-3" class="nav-icon"></i> Rapid Edit
                 </button></li>
             </ul>
         </div>
@@ -54,18 +55,18 @@
             <span class="nav-section-title">Resources</span>
             <ul class="nav-links">
                 <li><button class="nav-btn" data-view="guide-view">
-                    <span class="nav-icon">📖</span> Documentation
+                    <i data-lucide="book-open" class="nav-icon"></i> Documentation
                 </button></li>
             </ul>
         </div>
 
         <div class="sidebar-footer">
             <button id="theme-toggle" class="btn-theme-toggle" title="Toggle Appearance">
-                <span class="theme-icon">🌓</span>
+                <i data-lucide="moon" class="theme-icon"></i>
                 <span class="theme-text">Dark Mode</span>
             </button>
             <a href="/auth/logout" class="btn-logout">
-                <span class="logout-icon">󰈆</span> Sign Out
+                <i data-lucide="log-out" class="logout-icon"></i> Sign Out
             </a>
         </div>
     </nav>
@@ -80,7 +81,7 @@
                 <p class="tagline">Enterprise-grade GitHub repository orchestration and content management.</p>
                 <div id="auth-section">
                     <a href="/auth/github" class="btn btn-primary btn-large" id="login-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <i data-lucide="github" style="width: 20px; height: 20px; margin-right: 8px;"></i>
                         Login with GitHub
                     </a>
                 </div>
@@ -88,17 +89,17 @@
 
             <section class="features-grid">
                 <div class="feature-item">
-                    <div class="feature-icon">📁</div>
+                    <div class="feature-icon"><i data-lucide="folder-plus"></i></div>
                     <h3>Automated Provisioning</h3>
                     <p>Initialize repositories with precise templates and branch configurations in one click.</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">✍️</div>
+                    <div class="feature-icon"><i data-lucide="code-2"></i></div>
                     <h3>Headless Editor</h3>
                     <p>Modify repository files directly through the console without local cloning requirements.</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon"><i data-lucide="zap"></i></div>
                     <h3>Rapid Integration</h3>
                     <p>Access immediate remote configuration commands for local repository synchronization.</p>
                 </div>
@@ -116,7 +117,7 @@
                     </div>
                     <div class="filter-bar">
                         <div class="search-input-wrapper">
-                            <span class="search-icon">🔍</span>
+                            <i data-lucide="search" class="search-icon"></i>
                             <input type="text" id="repo-search" placeholder="Search repos (Cmd+K)...">
                             <kbd class="shortcut-hint">⌘K</kbd>
                         </div>
@@ -146,7 +147,7 @@
                         <div class="metric-card">
                             <div class="metric-header">
                                 <span class="metric-label">Total MRR</span>
-                                <span class="metric-trend positive">↑ 12%</span>
+                                <span class="metric-trend positive"><i data-lucide="trending-up"></i> 12%</span>
                             </div>
                             <div class="metric-value">$12,450</div>
                             <div class="metric-footer">vs $11,116 last month</div>
@@ -154,7 +155,7 @@
                         <div class="metric-card">
                             <div class="metric-header">
                                 <span class="metric-label">Churn Rate</span>
-                                <span class="metric-trend negative">↑ 0.1%</span>
+                                <span class="metric-trend negative"><i data-lucide="trending-up"></i> 0.1%</span>
                             </div>
                             <div class="metric-value">2.4%</div>
                             <div class="metric-footer">Target: &lt; 2.0%</div>
@@ -162,7 +163,7 @@
                         <div class="metric-card">
                             <div class="metric-header">
                                 <span class="metric-label">Active Users</span>
-                                <span class="metric-trend positive">↑ 5.2%</span>
+                                <span class="metric-trend positive"><i data-lucide="trending-up"></i> 5.2%</span>
                             </div>
                             <div class="metric-value">1,240</div>
                             <div class="metric-footer">+65 since Monday</div>
@@ -173,7 +174,9 @@
                         <section class="chart-card">
                             <div class="card-header">
                                 <h3>Repository Health Scores</h3>
-                                <button id="export-health-csv" class="btn btn-ghost btn-small">Export CSV</button>
+                                <button id="export-health-csv" class="btn btn-ghost btn-small">
+                                    <i data-lucide="download"></i> Export CSV
+                                </button>
                             </div>
                             <div id="health-score-list" class="analytics-list">
                                 <!-- Dynamic health list -->
@@ -250,7 +253,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-full">
-                                🚀 Deploy Repository
+                                <i data-lucide="rocket"></i> Deploy Repository
                             </button>
                         </form>
                     </section>
@@ -264,7 +267,7 @@
                             <div class="drop-zone" id="csv-drop-zone">
                                 <input type="file" id="csv-file" accept=".csv" class="file-input" required>
                                 <div class="drop-zone-content">
-                                    <span class="drop-icon">📁</span>
+                                    <i data-lucide="file-up" class="drop-icon"></i>
                                     <p>Drop CSV here or click to browse</p>
                                     <small>name, description, private</small>
                                 </div>
@@ -296,7 +299,9 @@
                         </div>
                         <div class="editor-footer">
                             <input type="text" id="commit-message" placeholder="Commit message (default: Update file)">
-                            <button type="submit" class="btn btn-success">Publish Changes</button>
+                            <button type="submit" class="btn btn-success">
+                                <i data-lucide="send"></i> Publish Changes
+                            </button>
                         </div>
                     </form>
                 </section>
@@ -352,17 +357,19 @@ git push -u origin main</code></pre>
                     <aside class="modal-sidebar">
                         <nav class="modal-nav">
                             <button class="modal-tab-btn active" data-tab="commits">
-                                <span class="btn-icon">🕒</span> Activity
+                                <i data-lucide="history" class="btn-icon"></i> Activity
                             </button>
-                            <button class="modal-tab-btn" data-tab="branches">
-                                <span class="btn-icon">🌿</span> Branches
+                            <button class="modal-tab-btn" data-tab="git-branch">
+                                <i data-lucide="git-branch" class="btn-icon"></i> Branches
                             </button>
                             <button class="modal-tab-btn" data-tab="editor">
-                                <span class="btn-icon">💻</span> Code Editor
+                                <i data-lucide="code" class="btn-icon"></i> Code Editor
                             </button>
                         </nav>
                         <div class="modal-sidebar-actions">
-                            <button id="download-zip-btn" class="btn btn-ghost btn-full">📥 Download ZIP</button>
+                            <button id="download-zip-btn" class="btn btn-ghost btn-full">
+                                <i data-lucide="archive"></i> Download ZIP
+                            </button>
                         </div>
                     </aside>
 

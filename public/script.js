@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     let allRepos = [];
     let currentRepo = null;
 
+    // Initialize Lucide
+    const initIcons = () => {
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    };
+
     // --- 1. Sidebar & Theme Logic ---
     if (localStorage.getItem('sidebar-collapsed') === 'true') {
         sidebar.classList.add('collapsed');
@@ -21,23 +28,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     sidebarToggle.onclick = () => {
         sidebar.classList.toggle('collapsed');
-        localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        localStorage.setItem('sidebar-collapsed', isCollapsed);
+        
+        // Update toggle icon
+        const icon = sidebarToggle.querySelector('i');
+        if (icon) {
+            icon.setAttribute('data-lucide', isCollapsed ? 'chevron-right' : 'chevron-left');
+            initIcons();
+        }
     };
 
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
-        updateThemeText(true);
+        updateThemeUI(true);
     }
 
     themeToggle.onclick = () => {
         const isDark = document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        updateThemeText(isDark);
+        updateThemeUI(isDark);
     };
 
-    function updateThemeText(isDark) {
+    function updateThemeUI(isDark) {
         const text = themeToggle.querySelector('.theme-text');
+        const icon = themeToggle.querySelector('i');
         if (text) text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        if (icon) {
+            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            initIcons();
+        }
     }
 
     // Keyboard Shortcuts
@@ -56,11 +76,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const showToast = (message, type = 'success') => {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
+        const iconName = type === 'success' ? 'check-circle' : 'alert-circle';
         toast.innerHTML = `
-            <span class="toast-icon">${type === 'success' ? '✅' : '❌'}</span>
+            <i data-lucide="${iconName}" class="toast-icon"></i>
             <span class="toast-message">${message}</span>
         `;
         toastContainer.appendChild(toast);
+        initIcons();
+        
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100%)';
@@ -83,6 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (activeBtn) activeBtn.classList.add('active');
 
         if (viewId === 'analytics-view') loadAnalytics();
+        initIcons();
     };
 
     navBtns.forEach(btn => {
@@ -102,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             loadRepositories();
         } else {
             document.body.classList.add('no-sidebar');
+            initIcons();
         }
     } catch (error) {
         console.error('Auth Check Error:', error);
@@ -134,36 +159,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         repoListContainer.innerHTML = repos.map(repo => `
             <div class="repo-card" onclick="openRepoModal('${repo.owner.login}', '${repo.name}', ${repo.private})">
-                <div class="repo-card-header">
-                    <h3>${repo.name}</h3>
-                    <span class="badge">${repo.private ? 'Private' : 'Public'}</span>
+                <div class="repo-card-header" style="display:flex; justify-content:space-between; align-items:start;">
+                    <h3 style="margin:0">${repo.name}</h3>
+                    <span class="badge">${repo.private ? '<i data-lucide="lock" style="width:10px;height:10px"></i> Private' : '<i data-lucide="globe" style="width:10px;height:10px"></i> Public'}</span>
                 </div>
-                <div class="metadata">
-                    ${repo.language ? `<span class="badge" style="background: var(--bg-tertiary)">${repo.language}</span>` : ''}
-                    <span class="stars">⭐ ${repo.stargazers_count}</span>
+                <div class="metadata" style="margin-top:0.5rem; display:flex; gap:0.75rem; align-items:center; font-size:12px; color:var(--text-secondary)">
+                    ${repo.language ? `<span><i data-lucide="code" style="width:12px;height:12px"></i> ${repo.language}</span>` : ''}
+                    <span><i data-lucide="star" style="width:12px;height:12px"></i> ${repo.stargazers_count}</span>
                 </div>
-                <p class="description">${repo.description || 'No description provided.'}</p>
-                <div class="repo-footer">
-                    <small>Updated ${timeAgo(new Date(repo.updated_at))}</small>
+                <p class="description" style="margin:1rem 0; font-size:13px; color:var(--text-secondary); height:2.6rem; overflow:hidden;">${repo.description || 'No description provided.'}</p>
+                <div class="repo-footer" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:0.75rem;">
+                    <small style="color:var(--text-tertiary)">Updated ${timeAgo(new Date(repo.updated_at))}</small>
                     <div class="sparkline-placeholder"></div>
                 </div>
             </div>
         `).join('');
+        initIcons();
     }
 
     function timeAgo(date) {
         const seconds = Math.floor((new Date() - date) / 1000);
         let interval = seconds / 31536000;
-        if (interval > 1) return Math.floor(interval) + " years ago";
+        if (interval > 1) return Math.floor(interval) + "y";
         interval = seconds / 2592000;
-        if (interval > 1) return Math.floor(interval) + " months ago";
+        if (interval > 1) return Math.floor(interval) + "mo";
         interval = seconds / 86400;
-        if (interval > 1) return Math.floor(interval) + " days ago";
+        if (interval > 1) return Math.floor(interval) + "d";
         interval = seconds / 3600;
-        if (interval > 1) return Math.floor(interval) + " hours ago";
+        if (interval > 1) return Math.floor(interval) + "h";
         interval = seconds / 60;
-        if (interval > 1) return Math.floor(interval) + " minutes ago";
-        return Math.floor(seconds) + " seconds ago";
+        if (interval > 1) return Math.floor(interval) + "m";
+        return Math.floor(seconds) + "s";
     }
 
     // --- 6. Analytics Logic ---
@@ -174,10 +200,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Health Scores
         if (allRepos.length > 0) {
             healthList.innerHTML = allRepos.slice(0, 5).map(repo => {
-                const score = Math.floor(Math.random() * 20) + 80; // Simulated health score
+                const score = Math.floor(Math.random() * 20) + 80;
                 return `
                     <div class="analytics-list-item" style="display:flex; justify-content:space-between; padding:0.75rem; border-bottom:1px solid var(--border-color)">
-                        <span>${repo.name}</span>
+                        <span><i data-lucide="shield-check" style="width:14px;height:14px;color:var(--success)"></i> ${repo.name}</span>
                         <span class="badge" style="color:var(--success)">${score}% Healthy</span>
                     </div>
                 `;
@@ -190,13 +216,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const trending = await res.json();
             trendingList.innerHTML = trending.slice(0, 5).map(repo => `
                 <div class="analytics-list-item" style="display:flex; justify-content:space-between; padding:0.75rem; border-bottom:1px solid var(--border-color)">
-                    <span>${repo.name}</span>
+                    <span><i data-lucide="flame" style="width:14px;height:14px;color:var(--warning)"></i> ${repo.name}</span>
                     <span>★ ${repo.stargazers_count}</span>
                 </div>
             `).join('');
         } catch (e) {
             trendingList.innerHTML = 'Trending data unavailable.';
         }
+        initIcons();
     }
 
     // --- 7. Modal & IDE Logic ---
@@ -212,6 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
         document.querySelector('[data-tab="commits"]').classList.add('active');
         document.getElementById('tab-commits').classList.add('active');
+        initIcons();
     };
 
     function closeRepoModal() {
@@ -233,6 +261,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (tabId === 'commits') loadCommits(currentRepo.owner, currentRepo.name);
             if (tabId === 'branches') loadBranches(currentRepo.owner, currentRepo.name);
             if (tabId === 'editor') loadFileTree(currentRepo.owner, currentRepo.name);
+            initIcons();
         };
     });
 
@@ -248,7 +277,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             let html = "";
             if (path !== "") {
                 const parentPath = path.split('/').slice(0, -1).join('/');
-                html += `<div class="tree-item folder" onclick="loadFileTree('${owner}', '${repo}', '${parentPath}')">..</div>`;
+                html += `<div class="tree-item folder" onclick="loadFileTree('${owner}', '${repo}', '${parentPath}')"><i data-lucide="corner-left-up" style="width:14px;height:14px"></i> ..</div>`;
             }
 
             if (Array.isArray(items)) {
@@ -256,11 +285,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 html += items.map(item => `
                     <div class="tree-item ${item.type === 'dir' ? 'folder' : 'file'}" 
                          onclick="${item.type === 'dir' ? `loadFileTree('${owner}', '${repo}', '${item.path}')` : `openFile('${item.path}')`}">
-                        ${item.type === 'dir' ? '📁' : '📄'} ${item.name}
+                        <i data-lucide="${item.type === 'dir' ? 'folder' : 'file-text'}" style="width:14px;height:14px"></i> ${item.name}
                     </div>
                 `).join('');
             }
             treeContainer.innerHTML = html;
+            initIcons();
         } catch (e) {
             treeContainer.innerHTML = 'Error.';
         }
@@ -282,6 +312,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Line Numbers Logic
     function updateLineNumbers(textarea, targetSelector) {
         const lineNumbers = document.querySelector(targetSelector);
+        if (!lineNumbers) return;
         const lines = textarea.value.split('\n').length;
         lineNumbers.innerHTML = Array(lines).fill(0).map((_, i) => i + 1).join('<br>');
     }
@@ -289,13 +320,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalEditor = document.getElementById('modal-file-content');
     modalEditor.oninput = () => updateLineNumbers(modalEditor, '.line-numbers-modal');
     modalEditor.onscroll = () => {
-        document.querySelector('.line-numbers-modal').scrollTop = modalEditor.scrollTop;
+        const lineNumbers = document.querySelector('.line-numbers-modal');
+        if (lineNumbers) lineNumbers.scrollTop = modalEditor.scrollTop;
     };
-
-    const mainEditor = document.getElementById('file-content');
-    if (mainEditor) {
-        mainEditor.oninput = () => updateLineNumbers(mainEditor, '.line-numbers');
-    }
 
     // --- 8. API Interactions ---
     async function loadCommits(owner, repo) {
@@ -307,9 +334,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             list.innerHTML = commits.slice(0, 10).map(c => `
                 <div class="commit-item" style="padding:1rem; border-bottom:1px solid var(--border-color)">
                     <div style="font-weight:600; font-size:0.875rem;">${c.commit.message}</div>
-                    <div style="color:var(--text-tertiary); font-size:0.75rem;">${c.commit.author.name} • ${timeAgo(new Date(c.commit.author.date))}</div>
+                    <div style="color:var(--text-tertiary); font-size:0.75rem; margin-top:0.25rem;">
+                        <i data-lucide="user" style="width:10px;height:10px"></i> ${c.commit.author.name} • <i data-lucide="calendar" style="width:10px;height:10px"></i> ${timeAgo(new Date(c.commit.author.date))}
+                    </div>
                 </div>
             `).join('');
+            initIcons();
         } catch (e) { list.innerHTML = 'Error.'; }
     }
 
@@ -321,10 +351,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const branches = await res.json();
             list.innerHTML = branches.map(b => `
                 <div class="branch-item" style="display:flex; justify-content:space-between; padding:0.75rem; border-bottom:1px solid var(--border-color)">
-                    <code>${b.name}</code>
+                    <span><i data-lucide="git-branch" style="width:14px;height:14px"></i> <code>${b.name}</code></span>
                     <button class="btn btn-ghost btn-xs" style="color:var(--danger)">Delete</button>
                 </div>
             `).join('');
+            initIcons();
         } catch (e) { list.innerHTML = 'Error.'; }
     }
 
@@ -404,4 +435,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         filterLanguage.innerHTML = '<option value="all">All Languages</option>' + 
             languages.map(l => `<option value="${l}">${l}</option>`).join('');
     }
+
+    // Initial icon call for static content
+    initIcons();
 });
