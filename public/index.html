@@ -6,36 +6,83 @@
     <title>GitWeaver - GitHub Management Console</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body class="app-layout">
-    <!-- Sidebar Navigation (Visible when logged in) -->
-    <nav class="sidebar" id="sidebar" style="display: none;">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar" aria-label="Main Navigation" style="display: none;">
         <div class="sidebar-header">
-            <span class="logo-text">GitWeaver</span>
-            <button id="theme-toggle" class="btn-icon" title="Toggle Dark Mode">🌓</button>
+            <div class="workspace-indicator">
+                <div class="workspace-avatar">GW</div>
+                <span class="logo-text">GitWeaver</span>
+            </div>
+            <button id="sidebar-toggle" class="btn-icon" aria-label="Collapse Sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
-        <ul class="nav-links">
-            <li><button class="nav-btn active" data-view="dashboard-view">Dashboard</button></li>
-            <li><button class="nav-btn" data-view="analytics-view">Analytics</button></li>
-            <li><button class="nav-btn" data-view="create-view">Create Repository</button></li>
-            <li><button class="nav-btn" data-view="editor-view">Quick Editor</button></li>
-            <li><button class="nav-btn" data-view="guide-view">How to Use</button></li>
-        </ul>
+        
+        <div class="nav-section">
+            <span class="nav-section-title">Overview</span>
+            <ul class="nav-links">
+                <li><button class="nav-btn active" data-view="dashboard-view" aria-current="page">
+                    <span class="nav-icon">📊</span> Dashboard
+                </button></li>
+                <li><button class="nav-btn" data-view="analytics-view">
+                    <span class="nav-icon">📈</span> Analytics
+                </button></li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Management</span>
+            <ul class="nav-links">
+                <li><button class="nav-btn" data-view="create-view">
+                    <span class="nav-icon">➕</span> Provisioning
+                </button></li>
+                <li><button class="nav-btn" data-view="editor-view">
+                    <span class="nav-icon">📝</span> Rapid Edit
+                </button></li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Resources</span>
+            <ul class="nav-links">
+                <li><button class="nav-btn" data-view="guide-view">
+                    <span class="nav-icon">📖</span> Documentation
+                </button></li>
+            </ul>
+        </div>
+
         <div class="sidebar-footer">
-            <a href="/auth/logout" class="btn-logout">Sign Out</a>
+            <button id="theme-toggle" class="btn-theme-toggle" title="Toggle Appearance">
+                <span class="theme-icon">🌓</span>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+            <a href="/auth/logout" class="btn-logout">
+                <span class="logout-icon">󰈆</span> Sign Out
+            </a>
         </div>
     </nav>
 
     <!-- Main Content Area -->
     <div class="main-wrapper">
-        <!-- Landing Page (Logged Out) -->
+        <!-- Landing Page -->
         <div id="landing-content" class="container">
             <header class="hero">
+                <div class="hero-badge">v2.0 Beta</div>
                 <h1>GitWeaver</h1>
                 <p class="tagline">Enterprise-grade GitHub repository orchestration and content management.</p>
                 <div id="auth-section">
-                    <a href="/auth/github" class="btn btn-primary btn-large" id="login-btn">Login with GitHub</a>
+                    <a href="/auth/github" class="btn btn-primary btn-large" id="login-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        Login with GitHub
+                    </a>
                 </div>
             </header>
 
@@ -58,90 +105,116 @@
             </section>
         </div>
 
-        <!-- App Views (Logged In) -->
+        <!-- App Views -->
         <main id="app-content" style="display: none;">
             <!-- Dashboard View -->
             <div id="dashboard-view" class="view active">
                 <div class="view-header">
-                    <h2>Repository Dashboard</h2>
+                    <div class="header-main">
+                        <h2>Repository Dashboard</h2>
+                        <p class="view-description">Manage your GitHub inventory and monitor activity.</p>
+                    </div>
                     <div class="filter-bar">
-                        <input type="text" id="repo-search" placeholder="Search repos (Cmd+K/Ctrl+K)...">
-                        <select id="filter-language">
+                        <div class="search-input-wrapper">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="repo-search" placeholder="Search repos (Cmd+K)...">
+                            <kbd class="shortcut-hint">⌘K</kbd>
+                        </div>
+                        <select id="filter-language" class="styled-select">
                             <option value="all">All Languages</option>
                         </select>
                     </div>
                 </div>
-                <div id="repo-list" class="repo-grid">Loading repository data...</div>
+                <div id="repo-list" class="repo-grid">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
             </div>
 
             <!-- Analytics View -->
             <div id="analytics-view" class="view">
                 <div class="view-header">
-                    <h2>Analytics & Insights</h2>
-                    <p class="view-description">Monitor repository health, SaaS metrics, and GitHub trends.</p>
+                    <div class="header-main">
+                        <h2>Analytics & Insights</h2>
+                        <p class="view-description">Monitor health scores and repository performance metrics.</p>
+                    </div>
                 </div>
                 
-                <div class="analytics-grid">
-                    <!-- SaaS Metrics Section -->
-                    <section class="analytics-card">
-                        <div class="card-header">
-                            <h3>SaaS Performance</h3>
-                            <button id="export-saas-csv" class="btn btn-secondary btn-small">Export CSV</button>
-                        </div>
-                        <div class="metrics-row">
-                            <div class="metric-item">
-                                <span class="metric-label">MRR</span>
-                                <span class="metric-value">$12,450</span>
-                                <span class="metric-trend positive">+12% vs last month</span>
+                <div class="analytics-container">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Total MRR</span>
+                                <span class="metric-trend positive">↑ 12%</span>
                             </div>
-                            <div class="metric-item">
+                            <div class="metric-value">$12,450</div>
+                            <div class="metric-footer">vs $11,116 last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-header">
                                 <span class="metric-label">Churn Rate</span>
-                                <span class="metric-value">2.4%</span>
-                                <span class="metric-trend negative">+0.1% vs last month</span>
+                                <span class="metric-trend negative">↑ 0.1%</span>
                             </div>
+                            <div class="metric-value">2.4%</div>
+                            <div class="metric-footer">Target: &lt; 2.0%</div>
                         </div>
-                    </section>
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-label">Active Users</span>
+                                <span class="metric-trend positive">↑ 5.2%</span>
+                            </div>
+                            <div class="metric-value">1,240</div>
+                            <div class="metric-footer">+65 since Monday</div>
+                        </div>
+                    </div>
 
-                    <!-- Repo Health Section -->
-                    <section class="analytics-card">
-                        <div class="card-header">
-                            <h3>Repository Health Scores</h3>
-                            <button id="export-health-csv" class="btn btn-secondary btn-small">Export CSV</button>
-                        </div>
-                        <div id="health-score-list" class="analytics-list">
-                            Loading health data...
-                        </div>
-                    </section>
+                    <div class="analytics-row">
+                        <section class="chart-card">
+                            <div class="card-header">
+                                <h3>Repository Health Scores</h3>
+                                <button id="export-health-csv" class="btn btn-ghost btn-small">Export CSV</button>
+                            </div>
+                            <div id="health-score-list" class="analytics-list">
+                                <!-- Dynamic health list -->
+                            </div>
+                        </section>
 
-                    <!-- GitHub Trending Section -->
-                    <section class="analytics-card">
-                        <div class="card-header">
-                            <h3>GitHub Trending</h3>
-                        </div>
-                        <div id="trending-list" class="analytics-list">
-                            Loading trending repositories...
-                        </div>
-                    </section>
+                        <section class="chart-card">
+                            <div class="card-header">
+                                <h3>GitHub Trending</h3>
+                            </div>
+                            <div id="trending-list" class="analytics-list">
+                                <!-- Dynamic trending list -->
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
             <!-- Create Repository View -->
             <div id="create-view" class="view">
                 <div class="view-header">
-                    <h2>Provision New Repository</h2>
-                    <p class="view-description">Configure and deploy a new repository to your GitHub account.</p>
+                    <div class="header-main">
+                        <h2>Provision New Repository</h2>
+                        <p class="view-description">Deploy a pre-configured repository to your account.</p>
+                    </div>
                 </div>
                 
-                <section class="form-container" style="margin-bottom: 2rem;">
-                    <form id="create-repo-form" class="standard-form">
-                        <div class="form-section">
-                            <label for="repo-name">Repository Identity</label>
-                            <input type="text" id="repo-name" placeholder="Name (e.g., project-alpha)" required>
-                            <input type="text" id="repo-description" placeholder="Short description of the project">
-                        </div>
-                        
-                        <div class="form-section">
-                            <label>Deployment Configuration</label>
+                <div class="form-layout">
+                    <section class="form-container glass-card">
+                        <form id="create-repo-form" class="standard-form">
+                            <div class="form-group">
+                                <label for="repo-name">Repository Name</label>
+                                <input type="text" id="repo-name" placeholder="e.g. monolith-service" required>
+                                <span class="input-hint">Unique within your account.</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="repo-description">Description</label>
+                                <input type="text" id="repo-description" placeholder="A brief overview of this project">
+                            </div>
+                            
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="repo-visibility">Visibility</label>
@@ -155,10 +228,7 @@
                                     <input type="text" id="default-branch" value="main">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-section">
-                            <label>Initialization Templates</label>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="gitignore-template">.gitignore</label>
@@ -178,143 +248,171 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <button type="submit" class="btn btn-primary">Deploy Repository</button>
-                    </form>
-                </section>
+                            <button type="submit" class="btn btn-primary btn-full">
+                                🚀 Deploy Repository
+                            </button>
+                        </form>
+                    </section>
 
-                <section class="form-container">
-                    <form id="import-csv-form" class="standard-form">
-                        <div class="form-section">
-                            <label for="csv-file">Import Repositories from CSV</label>
-                            <p class="view-description" style="font-size: 13px; margin-top: 0;">Upload a CSV file with columns: <code>name, description, private(true/false)</code></p>
-                            <input type="file" id="csv-file" accept=".csv" required>
+                    <section class="form-container glass-card">
+                        <div class="card-header-simple">
+                            <h3>Bulk CSV Import</h3>
+                            <p>Provision multiple repos at once.</p>
                         </div>
-                        <button type="submit" class="btn btn-secondary">Bulk Import</button>
-                    </form>
-                </section>
+                        <form id="import-csv-form" class="standard-form">
+                            <div class="drop-zone" id="csv-drop-zone">
+                                <input type="file" id="csv-file" accept=".csv" class="file-input" required>
+                                <div class="drop-zone-content">
+                                    <span class="drop-icon">📁</span>
+                                    <p>Drop CSV here or click to browse</p>
+                                    <small>name, description, private</small>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-full">Process Import</button>
+                        </form>
+                    </section>
+                </div>
             </div>
 
             <!-- Quick Editor View -->
             <div id="editor-view" class="view">
                 <div class="view-header">
-                    <h2>Remote Content Editor</h2>
-                    <p class="view-description">Directly modify repository files without leaving the console.</p>
+                    <div class="header-main">
+                        <h2>Remote Content Editor</h2>
+                        <p class="view-description">Directly modify repository files via GitHub API.</p>
+                    </div>
                 </div>
-                <section class="form-container">
-                    <form id="update-file-form" class="standard-form">
-                        <div class="form-row">
-                            <input type="text" id="owner-name" placeholder="GitHub Owner" required>
-                            <input type="text" id="target-repo" placeholder="Repository Name" required>
-                            <input type="text" id="file-name" placeholder="File Path (e.g., index.html)" required>
+                <section class="editor-container glass-card">
+                    <form id="update-file-form" class="standard-form full-height">
+                        <div class="editor-controls">
+                            <input type="text" id="owner-name" placeholder="Owner" required>
+                            <input type="text" id="target-repo" placeholder="Repository" required>
+                            <input type="text" id="file-name" placeholder="File Path (e.g. index.html)" required>
                         </div>
-                        <div class="editor-wrapper">
-                            <div id="autocomplete-suggestion"></div>
-                            <textarea id="file-content" placeholder="Source code content..." rows="12" required></textarea>
+                        <div class="code-editor-surface">
+                            <div class="line-numbers" aria-hidden="true"></div>
+                            <textarea id="file-content" placeholder="Start typing code..." spellcheck="false" required></textarea>
                         </div>
-                        <input type="text" id="commit-message" placeholder="Commit message (Optional)">
-                        <button type="submit" class="btn btn-success">Publish Changes</button>
+                        <div class="editor-footer">
+                            <input type="text" id="commit-message" placeholder="Commit message (default: Update file)">
+                            <button type="submit" class="btn btn-success">Publish Changes</button>
+                        </div>
                     </form>
                 </section>
             </div>
 
-            <!-- Guide View (How to Use) -->
+            <!-- Guide View -->
             <div id="guide-view" class="view">
                 <div class="view-header">
                     <h2>Usage Documentation</h2>
                 </div>
-                <div class="guide-content">
-                    <section class="guide-step">
-                        <h3>1. Authentication</h3>
-                        <p>Authenticate with GitHub to grant GitWeaver scoped access to your repositories. We use OAuth 2.0 to ensure your credentials remain private and secure.</p>
-                    </section>
-                    <section class="guide-step">
-                        <h3>2. Managing Repositories</h3>
-                        <p>The <strong>Dashboard</strong> provides a high-level overview of your active projects. You can search by name or filter by primary programming language.</p>
-                    </section>
-                    <section class="guide-step">
-                        <h3>3. Creating Projects</h3>
-                        <p>Use the <strong>Create Repository</strong> view to provision new projects. Selecting a template (.gitignore or License) will automatically initialize the repository with an initial commit.</p>
-                    </section>
-                    <section class="guide-step">
-                        <h3>4. Local Project Integration (VS Code)</h3>
-                        <p>To link an existing local project to your new repository:</p>
-                        <ol>
-                            <li>Open your project folder in <strong>VS Code</strong>.</li>
-                            <li>Open the integrated terminal (<code>Ctrl + `</code> or <code>Terminal > New Terminal</code>).</li>
-                            <li>Copy the <strong>Remote Configuration Commands</strong> from the repository card on your dashboard.</li>
-                            <li>Paste and execute them in the terminal. This establishes the link between your local files and your GitHub account.</li>
-                        </ol>
-                    </section>
-                    <section class="guide-step">
-                        <h3>5. Direct Editing & Publishing</h3>
-                        <p>The <strong>Quick Editor</strong> allows for rapid changes to repository content without a local setup. Provide the file path and owner to load or update specific files directly on GitHub.</p>
-                    </section>
+                <div class="documentation-grid">
+                    <aside class="doc-nav">
+                        <ul>
+                            <li><a href="#auth">Authentication</a></li>
+                            <li><a href="#repos">Managing Repos</a></li>
+                            <li><a href="#local">Local Integration</a></li>
+                        </ul>
+                    </aside>
+                    <div class="doc-content">
+                        <section id="auth" class="doc-section">
+                            <h3>1. Authentication</h3>
+                            <p>Authenticate with GitHub to grant GitWeaver scoped access. We use OAuth 2.0 to ensure your credentials remain private.</p>
+                        </section>
+                        <section id="repos" class="doc-section">
+                            <h3>2. Managing Repositories</h3>
+                            <p>The Dashboard provides a high-level overview. Use the <strong>Search</strong> bar (Cmd+K) to find specific projects instantly.</p>
+                        </section>
+                        <section id="local" class="doc-section">
+                            <h3>3. VS Code Integration</h3>
+                            <div class="code-block">
+                                <pre><code>git remote add origin https://github.com/user/repo.git
+git branch -M main
+git push -u origin main</code></pre>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </main>
 
         <!-- Repository Detail Modal -->
-        <div id="repo-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <div class="modal-body-container">
-                    <div class="modal-sidebar">
+        <div id="repo-modal" class="modal" aria-hidden="true">
+            <div class="modal-content glass-effect">
+                <div class="modal-header">
+                    <div class="repo-title-row">
                         <h2 id="modal-repo-name">Repository</h2>
-                        <ul class="modal-nav">
-                            <li><button class="modal-tab-btn active" data-tab="commits">Activity</button></li>
-                            <li><button class="modal-tab-btn" data-tab="branches">Branches</button></li>
-                            <li><button class="modal-tab-btn" data-tab="editor">Code Editor</button></li>
-                        </ul>
-                        <div style="margin-top: 2rem;">
-                            <button id="download-zip-btn" class="btn btn-secondary" style="width: 100%;">📥 Download ZIP</button>
-                        </div>
+                        <span id="modal-visibility" class="badge">Public</span>
                     </div>
-                    <div class="modal-main">
+                    <button class="close-modal" aria-label="Close Modal">&times;</button>
+                </div>
+                
+                <div class="modal-body-container">
+                    <aside class="modal-sidebar">
+                        <nav class="modal-nav">
+                            <button class="modal-tab-btn active" data-tab="commits">
+                                <span class="btn-icon">🕒</span> Activity
+                            </button>
+                            <button class="modal-tab-btn" data-tab="branches">
+                                <span class="btn-icon">🌿</span> Branches
+                            </button>
+                            <button class="modal-tab-btn" data-tab="editor">
+                                <span class="btn-icon">💻</span> Code Editor
+                            </button>
+                        </nav>
+                        <div class="modal-sidebar-actions">
+                            <button id="download-zip-btn" class="btn btn-ghost btn-full">📥 Download ZIP</button>
+                        </div>
+                    </aside>
+
+                    <main class="modal-main">
                         <div id="tab-commits" class="modal-tab-content active">
-                            <div id="commits-list">Loading...</div>
+                            <div id="commits-list" class="activity-feed"></div>
                         </div>
+                        
                         <div id="tab-branches" class="modal-tab-content">
-                            <div class="action-bar">
-                                <input type="text" id="new-branch-name" placeholder="New branch name">
-                                <button id="create-branch-btn" class="btn btn-secondary">Create</button>
+                            <div class="action-bar-simple">
+                                <input type="text" id="new-branch-name" placeholder="Branch name...">
+                                <button id="create-branch-btn" class="btn btn-primary">Create</button>
                             </div>
-                            <div id="branches-list">Loading...</div>
+                            <div id="branches-list" class="branch-grid"></div>
                         </div>
-                        <div id="tab-editor" class="modal-tab-content">
-                            <div class="editor-layout">
-                                <div class="file-browser">
-                                    <div class="browser-header">File Explorer</div>
-                                    <div id="file-tree" class="file-tree">Loading files...</div>
+                        
+                        <div id="tab-editor" class="modal-tab-content full-height">
+                            <div class="ide-layout">
+                                <div class="ide-sidebar">
+                                    <div class="ide-header">Explorer</div>
+                                    <div id="file-tree" class="ide-tree"></div>
                                 </div>
-                                <div class="editor-main">
-                                    <div class="action-bar">
-                                        <input type="text" id="editor-file-path" placeholder="Path (e.g. src/index.js)">
-                                        <button id="load-file-btn" class="btn btn-secondary">Load</button>
+                                <div class="ide-editor">
+                                    <div class="ide-toolbar">
+                                        <span id="editor-current-file">Select a file</span>
+                                        <div class="ide-actions">
+                                            <button id="load-file-btn" class="btn btn-ghost btn-xs">Reload</button>
+                                        </div>
                                     </div>
-                                    <div class="editor-wrapper" style="flex:1;">
-                                        <div id="modal-autocomplete-suggestion"></div>
-                                        <textarea id="modal-file-content" style="height:100%; resize:none; padding:10px; box-sizing:border-box; width:100%;"></textarea>
+                                    <div class="ide-surface">
+                                        <div class="line-numbers-modal" aria-hidden="true"></div>
+                                        <textarea id="modal-file-content" spellcheck="false"></textarea>
                                     </div>
-                                    <div class="commit-action">
-                                        <input type="text" id="modal-commit-message" placeholder="Commit message">
-                                        <button id="save-file-btn" class="btn btn-success">Commit Changes</button>
+                                    <div class="ide-footer">
+                                        <input type="text" id="modal-commit-message" placeholder="Commit message...">
+                                        <button id="save-file-btn" class="btn btn-success btn-small">Commit</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
 
-        <div id="status-message"></div>
+        <div id="toast-container"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
-    <script src="script.js?v=1.1"></script>
+    <script src="script.js?v=2.0"></script>
 </body>
 </html>
