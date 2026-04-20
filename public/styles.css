@@ -81,7 +81,7 @@ body {
 .sidebar.collapsed .logo-text,
 .sidebar.collapsed .nav-section-title,
 .sidebar.collapsed .theme-text,
-.sidebar.collapsed .logout-icon + span {
+.sidebar.collapsed .logout-text {
     display: none;
 }
 
