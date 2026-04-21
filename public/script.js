@@ -223,5 +223,90 @@ document.addEventListener('DOMContentLoaded', async () => {
             languages.map(l => `<option value="${l}">${l}</option>`).join('');
     }
 
+    // --- 9. AI Commit Architect Logic ---
+    const aiBtn = document.getElementById('ai-generate-commit');
+    if (aiBtn) {
+        aiBtn.onclick = async () => {
+            const path = document.getElementById('file-name').value;
+            const content = document.getElementById('file-content').value;
+
+            if (!path || !content) {
+                return showToast("Fill in path and content first", "error");
+            }
+
+            aiBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Architecting...';
+            initIcons();
+
+            try {
+                const res = await fetch('/api/generate-commit-message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path, content })
+                });
+                const data = await res.json();
+                
+                // We'll store the generated message in a toast and update the button
+                showToast(`AI Suggested: "${data.message}"`);
+                
+                // For this view, we can add a hidden message or just use it as the default
+                // Let's add it to a temporary data attribute or similar
+                aiBtn.dataset.suggestedMessage = data.message;
+                aiBtn.innerHTML = '<i data-lucide="sparkles"></i> AI Architected!';
+                initIcons();
+            } catch (e) {
+                showToast("AI failed to architect", "error");
+                aiBtn.innerHTML = '<i data-lucide="sparkles"></i> AI Architect';
+            }
+        };
+    }
+
+    // --- 10. File Update Logic (Rapid Edit) ---
+    const updateForm = document.getElementById('update-file-form'); // Note: I should ensure this ID exists in HTML
+    // Looking at index.html, it's actually just a div/section. Let's fix the form handler.
+    const publishBtn = document.getElementById('publish-btn');
+    if (publishBtn) {
+        publishBtn.onclick = async (e) => {
+            e.preventDefault();
+            const target = document.getElementById('target-repo').value;
+            const path = document.getElementById('file-name').value;
+            const content = document.getElementById('file-content').value;
+            const aiMessage = aiBtn ? aiBtn.dataset.suggestedMessage : null;
+            
+            if (!target || !path || !content) return showToast("Missing fields", "error");
+
+            const [owner, repo] = target.split('/');
+            if (!owner || !repo) return showToast("Use owner/repo format", "error");
+
+            publishBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Publishing...';
+            initIcons();
+
+            try {
+                const res = await fetch('/api/update-file', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        owner, repo, path, content,
+                        message: aiMessage || `Rapid Edit: ${path}`
+                    })
+                });
+                if (res.ok) {
+                    showToast("Successfully published to GitHub!");
+                    // Reset AI state
+                    if (aiBtn) {
+                        aiBtn.innerHTML = '<i data-lucide="sparkles"></i> AI Architect';
+                        delete aiBtn.dataset.suggestedMessage;
+                    }
+                } else {
+                    showToast("Publish failed", "error");
+                }
+            } catch (e) {
+                showToast("Network error", "error");
+            } finally {
+                publishBtn.innerHTML = 'Commit Changes';
+                initIcons();
+            }
+        };
+    }
+
     initIcons();
 });

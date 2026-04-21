@@ -436,6 +436,46 @@ app.get("/api/trending", async (req, res) => {
   }
 });
 
+// AI Commit Architect: Generate professional commit messages
+app.post("/api/generate-commit-message", async (req, res) => {
+  const { path: filePath, content } = req.body;
+  if (!filePath || !content) {
+    return res.status(400).json({ error: "File path and content required" });
+  }
+
+  // A "Heuristic AI" engine to analyze the code
+  const generateMessage = (file, code) => {
+    const ext = file.split(".").pop();
+    const fileName = file.split("/").pop();
+
+    // 1. Detect common patterns
+    if (code.includes("import") || code.includes("require")) {
+      return `refactor: update dependencies and imports in ${fileName}`;
+    }
+    if (code.includes("function") || code.includes("const") || code.includes("class")) {
+      return `feat: implement core logic in ${fileName}`;
+    }
+    if (ext === "md") {
+      return `docs: update documentation for ${fileName}`;
+    }
+    if (ext === "json" || ext === "yml" || ext === "yaml") {
+      return `chore: update configuration in ${fileName}`;
+    }
+    if (code.length < 50) {
+      return `fix: minor adjustments to ${fileName}`;
+    }
+
+    return `style: refine structure and formatting of ${fileName}`;
+  };
+
+  const message = generateMessage(filePath, content);
+  
+  // Simulate AI "thinking" time for premium feel
+  setTimeout(() => {
+    res.json({ message });
+  }, 600);
+});
+
 // Logout
 app.get("/auth/logout", (req, res) => {
   res.clearCookie("github_token");
