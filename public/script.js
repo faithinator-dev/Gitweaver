@@ -54,24 +54,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // --- 3. View Management ---
-    const views = document.querySelectorAll('.view');
-    const navBtns = document.querySelectorAll('.nav-btn');
-
     const switchView = (viewId) => {
-        views.forEach(v => v.classList.remove('active'));
-        navBtns.forEach(b => b.classList.remove('active'));
-        
+        console.log("Switching to view:", viewId);
+        const views = document.querySelectorAll('.view');
+        const navBtns = document.querySelectorAll('.nav-btn');
+
+        // Hide all views
+        views.forEach(v => {
+            v.style.display = 'none';
+            v.classList.remove('active');
+        });
+
+        // Show target view
         const targetView = document.getElementById(viewId);
-        if (targetView) targetView.classList.add('active');
-        
-        document.querySelectorAll(`.nav-btn[data-view="${viewId}"]`).forEach(btn => btn.classList.add('active'));
+        if (targetView) {
+            targetView.style.display = 'block';
+            targetView.classList.add('active');
+        }
+
+        // Update button states
+        navBtns.forEach(b => b.classList.remove('active'));
+        document.querySelectorAll(`.nav-btn[data-view="${viewId}"]`).forEach(btn => {
+            btn.classList.add('active');
+        });
 
         if (viewId === 'analytics-view') loadAnalytics();
         initIcons();
     };
 
-    navBtns.forEach(btn => {
-        btn.onclick = () => switchView(btn.dataset.view);
+    // Attach listeners to ALL nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.view) {
+            btn.addEventListener('click', () => {
+                switchView(btn.dataset.view);
+            });
+        }
     });
 
     // --- 4. Toast System ---
