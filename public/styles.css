@@ -356,6 +356,108 @@ input:focus {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- Modals & Detail Views --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 900px;
+    max-height: 80vh;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-main);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-pro);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-tabs {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1.5rem;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab-btn {
+    padding: 1rem 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    color: var(--text-main);
+    border-bottom-color: var(--git-blue);
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.stagger-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.commit-item, .branch-item {
+    padding: 1rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-inner);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.close-modal {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .repo-card { grid-column: span 6; }

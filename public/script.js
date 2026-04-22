@@ -17,7 +17,6 @@ const showToast = (message, type = 'success') => {
 
 // --- View Management ---
 const switchView = (viewId) => {
-    console.log("Navigating to:", viewId);
     const views = document.querySelectorAll('.view');
     const navBtns = document.querySelectorAll('.nav-btn');
 
@@ -34,15 +33,12 @@ const switchView = (viewId) => {
 
     navBtns.forEach(b => b.classList.remove('active'));
     document.querySelectorAll(`.nav-btn[data-view="${viewId}"]`).forEach(btn => btn.classList.add('active'));
-    
     initIcons();
 };
 
-// --- Execute immediately when DOM is ready ---
+// --- Execute on DOM Ready ---
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Forge Initializing...");
-
-    // 1. Attach Sidebar & View Listeners IMMEDIATELY
+    // 1. Sidebar & View Listeners
     document.querySelectorAll('.nav-btn').forEach(btn => {
         if (btn.dataset.view) {
             btn.onclick = (e) => {
@@ -61,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 2. Premium Interaction (Glow)
+    // 2. Glow Effect
     document.addEventListener('mousemove', (e) => {
         const cards = document.querySelectorAll('.repo-card, .glass-card, .metric-card');
         cards.forEach(card => {
@@ -71,17 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. AI Architect Logic
+    // 3. AI Architect
     const aiBtn = document.getElementById('ai-generate-commit');
     if (aiBtn) {
         aiBtn.onclick = async () => {
             const path = document.getElementById('file-name').value;
             const content = document.getElementById('file-content').value;
             if (!path || !content) return showToast("Missing path or content", "error");
-
             aiBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Architecting...';
             initIcons();
-
             try {
                 const res = await fetch('/api/generate-commit-message', {
                     method: 'POST',
@@ -92,14 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 aiBtn.dataset.suggestedMessage = data.message;
                 aiBtn.innerHTML = '<i data-lucide="sparkles"></i> AI Architected!';
                 showToast(`AI Suggested: "${data.message}"`);
-            } catch (e) {
-                aiBtn.innerHTML = '<i data-lucide="sparkles"></i> AI Architect';
-            }
+            } catch (e) { aiBtn.innerHTML = 'AI Architect'; }
             initIcons();
         };
     }
 
-    // 4. Publish Logic
+    // 4. Publish
     const publishBtn = document.getElementById('publish-btn');
     if (publishBtn) {
         publishBtn.onclick = async () => {
@@ -107,13 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const path = document.getElementById('file-name').value;
             const content = document.getElementById('file-content').value;
             if (!target || !path || !content) return showToast("Missing fields", "error");
-
             const [owner, repo] = target.split('/');
             const message = aiBtn.dataset.suggestedMessage || `Update ${path}`;
-
             publishBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Publishing...';
             initIcons();
-
             try {
                 const res = await fetch('/api/update-file', {
                     method: 'POST',
@@ -128,7 +117,22 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 5. Auth Check (Non-blocking)
+    // 5. Modal Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.onclick = () => {
+            const tabId = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        };
+    });
+
+    document.querySelector('.close-modal').onclick = () => {
+        document.getElementById('repo-modal').classList.remove('active');
+    };
+
+    // 6. Auth Check
     const checkAuth = async () => {
         try {
             const res = await fetch('/api/auth-status');
@@ -137,10 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('landing-content').style.display = 'none';
                 document.getElementById('sidebar').style.display = 'flex';
                 document.getElementById('app-content').style.display = 'block';
-                // Trigger repo load
                 fetch('/api/repos').then(r => r.json()).then(repos => renderRepos(repos));
             }
-        } catch (e) { console.error("Auth failed", e); }
+        } catch (e) {}
     };
     checkAuth();
     initIcons();
@@ -167,11 +170,28 @@ window.openRepoModal = (owner, name, isPrivate) => {
     document.getElementById('modal-repo-name').textContent = name;
     document.getElementById('modal-visibility').textContent = isPrivate ? 'Private' : 'Public';
     modal.classList.add('active');
-    modal.style.display = 'flex';
-};
+    
+    // Load Activity
+    const list = document.getElementById('commits-list');
+    list.innerHTML = 'Fetching pulse...';
+    fetch(`/api/repos/${owner}/${name}/commits`).then(r => r.json()).then(commits => {
+        list.innerHTML = commits.slice(0, 5).map(c => `
+            <div class="commit-item">
+                <span style="font-weight:600">${c.commit.message}</span>
+                <small style="color:var(--text-dark)">${c.commit.author.name} • ${new Date(c.commit.author.date).toLocaleDateString()}</small>
+            </div>
+        `).join('');
+    });
 
-document.querySelector('.close-modal').onclick = () => {
-    const modal = document.getElementById('repo-modal');
-    modal.classList.remove('active');
-    modal.style.display = 'none';
+    // Load Branches
+    const bList = document.getElementById('branches-list');
+    bList.innerHTML = 'Indexing branches...';
+    fetch(`/api/repos/${owner}/${name}/branches`).then(r => r.json()).then(branches => {
+        bList.innerHTML = branches.map(b => `
+            <div class="branch-item">
+                <span><i data-lucide="git-branch" style="width:14px"></i> ${b.name}</span>
+            </div>
+        `).join('');
+        initIcons();
+    });
 };
