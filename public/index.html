@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GitWeaver</title>
+    <title>GitWeaver Power Forge</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/styles.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body class="theme-vercel">
 
     <!-- Landing View -->
     <div id="landing-content" class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
-        <div class="logo" style="width: 64px; height: 64px; margin-bottom: 2rem;">
+        <div class="logo-circle" style="margin-bottom: 2rem;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
-        <h1 style="font-size: 3rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 1rem;">GitWeaver</h1>
-        <p style="color: var(--ds-accents-5); margin-bottom: 2rem; max-width: 500px;">Develop. Preview. Ship.</p>
+        <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.06em; margin-bottom: 1rem;">GitWeaver</h1>
+        <p style="color: var(--ds-accents-5); margin-bottom: 2.5rem; font-size: 1.25rem;">Develop. Preview. Ship.</p>
         <a href="/auth/github" class="btn btn-primary btn-large">Continue with GitHub</a>
     </div>
 
@@ -25,39 +25,32 @@
         <nav class="navbar">
             <div class="nav-top">
                 <div class="nav-left">
-                    <div class="logo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
+                    <div class="logo-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
                     </div>
-                    <span id="nav-username" class="desktop-only" style="font-size: 14px; font-weight: 500;">Developer</span>
+                    <span class="nav-slash">/</span>
+                    <span id="nav-username" class="nav-username">Developer</span>
                 </div>
                 
                 <div class="nav-right">
-                    <!-- Desktop Search -->
-                    <div class="search-cmd desktop-only" id="desktop-search-btn">
+                    <!-- Theme Switcher -->
+                    <button class="btn-icon-nav desktop-only" id="theme-toggle" title="Toggle Theme">
+                        <i data-lucide="moon"></i>
+                    </button>
+
+                    <!-- Omni Search Trigger -->
+                    <div class="search-box desktop-only" id="desktop-search-trigger" onclick="openOmniSearch()">
                         <i data-lucide="search" style="width: 14px;"></i>
-                        <input type="text" placeholder="Search..." disabled style="pointer-events: none; background: transparent; border: none; color: inherit;">
+                        <span class="search-placeholder">Omni Search...</span>
                         <span class="kbd">⌘K</span>
                     </div>
+                    <button class="mobile-only btn-icon-nav" id="mobile-search-trigger" onclick="openOmniSearch()"><i data-lucide="search"></i></button>
                     
-                    <!-- Mobile Search Icon -->
-                    <button class="mobile-only btn btn-secondary" id="mobile-search-trigger" style="border: none;">
-                        <i data-lucide="search"></i>
-                    </button>
-                    
-                    <!-- Logout -->
-                    <a href="/auth/logout" class="btn btn-secondary">
-                        <i data-lucide="log-out"></i>
-                        <span class="btn-logout-text desktop-only">Logout</span>
-                    </a>
+                    <a href="/auth/logout" class="btn btn-secondary nav-logout-btn"><i data-lucide="log-out"></i> <span class="desktop-only">Logout</span></a>
                 </div>
             </div>
-
-            <!-- Mobile Search Overlay -->
-            <div class="mobile-search-overlay" id="mobile-search-panel">
-                <input type="text" class="mobile-search-input" id="mobile-search-input" placeholder="Search repositories...">
-            </div>
             
-            <div class="nav-tabs-container">
+            <div class="nav-tabs-wrapper">
                 <div class="nav-tabs">
                     <button class="nav-tab active" data-view="dashboard-view">Overview</button>
                     <button class="nav-tab" data-view="create-view">Deploy</button>
@@ -69,75 +62,128 @@
 
         <main class="container">
             <!-- Dashboard -->
-            <section id="dashboard-view" class="view active">
-                <div id="repo-list" class="project-grid">
-                    <!-- Cards -->
-                </div>
-            </section>
+            <div id="dashboard-view" class="view active">
+                <div id="repo-list" class="project-grid"></div>
+            </div>
 
-            <!-- Create -->
-            <section id="create-view" class="view">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h2>Create New Project</h2>
-                    </div>
+            <!-- Enhanced Deploy Section -->
+            <div id="create-view" class="view">
+                <div class="page-section-header">
+                    <h2>Provision Infrastructure</h2>
+                    <p>Select a blueprint or build from scratch.</p>
+                </div>
+
+                <div class="template-gallery">
+                    <div class="template-card active" data-template="blank"><i data-lucide="file-plus"></i> <span>Blank</span></div>
+                    <div class="template-card" data-template="nextjs" data-gitignore="Node"><i data-lucide="zap"></i> <span>Next.js</span></div>
+                    <div class="template-card" data-template="react" data-gitignore="Node"><i data-lucide="layers"></i> <span>React</span></div>
+                    <div class="template-card" data-template="python" data-gitignore="Python"><i data-lucide="terminal"></i> <span>Python</span></div>
+                </div>
+
+                <div class="card-vercel">
                     <div class="card-body">
                         <div class="input-group">
-                            <label>Repo Name</label>
-                            <input type="text" id="repo-name" placeholder="my-awesome-project">
+                            <label>Project Identity</label>
+                            <div class="input-with-action">
+                                <input type="text" id="repo-name" placeholder="enter-keyword-or-name">
+                                <button id="ai-name-forge" class="btn-icon-inside" title="Forge AI Name"><i data-lucide="sparkles"></i></button>
+                            </div>
+                            <div id="name-suggestions" class="suggestions-list"></div>
                         </div>
-                        <div class="input-group">
-                            <label>Visibility</label>
-                            <select id="repo-visibility"><option value="public">Public</option><option value="private">Private</option></select>
+
+                        <div class="stack-toggles">
+                            <label class="toggle-item"><input type="checkbox" id="toggle-readme" checked><span class="toggle-label">Include README.md</span></label>
+                            <label class="toggle-item"><input type="checkbox" id="toggle-license"><span class="toggle-label">Add MIT License</span></label>
+                            <label class="toggle-item"><input type="checkbox" id="toggle-gitignore" checked><span class="toggle-label">Auto-Gitignore</span></label>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button id="deploy-btn" class="btn btn-primary">Deploy</button>
+                        <button id="deploy-btn" class="btn btn-primary btn-full">Provision Stack</button>
                     </div>
                 </div>
-            </section>
 
-            <!-- Other views omitted for brevity in template rewrite, but kept in logic -->
-            <section id="editor-view" class="view">
-                <div class="card-panel"><div class="card-header"><h2>Rapid Edit</h2></div><div class="card-body">
-                <input type="text" id="target-repo" placeholder="owner/repo" style="margin-bottom: 1rem;">
-                <input type="text" id="file-name" placeholder="path/to/file.ext" style="margin-bottom: 1rem;">
-                <textarea id="file-content" style="width: 100%; height: 300px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; font-family: monospace;"></textarea>
-                </div><div class="card-footer"><button id="publish-btn" class="btn btn-primary">Push Changes</button></div></div>
-            </section>
-            
-            <section id="analytics-view" class="view">
-                <div class="metrics-row">
-                    <div class="metric-box"><span class="metric-title">Total Repos</span><span class="metric-value" id="total-repos-count">0</span></div>
+                <div id="provision-terminal" class="provision-terminal" style="display: none;">
+                    <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">Provisioning Logs</span></div>
+                    <div id="terminal-output" class="terminal-content"></div>
                 </div>
-            </section>
+            </div>
+
+            <!-- Editor Section -->
+            <div id="editor-view" class="view">
+                <div class="card-vercel">
+                    <div class="editor-surface">
+                        <div class="editor-nav">
+                            <input type="text" id="target-repo" placeholder="owner/repo">
+                            <span class="nav-slash">/</span>
+                            <input type="text" id="file-name" placeholder="path/to/file.js">
+                        </div>
+                        <textarea id="file-content" spellcheck="false" placeholder="// Start hacking..."></textarea>
+                    </div>
+                    <div class="card-footer" style="justify-content: space-between;">
+                        <button id="ai-generate-commit" class="btn btn-secondary"><i data-lucide="sparkles"></i> AI Commit</button>
+                        <button id="publish-btn" class="btn btn-primary">Commit Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div id="analytics-view" class="view">
+                <div class="metrics-grid-vercel">
+                    <div class="metric-card-vercel"><span class="metric-label">Total Repos</span><span class="metric-value" id="total-repos-count">0</span></div>
+                    <div class="metric-card-vercel"><span class="metric-label">System Health</span><span class="metric-value" style="color: var(--ds-blue);">Optimal</span></div>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- Vercel Modal -->
-    <div id="repo-modal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2 id="modal-repo-name">--</h2>
-                <button class="modal-close"><i data-lucide="x"></i></button>
+    <!-- Omni Search Command Palette -->
+    <div id="omni-overlay" class="modal-overlay" onclick="if(event.target===this) closeOmniSearch()">
+        <div class="omni-palette">
+            <div class="omni-header">
+                <i data-lucide="search" style="color: var(--ds-accents-5);"></i>
+                <input type="text" id="omni-input" placeholder="Type a command or search repos...">
             </div>
-            <div class="nav-tabs-container">
+            <div class="omni-results" id="omni-results">
+                <!-- Results populated by JS -->
+            </div>
+            <div class="omni-footer">
+                <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+                <span><kbd>Enter</kbd> to select</span>
+                <span><kbd>Esc</kbd> to close</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repo Detail Modal with Ghost Branch -->
+    <div id="repo-modal" class="modal-overlay" onclick="if(event.target===this) document.getElementById('repo-modal').classList.remove('active')">
+        <div class="modal-content-vercel" onclick="event.stopPropagation()">
+            <div class="modal-header-vercel">
+                <h2 id="modal-repo-name">--</h2>
+                <button class="modal-close-btn" onclick="document.getElementById('repo-modal').classList.remove('active')"><i data-lucide="x"></i></button>
+            </div>
+            <div class="nav-tabs-wrapper" style="padding: 0 1rem; border-bottom: 1px solid var(--ds-accents-2);">
                 <div class="nav-tabs">
-                    <button class="nav-tab active modal-tab-btn" data-tab="setup">Quick Setup</button>
+                    <button class="nav-tab active modal-tab-btn" data-tab="setup">Setup</button>
                     <button class="nav-tab modal-tab-btn" data-tab="commits">Activity</button>
+                    <button class="nav-tab modal-tab-btn" data-tab="branches">Ghost Branches</button>
                 </div>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-vercel">
                 <div id="tab-setup" class="tab-pane active">
-                    <p style="color: var(--ds-accents-5); margin-bottom: 1rem;">Push an existing repository from your command line:</p>
-                    <div class="code-block" id="git-commands">
-                        git remote add origin https://github.com/user/repo.git<br>
-                        git branch -M main<br>
-                        git push -u origin main
-                    </div>
+                    <div class="code-terminal" id="git-commands"></div>
                 </div>
                 <div id="tab-commits" class="tab-pane">
-                    <div id="commits-list">Fetching activity...</div>
+                    <div id="commits-list" class="activity-list"></div>
+                </div>
+                <div id="tab-branches" class="tab-pane">
+                    <div class="ghost-branch-ui">
+                        <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 1rem;">Instantly spin up a new Ghost Branch from main.</p>
+                        <div class="input-with-action">
+                            <input type="text" id="new-branch-name" placeholder="feature/new-idea" style="background: var(--ds-accents-1); border: 1px solid var(--ds-accents-2); padding: 8px 12px; color: #fff; width: 100%; border-radius: 4px;">
+                            <button id="create-ghost-branch" class="btn btn-primary" style="position: absolute; right: 4px; top: 4px; height: 28px;">Forge Branch</button>
+                        </div>
+                        <div id="branches-list" style="margin-top: 1.5rem;"></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-// --- Global Setup ---
+// --- Global Forge Core ---
 const initIcons = () => { if (window.lucide) window.lucide.createIcons(); };
 
 const showToast = (message, type = 'success') => {
@@ -16,92 +16,139 @@ const showToast = (message, type = 'success') => {
 };
 
 const switchView = (viewId) => {
-    document.querySelectorAll('.view').forEach(v => {
-        v.style.display = 'none';
-        v.classList.remove('active');
-    });
+    document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
     const target = document.getElementById(viewId);
-    if (target) {
-        target.style.display = 'block';
-        target.classList.add('active');
-    }
-    document.querySelectorAll('.nav-tab[data-view]').forEach(b => b.classList.remove('active'));
+    if (target) target.style.display = 'block';
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
     document.querySelectorAll(`.nav-tab[data-view="${viewId}"]`).forEach(btn => btn.classList.add('active'));
     initIcons();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Navigation & Search
+    document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
     
-    // 1. Mobile Search Logic
     const mobileSearchTrigger = document.getElementById('mobile-search-trigger');
     const mobileSearchPanel = document.getElementById('mobile-search-panel');
     const mobileSearchInput = document.getElementById('mobile-search-input');
-    const desktopSearchBtn = document.getElementById('desktop-search-btn');
-
-    const toggleMobileSearch = () => {
-        const isActive = mobileSearchPanel.classList.toggle('active');
-        if (isActive) {
+    
+    mobileSearchTrigger?.addEventListener('click', () => {
+        mobileSearchPanel.classList.toggle('active');
+        if (mobileSearchPanel.classList.contains('active')) {
             switchView('dashboard-view');
             mobileSearchInput.focus();
         }
+    });
+
+    // 2. AI Name Forge
+    const aiForgeBtn = document.getElementById('ai-name-forge');
+    const suggestionsList = document.getElementById('name-suggestions');
+    const nameInput = document.getElementById('repo-name');
+
+    aiForgeBtn?.addEventListener('click', async () => {
+        const keyword = nameInput.value || "project";
+        aiForgeBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i>';
+        initIcons();
+
+        try {
+            const res = await fetch('/api/generate-repo-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keyword })
+            });
+            const { suggestions } = await res.json();
+            suggestionsList.innerHTML = suggestions.map(s => `<span class="suggestion-chip">${s}</span>`).join('');
+            
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.onclick = () => {
+                    nameInput.value = chip.textContent;
+                    suggestionsList.innerHTML = '';
+                };
+            });
+        } catch (e) { showToast("AI Forge Offline", "error"); }
+        aiForgeBtn.innerHTML = '<i data-lucide="sparkles"></i>';
+        initIcons();
+    });
+
+    // 3. Template Gallery
+    const templates = document.querySelectorAll('.template-card');
+    templates.forEach(t => {
+        t.onclick = () => {
+            templates.forEach(card => card.classList.remove('active'));
+            t.classList.add('active');
+            if (t.dataset.template !== 'blank') {
+                nameInput.placeholder = `e.g. my-${t.dataset.template}-app`;
+            }
+        };
+    });
+
+    // 4. Provisioning Terminal & Deploy
+    const deployBtn = document.getElementById('deploy-btn');
+    const terminal = document.getElementById('provision-terminal');
+    const output = document.getElementById('terminal-output');
+
+    const log = (msg, type = 'system') => {
+        const line = document.createElement('span');
+        line.className = `log-line log-${type}`;
+        line.textContent = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
     };
 
-    mobileSearchTrigger?.addEventListener('click', toggleMobileSearch);
-    
-    desktopSearchBtn?.addEventListener('click', () => {
-        switchView('dashboard-view');
-        document.getElementById('repo-search')?.focus();
-    });
-
-    // 2. Navigation
-    document.querySelectorAll('.nav-tab[data-view]').forEach(btn => {
-        btn.onclick = () => switchView(btn.dataset.view);
-    });
-
-    // 3. Deployment & Immediate Navigation
-    const deployBtn = document.getElementById('deploy-btn');
     deployBtn?.addEventListener('click', async () => {
-        const name = document.getElementById('repo-name').value;
+        const name = nameInput.value;
         const visibility = document.getElementById('repo-visibility').value;
-        if (!name) return showToast("Name required", "error");
+        const activeTemplate = document.querySelector('.template-card.active');
+        
+        if (!name) return showToast("Project name required", "error");
 
-        deployBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Deploying...';
-        initIcons();
+        deployBtn.disabled = true;
+        terminal.style.display = 'block';
+        output.innerHTML = '';
+        
+        log(`Initiating Forge for ${name}...`, 'forge');
+        await new Promise(r => setTimeout(r, 600));
+        log("Establishing GitHub Handshake...", 'system');
+        await new Promise(r => setTimeout(r, 800));
+        log(`Applying blueprint: ${activeTemplate.dataset.template}`, 'forge');
 
         try {
             const res = await fetch('/api/create-repo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, private: visibility === 'private' })
+                body: JSON.stringify({ 
+                    name, 
+                    private: visibility === 'private',
+                    license_template: document.getElementById('toggle-license').checked ? 'mit' : undefined,
+                    gitignore_template: document.getElementById('toggle-gitignore').checked ? activeTemplate.dataset.gitignore || 'Node' : undefined
+                })
             });
             const data = await res.json();
+            
             if (res.ok) {
-                showToast("Deployed! Opening Command Center...");
-                // Open modal immediately for the new repo
-                window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true);
-                fetchRepos();
+                log("Repository weaving complete.", 'forge');
+                await new Promise(r => setTimeout(r, 500));
+                log("Optimizing metadata and branches...", 'system');
+                await new Promise(r => setTimeout(r, 700));
+                log("PROVISIONING SUCCESSFUL.", 'success');
+                
+                showToast("Stack Provisioned!");
+                setTimeout(() => {
+                    window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true);
+                    fetchRepos();
+                    deployBtn.disabled = false;
+                }, 1000);
             } else {
-                showToast("Failed", "error");
+                log(`ERROR: ${data.error}`, 'system');
+                deployBtn.disabled = false;
             }
-        } catch (e) { showToast("Error", "error"); }
-        deployBtn.innerHTML = 'Deploy';
+        } catch (e) {
+            log("CRITICAL ERROR: Connection Terminated.", 'system');
+            deployBtn.disabled = false;
+        }
     });
 
-    // 4. Modal
-    document.querySelector('.modal-close').onclick = () => {
-        document.getElementById('repo-modal').classList.remove('active');
-    };
-
-    document.querySelectorAll('.modal-tab-btn').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-        };
-    });
-
-    // 5. App Data
+    // 5. Auth & Initial Load
     let allRepos = [];
     const fetchRepos = async () => {
         const res = await fetch('/api/repos');
@@ -120,11 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    mobileSearchInput?.addEventListener('input', () => {
-        const term = mobileSearchInput.value.toLowerCase();
-        renderRepos(allRepos.filter(r => r.name.toLowerCase().includes(term)));
-    });
-
     checkAuth();
     initIcons();
 });
@@ -135,10 +177,10 @@ function renderRepos(repos) {
     container.innerHTML = repos.map(r => `
         <div class="project-card" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <span style="font-weight:600; font-size:1.1rem;">${r.name}</span>
+                <span style="font-weight:600; font-size:1rem;">${r.name}</span>
                 <span class="badge">${r.private ? 'Private' : 'Public'}</span>
             </div>
-            <div style="font-size:0.85rem; color:var(--ds-accents-5); display:flex; align-items:center; gap:10px;">
+            <div style="font-size:0.85rem; color:#666; display:flex; align-items:center; gap:10px;">
                 <i data-lucide="github" style="width:14px;"></i>
                 <span>${r.default_branch || 'main'}</span>
                 <span>•</span>
@@ -154,11 +196,9 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     document.getElementById('modal-repo-name').textContent = name;
     modal.classList.add('active');
 
-    // Update Git Commands
     const gitCmds = document.getElementById('git-commands');
     gitCmds.innerHTML = `git remote add origin https://github.com/${owner}/${name}.git<br>git branch -M main<br>git push -u origin main`;
 
-    // Auto-switch to Setup if new
     if (isNew) {
         document.querySelector('[data-tab="setup"]').click();
     } else {
@@ -174,4 +214,8 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
             `).join('') : 'No activity yet.';
         });
     }
+};
+
+document.querySelector('.modal-close-btn').onclick = () => {
+    document.getElementById('repo-modal').classList.remove('active');
 };

@@ -436,6 +436,36 @@ app.get("/api/trending", async (req, res) => {
   }
 });
 
+// Get GitHub Actions Workflow Runs (Action Pulse)
+app.get("/api/repos/:owner/:repo/actions", async (req, res) => {
+  const octokit = getOctokit(req);
+  if (!octokit) return res.status(401).json({ error: "Unauthorized" });
+
+  const { owner, repo } = req.params;
+
+  try {
+    const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
+      owner,
+      repo,
+      per_page: 1, // We only need the latest run for the pulse
+    });
+    
+    if (data.workflow_runs && data.workflow_runs.length > 0) {
+      const run = data.workflow_runs[0];
+      res.json({ 
+        status: run.status, 
+        conclusion: run.conclusion, // 'success', 'failure', 'neutral', etc.
+        url: run.html_url 
+      });
+    } else {
+      res.json({ status: 'none', conclusion: 'none' });
+    }
+  } catch (error) {
+    // If actions aren't enabled or repo is empty, just return none
+    res.json({ status: 'none', conclusion: 'none' });
+  }
+});
+
 // AI Commit Architect: Generate professional commit messages
 app.post("/api/generate-commit-message", async (req, res) => {
   const { path: filePath, content } = req.body;
@@ -474,6 +504,23 @@ app.post("/api/generate-commit-message", async (req, res) => {
   setTimeout(() => {
     res.json({ message });
   }, 600);
+});
+
+// AI Naming Forge: Generate cool repository names
+app.post("/api/generate-repo-name", async (req, res) => {
+  const { keyword } = req.body;
+  if (!keyword) return res.status(400).json({ error: "Keyword required" });
+
+  const prefixes = ["Neon", "Flux", "Void", "Quantum", "Apex", "Ether", "Zero", "Nova", "Cyber", "Synapse"];
+  const suffixes = ["Link", "Core", "Forge", "Grid", "Pulse", "Flow", "Sync", "Wave", "Hub", "Node"];
+  
+  const suggestions = Array.from({ length: 3 }, () => {
+    const p = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const s = suffixes[Math.floor(Math.random() * suffixes.length)];
+    return `${p}${keyword.charAt(0).toUpperCase() + keyword.slice(1)}${s}`;
+  });
+
+  setTimeout(() => res.json({ suggestions }), 400);
 });
 
 // Logout
