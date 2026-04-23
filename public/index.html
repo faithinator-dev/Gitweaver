@@ -3,204 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitWeaver — The GitHub Forge</title>
+    <title>GitWeaver</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="app-layout">
-    <div class="mesh-gradient"></div>
+<body>
 
-    <!-- Sidebar: Linear-inspired Minimalist Navigation -->
-    <nav class="sidebar" id="sidebar" style="display: none;">
-        <div class="workspace-indicator">
-            <div class="workspace-avatar">
-                <img src="/favicon.svg" alt="GW">
-            </div>
-            <span class="logo-text">GitWeaver</span>
+    <!-- Landing View (Shown if not logged in) -->
+    <div id="landing-content" class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
+        <div class="logo" style="width: 64px; height: 64px; margin-bottom: 2rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
+        <h1 style="font-size: 3rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 1rem;">GitWeaver</h1>
+        <p style="color: var(--ds-accents-5); margin-bottom: 2rem; max-width: 500px;">Develop. Preview. Ship. The ultimate GitHub repository manager, styled with precision.</p>
+        <a href="/auth/github" class="btn btn-primary btn-large">
+            <i data-lucide="github" style="width: 20px; height: 20px;"></i> Continue with GitHub
+        </a>
+    </div>
 
-        <div class="nav-group">
-            <span class="nav-section-title">Forge</span>
-            <button class="nav-btn active" data-view="dashboard-view">
-                <i data-lucide="layers" class="nav-icon"></i> Dashboard
-            </button>
-            <button class="nav-btn" data-view="analytics-view">
-                <i data-lucide="bar-chart-3" class="nav-icon"></i> Insights
-            </button>
-        </div>
-
-        <div class="nav-group">
-            <span class="nav-section-title">Orchestrate</span>
-            <button class="nav-btn" data-view="create-view">
-                <i data-lucide="plus-square" class="nav-icon"></i> Provision
-            </button>
-            <button class="nav-btn" data-view="editor-view">
-                <i data-lucide="terminal" class="nav-icon"></i> Rapid Edit
-            </button>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="user-pill">
-                <div class="user-info">
-                    <span class="user-status">System Online</span>
-                </div>
-                <button id="sidebar-toggle" class="btn-icon">
-                    <i data-lucide="chevron-left"></i>
-                </button>
-            </div>
-            <a href="/auth/logout" class="nav-btn logout-btn">
-                <i data-lucide="log-out" class="nav-icon"></i> Sign Out
-            </a>
-        </div>
-    </nav>
-
-    <!-- Main Content: Vercel-inspired Precision Canvas -->
-    <main class="main-wrapper">
+    <!-- App Content (Shown if logged in) -->
+    <div id="app-content" style="display: none;">
         
-        <!-- Landing: Stripe-inspired Hero -->
-        <div id="landing-content" class="hero-container">
-            <header class="hero">
-                <div class="hero-badge">Next Gen v2.0</div>
-                <h1>Software delivery, <br><span class="text-glow">reimagined.</span></h1>
-                <p class="tagline">The premium command center for GitHub repository orchestration. Fast, headless, and industrial-grade.</p>
-                <div class="hero-actions">
-                    <a href="/auth/github" class="btn btn-primary btn-large">
-                        <i data-lucide="github"></i> Connect GitHub Account
-                    </a>
+        <!-- Vercel Top Navigation -->
+        <nav class="navbar">
+            <div class="nav-top">
+                <div class="nav-left">
+                    <div class="logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    </div>
+                    <span class="slash">/</span>
+                    <div class="user-name">
+                        <div class="user-avatar" id="nav-avatar"><i data-lucide="user"></i></div>
+                        <span id="nav-username">Developer</span>
+                    </div>
                 </div>
-            </header>
-        </div>
-
-        <!-- App Views -->
-        <div id="app-content" style="display: none;">
+                <div class="nav-right">
+                    <div class="search-cmd" id="global-search-btn">
+                        <i data-lucide="search" style="width: 14px;"></i>
+                        <input type="text" placeholder="Search..." disabled style="pointer-events: none;">
+                        <span class="kbd" style="margin-left: auto;">⌘K</span>
+                    </div>
+                    <a href="/auth/logout" class="btn btn-secondary" style="height: 32px; padding: 0 12px; font-size: 0.875rem;">Logout</a>
+                </div>
+            </div>
             
-            <!-- Dashboard View: Bento Grid Layout -->
+            <div class="nav-tabs-container">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" data-view="dashboard-view">Overview</button>
+                    <button class="nav-tab" data-view="create-view">Deploy</button>
+                    <button class="nav-tab" data-view="editor-view">Rapid Edit</button>
+                    <button class="nav-tab" data-view="analytics-view">Analytics</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container">
+            
+            <!-- Overview (Dashboard) -->
             <section id="dashboard-view" class="view active">
-                <header class="view-header">
-                    <div>
-                        <h2>Repositories</h2>
-                        <p class="text-muted">Manage and monitor your digital assets.</p>
+                <div class="page-header">
+                    <div class="project-search">
+                        <i data-lucide="search"></i>
+                        <input type="text" id="repo-search" placeholder="Search Repositories...">
                     </div>
-                    <div class="header-actions">
-                        <div class="search-box">
-                            <i data-lucide="search"></i>
-                            <input type="text" id="repo-search" placeholder="Filter projects...">
-                        </div>
-                        <select id="filter-language" class="glass-select">
-                            <option value="all">All Tech</option>
-                        </select>
-                    </div>
-                </header>
-
-                <div id="repo-list" class="repo-grid">
-                    <!-- Bento Tiles Injected Here -->
+                </div>
+                <div id="repo-list" class="project-grid">
+                    <!-- Cards Injected Here -->
                 </div>
             </section>
 
-            <!-- Insights View -->
-            <section id="analytics-view" class="view">
-                <header class="view-header">
-                    <h2>Insights</h2>
-                    <p class="text-muted">Real-time performance and health metrics.</p>
-                </header>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <span class="nav-section-title">Health Score</span>
-                        <div class="metric-value">98.4%</div>
-                        <p class="badge">Stable</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="nav-section-title">Sync Latency</span>
-                        <div class="metric-value">42ms</div>
-                        <p class="badge">Ultra Fast</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="nav-section-title">Total Repos</span>
-                        <div id="total-repos-count" class="metric-value">--</div>
-                        <p class="text-dark">Active Assets</p>
-                    </div>
-                </div>
-                <div id="health-score-list" class="glass-card"></div>
-            </section>
-
-            <!-- Provisioning View -->
+            <!-- Deploy (Provisioning) -->
             <section id="create-view" class="view">
-                <div class="form-hero">
-                    <h2>Provision Infrastructure</h2>
-                    <p class="text-muted">Deploy pre-configured repository templates in seconds.</p>
+                <div class="page-header">
+                    <h1>Import Git Repository</h1>
                 </div>
-                <div class="glass-card form-box">
-                    <form id="create-repo-form" class="forge-form">
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label>Repo Identity</label>
-                                <input type="text" id="repo-name" placeholder="my-next-unicorn" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Visibility</label>
-                                <select id="repo-visibility">
-                                    <option value="public">Public (Open)</option>
-                                    <option value="private">Private (Stealth)</option>
-                                </select>
-                            </div>
+                <div class="card-panel">
+                    <div class="card-header">
+                        <h2>Configure Project</h2>
+                        <p>Set up your new repository parameters.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label>Repository Name</label>
+                            <input type="text" id="repo-name" placeholder="my-new-project">
+                        </div>
+                        <div class="input-group">
+                            <label>Visibility</label>
+                            <select id="repo-visibility">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label>Description</label>
-                            <textarea id="repo-description" rows="2" placeholder="What are you building?"></textarea>
+                            <textarea id="repo-description" rows="3" placeholder="Brief description..."></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-full">Deploy to GitHub</button>
-                    </form>
+                    </div>
+                    <div class="card-footer">
+                        <button id="deploy-btn" class="btn btn-primary">Deploy</button>
+                    </div>
                 </div>
             </section>
 
-            <!-- Editor View -->
+            <!-- Rapid Edit -->
             <section id="editor-view" class="view">
-                <header class="view-header">
-                    <h2>Rapid Edit</h2>
-                    <p class="text-muted">Headless content modification via API.</p>
-                </header>
-                <div class="glass-card editor-canvas">
-                    <div class="editor-header">
-                        <input type="text" id="target-repo" placeholder="user/repository">
-                        <input type="text" id="file-name" placeholder="path/to/file.ext">
+                <div class="page-header">
+                    <h1>Rapid Edit</h1>
+                </div>
+                <div class="card-panel">
+                    <div class="ide-wrapper">
+                        <div class="ide-header">
+                            <input type="text" id="target-repo" placeholder="owner/repo" style="width: 200px;">
+                            <span style="color: var(--ds-accents-4);">/</span>
+                            <input type="text" id="file-name" placeholder="path/to/file.ext" style="flex: 1;">
+                        </div>
+                        <div class="ide-body">
+                            <textarea id="file-content" class="ide-textarea" spellcheck="false" placeholder="// Write code here..."></textarea>
+                        </div>
                     </div>
-                    <textarea id="file-content" class="mono-editor" placeholder="// Remote file content..."></textarea>
-                    <div class="editor-footer">
-                        <button type="button" id="ai-generate-commit" class="btn btn-secondary">
-                            <i data-lucide="sparkles"></i> AI Architect
+                    <div class="card-footer" style="justify-content: space-between;">
+                        <button id="ai-generate-commit" class="btn btn-secondary">
+                            <i data-lucide="sparkles" style="width: 14px;"></i> AI Commit
                         </button>
-                        <button type="submit" id="publish-btn" class="btn btn-primary">Commit Changes</button>
+                        <button id="publish-btn" class="btn btn-primary">Commit Changes</button>
                     </div>
                 </div>
             </section>
 
-        </div>
-    </main>
+            <!-- Analytics -->
+            <section id="analytics-view" class="view">
+                <div class="page-header">
+                    <h1>Analytics</h1>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <span class="metric-title">Health Score</span>
+                        <span class="metric-value">99%</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-title">Total Repositories</span>
+                        <span class="metric-value" id="total-repos-count">--</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-title">API Latency</span>
+                        <span class="metric-value">45ms</span>
+                    </div>
+                </div>
+                <div class="card-panel">
+                    <div class="card-header">
+                        <h2>Recent Activity</h2>
+                    </div>
+                    <div class="card-body" id="health-score-list">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </section>
 
-    <!-- Global Modal: Precision Detail -->
-    <div id="repo-modal" class="modal">
-        <div class="modal-content glass-card">
+        </main>
+    </div>
+
+    <!-- Vercel-style Modal -->
+    <div id="repo-modal" class="modal-overlay">
+        <div class="modal-card">
             <div class="modal-header">
                 <div>
-                    <h2 id="modal-repo-name">--</h2>
-                    <span id="modal-visibility" class="badge">--</span>
+                    <h2 id="modal-repo-name" style="font-size: 1.25rem; font-weight: 600;">--</h2>
+                    <span id="modal-visibility" class="badge" style="margin-top: 4px; display: inline-block;">--</span>
                 </div>
-                <button class="close-modal">&times;</button>
+                <button class="modal-close"><i data-lucide="x"></i></button>
             </div>
-            <div class="modal-tabs">
-                <button class="tab-btn active" data-tab="commits">Activity</button>
-                <button class="tab-btn" data-tab="branches">Branches</button>
+            
+            <div class="nav-tabs-container" style="padding: 0 1.5rem; border-bottom: 1px solid var(--ds-accents-2);">
+                <div class="nav-tabs" style="padding: 0;">
+                    <button class="nav-tab active modal-tab-btn" data-tab="commits">Commits</button>
+                    <button class="nav-tab modal-tab-btn" data-tab="branches">Branches</button>
+                </div>
             </div>
+
             <div class="modal-body">
                 <div id="tab-commits" class="tab-pane active">
-                    <div id="commits-list" class="stagger-list"></div>
+                    <div id="commits-list">Loading commits...</div>
                 </div>
                 <div id="tab-branches" class="tab-pane">
-                    <div id="branches-list" class="stagger-list"></div>
+                    <div id="branches-list">Loading branches...</div>
                 </div>
             </div>
         </div>
