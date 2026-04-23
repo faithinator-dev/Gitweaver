@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GitWeaver</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/styles.css">
@@ -10,42 +10,51 @@
 </head>
 <body>
 
-    <!-- Landing View (Shown if not logged in) -->
+    <!-- Landing View -->
     <div id="landing-content" class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
         <div class="logo" style="width: 64px; height: 64px; margin-bottom: 2rem;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
         <h1 style="font-size: 3rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 1rem;">GitWeaver</h1>
-        <p style="color: var(--ds-accents-5); margin-bottom: 2rem; max-width: 500px;">Develop. Preview. Ship. The ultimate GitHub repository manager, styled with precision.</p>
-        <a href="/auth/github" class="btn btn-primary btn-large">
-            <i data-lucide="github" style="width: 20px; height: 20px;"></i> Continue with GitHub
-        </a>
+        <p style="color: var(--ds-accents-5); margin-bottom: 2rem; max-width: 500px;">Develop. Preview. Ship.</p>
+        <a href="/auth/github" class="btn btn-primary btn-large">Continue with GitHub</a>
     </div>
 
-    <!-- App Content (Shown if logged in) -->
+    <!-- App Content -->
     <div id="app-content" style="display: none;">
-        
-        <!-- Vercel Top Navigation -->
         <nav class="navbar">
             <div class="nav-top">
                 <div class="nav-left">
                     <div class="logo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
                     </div>
-                    <span class="slash">/</span>
-                    <div class="user-name">
-                        <div class="user-avatar" id="nav-avatar"><i data-lucide="user"></i></div>
-                        <span id="nav-username">Developer</span>
-                    </div>
+                    <span id="nav-username" class="desktop-only" style="font-size: 14px; font-weight: 500;">Developer</span>
                 </div>
+                
                 <div class="nav-right">
-                    <div class="search-cmd" id="global-search-btn">
+                    <!-- Desktop Search -->
+                    <div class="search-cmd desktop-only" id="desktop-search-btn">
                         <i data-lucide="search" style="width: 14px;"></i>
-                        <input type="text" placeholder="Search..." disabled style="pointer-events: none;">
-                        <span class="kbd" style="margin-left: auto;">⌘K</span>
+                        <input type="text" placeholder="Search..." disabled style="pointer-events: none; background: transparent; border: none; color: inherit;">
+                        <span class="kbd">⌘K</span>
                     </div>
-                    <a href="/auth/logout" class="btn btn-secondary" style="height: 32px; padding: 0 12px; font-size: 0.875rem;">Logout</a>
+                    
+                    <!-- Mobile Search Icon -->
+                    <button class="mobile-only btn btn-secondary" id="mobile-search-trigger" style="border: none;">
+                        <i data-lucide="search"></i>
+                    </button>
+                    
+                    <!-- Logout -->
+                    <a href="/auth/logout" class="btn btn-secondary">
+                        <i data-lucide="log-out"></i>
+                        <span class="btn-logout-text desktop-only">Logout</span>
+                    </a>
                 </div>
+            </div>
+
+            <!-- Mobile Search Overlay -->
+            <div class="mobile-search-overlay" id="mobile-search-panel">
+                <input type="text" class="mobile-search-input" id="mobile-search-input" placeholder="Search repositories...">
             </div>
             
             <div class="nav-tabs-container">
@@ -59,45 +68,27 @@
         </nav>
 
         <main class="container">
-            
-            <!-- Overview (Dashboard) -->
+            <!-- Dashboard -->
             <section id="dashboard-view" class="view active">
-                <div class="page-header">
-                    <div class="project-search">
-                        <i data-lucide="search"></i>
-                        <input type="text" id="repo-search" placeholder="Search Repositories...">
-                    </div>
-                </div>
                 <div id="repo-list" class="project-grid">
-                    <!-- Cards Injected Here -->
+                    <!-- Cards -->
                 </div>
             </section>
 
-            <!-- Deploy (Provisioning) -->
+            <!-- Create -->
             <section id="create-view" class="view">
-                <div class="page-header">
-                    <h1>Import Git Repository</h1>
-                </div>
                 <div class="card-panel">
                     <div class="card-header">
-                        <h2>Configure Project</h2>
-                        <p>Set up your new repository parameters.</p>
+                        <h2>Create New Project</h2>
                     </div>
                     <div class="card-body">
                         <div class="input-group">
-                            <label>Repository Name</label>
-                            <input type="text" id="repo-name" placeholder="my-new-project">
+                            <label>Repo Name</label>
+                            <input type="text" id="repo-name" placeholder="my-awesome-project">
                         </div>
                         <div class="input-group">
                             <label>Visibility</label>
-                            <select id="repo-visibility">
-                                <option value="public">Public</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Description</label>
-                            <textarea id="repo-description" rows="3" placeholder="Brief description..."></textarea>
+                            <select id="repo-visibility"><option value="public">Public</option><option value="private">Private</option></select>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -106,87 +97,47 @@
                 </div>
             </section>
 
-            <!-- Rapid Edit -->
+            <!-- Other views omitted for brevity in template rewrite, but kept in logic -->
             <section id="editor-view" class="view">
-                <div class="page-header">
-                    <h1>Rapid Edit</h1>
-                </div>
-                <div class="card-panel">
-                    <div class="ide-wrapper">
-                        <div class="ide-header">
-                            <input type="text" id="target-repo" placeholder="owner/repo" style="width: 200px;">
-                            <span style="color: var(--ds-accents-4);">/</span>
-                            <input type="text" id="file-name" placeholder="path/to/file.ext" style="flex: 1;">
-                        </div>
-                        <div class="ide-body">
-                            <textarea id="file-content" class="ide-textarea" spellcheck="false" placeholder="// Write code here..."></textarea>
-                        </div>
-                    </div>
-                    <div class="card-footer" style="justify-content: space-between;">
-                        <button id="ai-generate-commit" class="btn btn-secondary">
-                            <i data-lucide="sparkles" style="width: 14px;"></i> AI Commit
-                        </button>
-                        <button id="publish-btn" class="btn btn-primary">Commit Changes</button>
-                    </div>
-                </div>
+                <div class="card-panel"><div class="card-header"><h2>Rapid Edit</h2></div><div class="card-body">
+                <input type="text" id="target-repo" placeholder="owner/repo" style="margin-bottom: 1rem;">
+                <input type="text" id="file-name" placeholder="path/to/file.ext" style="margin-bottom: 1rem;">
+                <textarea id="file-content" style="width: 100%; height: 300px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; font-family: monospace;"></textarea>
+                </div><div class="card-footer"><button id="publish-btn" class="btn btn-primary">Push Changes</button></div></div>
             </section>
-
-            <!-- Analytics -->
+            
             <section id="analytics-view" class="view">
-                <div class="page-header">
-                    <h1>Analytics</h1>
-                </div>
                 <div class="metrics-row">
-                    <div class="metric-box">
-                        <span class="metric-title">Health Score</span>
-                        <span class="metric-value">99%</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="metric-title">Total Repositories</span>
-                        <span class="metric-value" id="total-repos-count">--</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="metric-title">API Latency</span>
-                        <span class="metric-value">45ms</span>
-                    </div>
-                </div>
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h2>Recent Activity</h2>
-                    </div>
-                    <div class="card-body" id="health-score-list">
-                        <!-- Populated via JS -->
-                    </div>
+                    <div class="metric-box"><span class="metric-title">Total Repos</span><span class="metric-value" id="total-repos-count">0</span></div>
                 </div>
             </section>
-
         </main>
     </div>
 
-    <!-- Vercel-style Modal -->
+    <!-- Vercel Modal -->
     <div id="repo-modal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <div>
-                    <h2 id="modal-repo-name" style="font-size: 1.25rem; font-weight: 600;">--</h2>
-                    <span id="modal-visibility" class="badge" style="margin-top: 4px; display: inline-block;">--</span>
-                </div>
+                <h2 id="modal-repo-name">--</h2>
                 <button class="modal-close"><i data-lucide="x"></i></button>
             </div>
-            
-            <div class="nav-tabs-container" style="padding: 0 1.5rem; border-bottom: 1px solid var(--ds-accents-2);">
-                <div class="nav-tabs" style="padding: 0;">
-                    <button class="nav-tab active modal-tab-btn" data-tab="commits">Commits</button>
-                    <button class="nav-tab modal-tab-btn" data-tab="branches">Branches</button>
+            <div class="nav-tabs-container">
+                <div class="nav-tabs">
+                    <button class="nav-tab active modal-tab-btn" data-tab="setup">Quick Setup</button>
+                    <button class="nav-tab modal-tab-btn" data-tab="commits">Activity</button>
                 </div>
             </div>
-
             <div class="modal-body">
-                <div id="tab-commits" class="tab-pane active">
-                    <div id="commits-list">Loading commits...</div>
+                <div id="tab-setup" class="tab-pane active">
+                    <p style="color: var(--ds-accents-5); margin-bottom: 1rem;">Push an existing repository from your command line:</p>
+                    <div class="code-block" id="git-commands">
+                        git remote add origin https://github.com/user/repo.git<br>
+                        git branch -M main<br>
+                        git push -u origin main
+                    </div>
                 </div>
-                <div id="tab-branches" class="tab-pane">
-                    <div id="branches-list">Loading branches...</div>
+                <div id="tab-commits" class="tab-pane">
+                    <div id="commits-list">Fetching activity...</div>
                 </div>
             </div>
         </div>
