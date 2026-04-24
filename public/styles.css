@@ -219,6 +219,75 @@ body {
 .btn-full { width: 100%; justify-content: center; }
 .btn-icon-nav { background: transparent; border: none; color: var(--ds-accents-5); cursor: pointer; padding: 5px; }
 
+/* --- Forms & Inputs (Refined) --- */
+.input-group {
+    display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;
+}
+.input-group label {
+    font-size: 0.875rem; font-weight: 500; color: var(--ds-accents-5);
+}
+.input-group input, .input-group select {
+    background: var(--ds-bg);
+    border: 1px solid var(--ds-accents-2);
+    color: var(--ds-foreground);
+    border-radius: var(--ds-radius);
+    padding: 0.75rem 1rem;
+    font-family: var(--ds-font-sans);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    outline: none;
+    width: 100%;
+}
+.input-group input:focus, .input-group select:focus,
+.input-with-action input:focus {
+    border-color: var(--ds-blue);
+    box-shadow: 0 0 0 1px var(--ds-blue);
+}
+.input-with-action input {
+    background: var(--ds-bg);
+    border: 1px solid var(--ds-accents-2);
+    color: var(--ds-foreground);
+    border-radius: var(--ds-radius);
+    padding: 0.75rem 1rem;
+    padding-right: 2.5rem;
+    font-family: var(--ds-font-sans);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    outline: none;
+    width: 100%;
+}
+
+select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%23888888" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+}
+
+/* --- Editor Surface (Rapid Edit) --- */
+.editor-surface {
+    display: flex; flex-direction: column; height: 500px;
+    border: 1px solid var(--ds-accents-2); border-radius: var(--ds-radius);
+    overflow: hidden; margin-bottom: 1.5rem;
+    background: var(--ds-bg);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+.editor-nav {
+    display: flex; align-items: center; gap: 10px; padding: 10px 1rem;
+    background: var(--ds-accents-1); border-bottom: 1px solid var(--ds-accents-2);
+}
+.editor-nav input {
+    background: transparent; border: none; color: var(--ds-accents-5);
+    font-family: var(--ds-font-mono); font-size: 13px; outline: none; width: 100%;
+    transition: color 0.2s;
+}
+.editor-nav input:focus { color: var(--ds-foreground); }
+.editor-surface textarea {
+    flex: 1; background: transparent; border: none; color: var(--ds-foreground);
+    font-family: var(--ds-font-mono); font-size: 14px; padding: 1rem; outline: none; resize: none; line-height: 1.6;
+}
+
 /* --- Provisioning Forge v3.0 --- */
 .page-section-header { margin-bottom: 2rem; }
 .page-section-header h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.04em; }
