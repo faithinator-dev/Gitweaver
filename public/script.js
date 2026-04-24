@@ -44,10 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcon();
     });
 
-    // 2. Omni Search (Command Palette) Logic
+    // 2. Omni Search Logic
     window.openOmniSearch = () => {
-        const overlay = document.getElementById('omni-overlay');
-        overlay.classList.add('active');
+        document.getElementById('omni-overlay').classList.add('active');
         document.getElementById('omni-input').focus();
         renderOmniResults("");
     };
@@ -70,18 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const term = query.toLowerCase();
         let html = "";
         
-        // Filter Commands
         const filteredCmds = commands.filter(c => c.label.toLowerCase().includes(term));
         if (filteredCmds.length > 0) {
             html += `<div style="font-size:10px; color:var(--ds-accents-5); padding:8px 12px; text-transform:uppercase;">Actions</div>`;
-            html += filteredCmds.map((c, i) => `
+            html += filteredCmds.map(c => `
                 <div class="omni-item" onclick="(${c.action.toString()})(); closeOmniSearch();">
                     <i data-lucide="${c.icon}"></i> <span>${c.label}</span>
                 </div>
             `).join('');
         }
 
-        // Filter Repos
         const filteredRepos = allRepos.filter(r => r.name.toLowerCase().includes(term));
         if (filteredRepos.length > 0) {
             html += `<div style="font-size:10px; color:var(--ds-accents-5); padding:8px 12px; text-transform:uppercase; margin-top:8px;">Repositories</div>`;
@@ -103,12 +100,117 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') closeOmniSearch();
     });
 
-    // 3. Ghost Branch Logic
+    // 3. AI Name Forge
+    const aiForgeBtn = document.getElementById('ai-name-forge');
+    const suggestionsList = document.getElementById('name-suggestions');
+    const nameInput = document.getElementById('repo-name');
+
+    aiForgeBtn?.addEventListener('click', async () => {
+        const keyword = nameInput.value || "project";
+        aiForgeBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i>';
+        initIcons();
+
+        try {
+            const res = await fetch('/api/generate-repo-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keyword })
+            });
+            const { suggestions } = await res.json();
+            suggestionsList.innerHTML = suggestions.map(s => `<span class="suggestion-chip">${s}</span>`).join('');
+            
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.onclick = () => {
+                    nameInput.value = chip.textContent;
+                    suggestionsList.innerHTML = '';
+                };
+            });
+        } catch (e) { showToast("AI Forge Offline", "error"); }
+        aiForgeBtn.innerHTML = '<i data-lucide="sparkles"></i>';
+        initIcons();
+    });
+
+    // 4. Template Gallery
+    const templates = document.querySelectorAll('.template-card');
+    templates.forEach(t => {
+        t.onclick = () => {
+            templates.forEach(card => card.classList.remove('active'));
+            t.classList.add('active');
+        };
+    });
+
+    // 5. Deployment Logic with Faster Terminal
+    const deployBtn = document.getElementById('deploy-btn');
+    const terminal = document.getElementById('provision-terminal');
+    const terminalOutput = document.getElementById('terminal-output');
+
+    const log = (msg, type = 'system') => {
+        const line = document.createElement('span');
+        line.className = `log-line log-${type}`;
+        line.textContent = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+        terminalOutput.appendChild(line);
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    };
+
+    deployBtn?.addEventListener('click', async () => {
+        const name = nameInput.value;
+        const visibility = document.getElementById('repo-visibility').value;
+        const activeTemplate = document.querySelector('.template-card.active');
+        
+        if (!name) return showToast("Project name required", "error");
+
+        deployBtn.disabled = true;
+        terminal.style.display = 'block';
+        terminalOutput.innerHTML = '';
+        
+        log(`Initiating Forge for ${name}...`, 'forge');
+        await new Promise(r => setTimeout(r, 200));
+        log("Establishing GitHub Handshake...", 'system');
+        await new Promise(r => setTimeout(r, 300));
+        log(`Applying blueprint: ${activeTemplate.dataset.template}`, 'forge');
+
+        try {
+            const res = await fetch('/api/create-repo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name, 
+                    private: visibility === 'private',
+                    license_template: document.getElementById('toggle-license').checked ? 'mit' : undefined,
+                    gitignore_template: document.getElementById('toggle-gitignore').checked ? activeTemplate.dataset.gitignore || 'Node' : undefined
+                })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                log("Repository weaving complete.", 'forge');
+                await new Promise(r => setTimeout(r, 200));
+                log("Optimizing metadata...", 'system');
+                await new Promise(r => setTimeout(r, 200));
+                log("PROVISIONING SUCCESSFUL.", 'success');
+                
+                showToast("Stack Provisioned!");
+                setTimeout(() => {
+                    window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true);
+                    fetchRepos();
+                    deployBtn.disabled = false;
+                }, 500);
+            } else {
+                log(`ERROR: ${data.error}`, 'system');
+                deployBtn.disabled = false;
+            }
+        } catch (e) {
+            log("CRITICAL ERROR: Connection Terminated.", 'system');
+            deployBtn.disabled = false;
+        }
+    });
+
+    // 6. Ghost Branch Logic
     const ghostBtn = document.getElementById('create-ghost-branch');
     ghostBtn?.addEventListener('click', async () => {
         const branchName = document.getElementById('new-branch-name').value;
         const repoName = document.getElementById('modal-repo-name').textContent;
-        const owner = currentRepoOwner; // Tracked globally
+        const owner = currentRepoOwner;
 
         if (!branchName) return showToast("Branch name required", "error");
         
@@ -123,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ branch: branchName })
             });
             if (res.ok) {
-                showToast(`Ghost Branch '${branchName}' Forged!`);
+                showToast(`Ghost Branch Forged!`);
                 document.getElementById('new-branch-name').value = '';
                 loadRepoBranches(owner, repoName);
             } else { showToast("Forge failed", "error"); }
@@ -133,17 +235,17 @@ document.addEventListener('DOMContentLoaded', () => {
         initIcons();
     });
 
-    // 4. Action Pulse & Data Loading
+    // 7. Navigation & Data Loading
     let allRepos = [];
     let currentRepoOwner = "";
+
+    document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
 
     const fetchRepos = async () => {
         const res = await fetch('/api/repos');
         allRepos = await res.json();
         renderRepos(allRepos);
         document.getElementById('total-repos-count').textContent = allRepos.length;
-        
-        // Parallel load action pulses
         allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
     };
 
@@ -153,47 +255,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             const pulseEl = document.querySelector(`[data-pulse="${owner}/${name}"]`);
             const cardEl = document.querySelector(`[data-card="${owner}/${name}"]`);
-            
             if (!pulseEl) return;
-            
             pulseEl.className = 'status-pulse';
-            if (data.status === 'in_progress' || data.status === 'queued') {
-                pulseEl.classList.add('pulse-running');
-            } else if (data.conclusion === 'success') {
-                pulseEl.classList.add('pulse-success');
-            } else if (data.conclusion === 'failure') {
-                pulseEl.classList.add('pulse-failure');
-                cardEl?.classList.add('status-failing');
-            } else {
-                pulseEl.classList.add('pulse-none');
-            }
+            if (data.status === 'in_progress' || data.status === 'queued') pulseEl.classList.add('pulse-running');
+            else if (data.conclusion === 'success') pulseEl.classList.add('pulse-success');
+            else if (data.conclusion === 'failure') { pulseEl.classList.add('pulse-failure'); cardEl?.classList.add('status-failing'); }
+            else pulseEl.classList.add('pulse-none');
         } catch (e) {}
     };
-
-    // --- standard nav & creation logic (already in v3, keeping integrated) ---
-    document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
-    
-    document.getElementById('deploy-btn')?.addEventListener('click', async () => {
-        const name = document.getElementById('repo-name').value;
-        const terminal = document.getElementById('provision-terminal');
-        const output = document.getElementById('terminal-output');
-        if (!name) return;
-
-        terminal.style.display = 'block';
-        output.innerHTML = 'Initiating Provisioning Sequence...';
-        
-        const res = await fetch('/api/create-repo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, private: document.getElementById('repo-visibility').value === 'private' })
-        });
-        const data = await res.json();
-        if (res.ok) {
-            output.innerHTML += '<br>Handshake established...<br>Metadata optimized...<br>FORGE SUCCESSFUL.';
-            fetchRepos();
-            setTimeout(() => window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true), 1000);
-        }
-    });
 
     const checkAuth = async () => {
         const res = await fetch('/api/auth-status');
@@ -235,12 +304,9 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     const modal = document.getElementById('repo-modal');
     document.getElementById('modal-repo-name').textContent = name;
     modal.classList.add('active');
-
     const gitCmds = document.getElementById('git-commands');
     gitCmds.innerHTML = `git remote add origin https://github.com/${owner}/${name}.git<br>git branch -M main<br>git push -u origin main`;
-
     if (!isNew) {
-        // Load Commits
         fetch(`/api/repos/${owner}/${name}/commits`).then(r => r.json()).then(commits => {
             document.getElementById('commits-list').innerHTML = Array.isArray(commits) ? commits.slice(0, 5).map(c => `
                 <div style="padding:10px 0; border-bottom:1px solid #222;">
@@ -250,6 +316,8 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
             `).join('') : 'No activity yet.';
         });
         loadRepoBranches(owner, name);
+    } else {
+        document.querySelector('[data-tab="setup"]').click();
     }
 };
 
