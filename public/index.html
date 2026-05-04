@@ -188,13 +188,19 @@
             </div>
             <div class="nav-tabs-wrapper" style="padding: 0 1rem; border-bottom: 1px solid var(--ds-accents-2);">
                 <div class="nav-tabs">
-                    <button class="nav-tab active modal-tab-btn" data-tab="setup">Setup</button>
+                    <button class="nav-tab active modal-tab-btn" data-tab="info">Info</button>
+                    <button class="nav-tab modal-tab-btn" data-tab="setup">Setup</button>
                     <button class="nav-tab modal-tab-btn" data-tab="commits">Activity</button>
                     <button class="nav-tab modal-tab-btn" data-tab="branches">Ghost Branches</button>
                 </div>
             </div>
             <div class="modal-body-vercel">
-                <div id="tab-setup" class="tab-pane active">
+                <div id="tab-info" class="tab-pane active">
+                    <div id="repo-details-info" class="repo-details-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <div id="tab-setup" class="tab-pane">
                     <div class="code-terminal" id="git-commands"></div>
                 </div>
                 <div id="tab-commits" class="tab-pane">

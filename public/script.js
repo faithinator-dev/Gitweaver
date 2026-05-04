@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
-        const filteredRepos = allRepos.filter(r => r.name.toLowerCase().includes(term));
+        const filteredRepos = window.allRepos.filter(r => r.name.toLowerCase().includes(term));
         if (filteredRepos.length > 0) {
             html += `<div style="font-size:10px; color:var(--ds-accents-5); padding:8px 12px; text-transform:uppercase; margin-top:8px;">Repositories</div>`;
             html += filteredRepos.slice(0, 5).map(r => `
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 7. Navigation & Data Loading
-    let allRepos = [];
+    window.allRepos = [];
     window.currentRepoOwner = "";
 
     document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
@@ -259,10 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('/api/repos');
             if (!res.ok) throw new Error("Failed to fetch repos");
-            allRepos = await res.json();
-            renderRepos(allRepos);
-            document.getElementById('total-repos-count').textContent = allRepos.length;
-            allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
+            window.allRepos = await res.json();
+            renderRepos(window.allRepos);
+            document.getElementById('total-repos-count').textContent = window.allRepos.length;
+            window.allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
         } catch (e) {
             showToast("Failed to load repositories", "error");
             document.getElementById('repo-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--ds-accents-5);">Failed to load repositories. Please try again.</div>';
@@ -296,6 +296,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.error("Auth check failed"); }
     };
     checkAuth();
+
+    // 7.1 Modal Tab Logic
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-tab-btn')) {
+            const btn = e.target;
+            document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            const pane = document.getElementById(`tab-${btn.dataset.tab}`);
+            if (pane) pane.classList.add('active');
+        }
+    });
 });
 
 function renderRepos(repos) {
@@ -325,21 +337,79 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     window.currentRepoOwner = owner;
     const modal = document.getElementById('repo-modal');
     document.getElementById('modal-repo-name').textContent = name;
+    
+    // Reset tabs
+    document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    
+    const infoTabBtn = document.querySelector('.modal-tab-btn[data-tab="info"]');
+    const infoPane = document.getElementById('tab-info');
+    infoTabBtn.classList.add('active');
+    infoPane.classList.add('active');
+
+    const repoData = window.allRepos.find(r => r.owner.login === owner && r.name === name);
+    if (repoData) {
+        document.getElementById('repo-details-info').innerHTML = `
+            <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-value">${repoData.full_name}</span></div>
+            <div class="detail-item"><span class="detail-label">Description</span><span class="detail-value">${repoData.description || 'No description provided.'}</span></div>
+            <div class="detail-item"><span class="detail-label">Visibility</span><span class="detail-value">${repoData.private ? 'Private' : 'Public'}</span></div>
+            <div class="detail-item"><span class="detail-label">Stars</span><span class="detail-value">${repoData.stargazers_count}</span></div>
+            <div class="detail-item"><span class="detail-label">Forks</span><span class="detail-value">${repoData.forks_count}</span></div>
+            <div class="detail-item"><span class="detail-label">Language</span><span class="detail-value">${repoData.language || 'Unknown'}</span></div>
+            <div class="detail-item"><span class="detail-label">Created</span><span class="detail-value">${new Date(repoData.created_at).toLocaleDateString()}</span></div>
+            <div class="detail-item"><span class="detail-label">Last Push</span><span class="detail-value">${new Date(repoData.pushed_at).toLocaleDateString()}</span></div>
+            <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">GitHub URL</span><span class="detail-value"><a href="${repoData.html_url}" target="_blank">${repoData.html_url}</a></span></div>
+        `;
+    }
+
     modal.classList.add('active');
+    
+    // Setup Section
     const gitCmds = document.getElementById('git-commands');
-    gitCmds.innerHTML = `git remote add origin https://github.com/${owner}/${name}.git<br>git branch -M main<br>git push -u origin main`;
+    gitCmds.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+            <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Quick Start: Clone this repository</p>
+            <div class="code-terminal">git clone https://github.com/${owner}/${name}.git</div>
+        </div>
+        <div>
+            <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Push an existing repository from your command line</p>
+            <div class="code-terminal">
+                git remote add origin https://github.com/${owner}/${name}.git<br>
+                git branch -M main<br>
+                git push -u origin main
+            </div>
+        </div>
+    `;
+    
+    const commitsList = document.getElementById('commits-list');
+    commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);"><i data-lucide="loader-2" class="spin"></i> Syncing activity...</div>';
+    initIcons();
+
     if (!isNew) {
         fetch(`/api/repos/${owner}/${name}/commits`).then(r => r.json()).then(commits => {
-            document.getElementById('commits-list').innerHTML = Array.isArray(commits) ? commits.slice(0, 5).map(c => `
-                <div style="padding:10px 0; border-bottom:1px solid #222;">
-                    <div style="font-size:14px; font-weight:500;">${c.commit.message}</div>
-                    <div style="font-size:12px; color:#666;">${c.commit.author.name}</div>
-                </div>
-            `).join('') : 'No activity yet.';
+            if (Array.isArray(commits) && commits.length > 0) {
+                commitsList.innerHTML = commits.slice(0, 10).map(c => `
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <div class="activity-content">
+                            <div class="activity-message">${c.commit.message}</div>
+                            <div class="activity-meta">
+                                <span class="activity-author">${c.commit.author.name}</span>
+                                <span class="activity-date">• ${new Date(c.commit.author.date).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);">No activity recorded yet.</div>';
+            }
+        }).catch(() => {
+            commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);">Failed to load activity.</div>';
         });
         loadRepoBranches(owner, name);
     } else {
-        document.querySelector('[data-tab="setup"]').click();
+        const setupTabBtn = document.querySelector('.modal-tab-btn[data-tab="setup"]');
+        if (setupTabBtn) setupTabBtn.click();
     }
 };
 
