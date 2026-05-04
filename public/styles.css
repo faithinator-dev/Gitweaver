@@ -155,8 +155,8 @@ body {
 
 .badge {
     border: 1px solid var(--ds-accents-2);
-    background: var(--ds-accents-1);
-    color: var(--ds-accents-5);
+    background: var(--ds-accents-2);
+    color: #fff;
     font-size: 11px; font-weight: 700;
     padding: 2px 8px; border-radius: 100px;
     text-transform: uppercase;

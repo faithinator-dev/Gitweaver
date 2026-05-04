@@ -25,29 +25,32 @@ const switchView = (viewId) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Theme Engine Logic
+    // 1. Theme Engine Logic (Icon Update only)
     const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('gw-theme') || 'theme-vercel';
-    document.body.className = savedTheme;
     
     const updateThemeIcon = () => {
-        const isLinear = document.body.classList.contains('theme-linear');
-        themeToggle.innerHTML = `<i data-lucide="${isLinear ? 'sun' : 'moon'}"></i>`;
-        initIcons();
+        const isLinear = document.documentElement.classList.contains('theme-linear');
+        if (themeToggle) {
+            themeToggle.innerHTML = `<i data-lucide="${isLinear ? 'sun' : 'moon'}"></i>`;
+            initIcons();
+        }
     };
     updateThemeIcon();
 
     themeToggle?.addEventListener('click', () => {
-        const isLinear = document.body.classList.toggle('theme-linear');
-        document.body.classList.toggle('theme-vercel', !isLinear);
+        const isLinear = document.documentElement.classList.toggle('theme-linear');
+        document.documentElement.classList.toggle('theme-vercel', !isLinear);
         localStorage.setItem('gw-theme', isLinear ? 'theme-linear' : 'theme-vercel');
         updateThemeIcon();
     });
 
     // 2. Omni Search Logic
     window.openOmniSearch = () => {
-        document.getElementById('omni-overlay').classList.add('active');
-        document.getElementById('omni-input').focus();
+        const overlay = document.getElementById('omni-overlay');
+        overlay.classList.add('active');
+        const input = document.getElementById('omni-input');
+        input.value = "";
+        input.focus();
         renderOmniResults("");
     };
 
@@ -107,7 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     aiForgeBtn?.addEventListener('click', async () => {
         const keyword = nameInput.value || "project";
+        const originalContent = aiForgeBtn.innerHTML;
         aiForgeBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i>';
+        aiForgeBtn.disabled = true;
         initIcons();
 
         try {
@@ -116,17 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ keyword })
             });
-            const { suggestions } = await res.json();
-            suggestionsList.innerHTML = suggestions.map(s => `<span class="suggestion-chip">${s}</span>`).join('');
-            
-            document.querySelectorAll('.suggestion-chip').forEach(chip => {
-                chip.onclick = () => {
-                    nameInput.value = chip.textContent;
-                    suggestionsList.innerHTML = '';
-                };
-            });
+            const data = await res.json();
+            if (res.ok) {
+                suggestionsList.innerHTML = data.suggestions.map(s => `<span class="suggestion-chip">${s}</span>`).join('');
+                document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                    chip.onclick = () => {
+                        nameInput.value = chip.textContent;
+                        suggestionsList.innerHTML = '';
+                    };
+                });
+            } else {
+                showToast(data.error || "AI Forge Offline", "error");
+            }
         } catch (e) { showToast("AI Forge Offline", "error"); }
-        aiForgeBtn.innerHTML = '<i data-lucide="sparkles"></i>';
+        aiForgeBtn.innerHTML = originalContent;
+        aiForgeBtn.disabled = false;
         initIcons();
     });
 
@@ -154,21 +163,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deployBtn?.addEventListener('click', async () => {
         const name = nameInput.value;
-        const visibility = document.getElementById('repo-visibility').value;
+        const visibility = document.getElementById('repo-visibility')?.value || 'public';
         const activeTemplate = document.querySelector('.template-card.active');
         
         if (!name) return showToast("Project name required", "error");
 
         deployBtn.disabled = true;
+        const originalText = deployBtn.textContent;
+        deployBtn.textContent = "Provisioning...";
         terminal.style.display = 'block';
         terminalOutput.innerHTML = '';
         
         log(`Initiating Forge for ${name}...`, 'forge');
         await new Promise(r => setTimeout(r, 200));
         log("Establishing GitHub Handshake...", 'system');
-        await new Promise(r => setTimeout(r, 300));
-        log(`Applying blueprint: ${activeTemplate.dataset.template}`, 'forge');
-
+        
         try {
             const res = await fetch('/api/create-repo', {
                 method: 'POST',
@@ -177,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     name, 
                     private: visibility === 'private',
                     license_template: document.getElementById('toggle-license').checked ? 'mit' : undefined,
-                    gitignore_template: document.getElementById('toggle-gitignore').checked ? activeTemplate.dataset.gitignore || 'Node' : undefined
+                    gitignore_template: document.getElementById('toggle-gitignore').checked ? activeTemplate?.dataset.gitignore || 'Node' : undefined
                 })
             });
             const data = await res.json();
@@ -185,23 +194,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 log("Repository weaving complete.", 'forge');
                 await new Promise(r => setTimeout(r, 200));
-                log("Optimizing metadata...", 'system');
-                await new Promise(r => setTimeout(r, 200));
                 log("PROVISIONING SUCCESSFUL.", 'success');
-                
                 showToast("Stack Provisioned!");
                 setTimeout(() => {
                     window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true);
                     fetchRepos();
                     deployBtn.disabled = false;
+                    deployBtn.textContent = originalText;
                 }, 500);
             } else {
                 log(`ERROR: ${data.error}`, 'system');
                 deployBtn.disabled = false;
+                deployBtn.textContent = originalText;
+                showToast(data.error || "Deployment failed", "error");
             }
         } catch (e) {
             log("CRITICAL ERROR: Connection Terminated.", 'system');
             deployBtn.disabled = false;
+            deployBtn.textContent = originalText;
+            showToast("Connection Error", "error");
         }
     });
 
@@ -210,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ghostBtn?.addEventListener('click', async () => {
         const branchName = document.getElementById('new-branch-name').value;
         const repoName = document.getElementById('modal-repo-name').textContent;
-        const owner = currentRepoOwner;
+        const owner = window.currentRepoOwner;
 
         if (!branchName) return showToast("Branch name required", "error");
         
@@ -228,7 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast(`Ghost Branch Forged!`);
                 document.getElementById('new-branch-name').value = '';
                 loadRepoBranches(owner, repoName);
-            } else { showToast("Forge failed", "error"); }
+            } else {
+                const data = await res.json();
+                showToast(data.error || "Forge failed", "error");
+            }
         } catch (e) { showToast("Connection error", "error"); }
         ghostBtn.disabled = false;
         ghostBtn.innerHTML = 'Forge Branch';
@@ -237,16 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. Navigation & Data Loading
     let allRepos = [];
-    let currentRepoOwner = "";
+    window.currentRepoOwner = "";
 
     document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
 
     const fetchRepos = async () => {
-        const res = await fetch('/api/repos');
-        allRepos = await res.json();
-        renderRepos(allRepos);
-        document.getElementById('total-repos-count').textContent = allRepos.length;
-        allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
+        try {
+            const res = await fetch('/api/repos');
+            if (!res.ok) throw new Error("Failed to fetch repos");
+            allRepos = await res.json();
+            renderRepos(allRepos);
+            document.getElementById('total-repos-count').textContent = allRepos.length;
+            allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
+        } catch (e) {
+            showToast("Failed to load repositories", "error");
+            document.getElementById('repo-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--ds-accents-5);">Failed to load repositories. Please try again.</div>';
+        }
     };
 
     const updateActionPulse = async (owner, name) => {
@@ -265,13 +285,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const checkAuth = async () => {
-        const res = await fetch('/api/auth-status');
-        const data = await res.json();
-        if (data.loggedIn) {
-            document.getElementById('landing-content').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            fetchRepos();
-        }
+        try {
+            const res = await fetch('/api/auth-status');
+            const data = await res.json();
+            if (data.loggedIn) {
+                document.getElementById('landing-content').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                fetchRepos();
+            }
+        } catch (e) { console.error("Auth check failed"); }
     };
     checkAuth();
 });

@@ -19,7 +19,7 @@ So I built **GitWeaver**—a surgical tool for GitHub ops. OAuth-secured, headle
 
 > "GitWeaver = GitHub on steroids. Deployed my SaaS boilerplate + CI/CD in 90s." — @dev_rel
 
-**Try the 3-min setup → [Live Demo](https://gitweaver.onrender.com)**
+**Try the setup → [GitHub Repo](https://github.com/gitweaver/gitweaver)**
 
 ---
 

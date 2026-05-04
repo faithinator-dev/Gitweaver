@@ -4,16 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GitWeaver Power Forge</title>
+    <meta name="description" content="Enterprise-grade GitHub repository orchestration and management.">
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" as="style">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/styles.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('gw-theme') || 'theme-vercel';
+            document.documentElement.className = savedTheme;
+            // Also apply to body as soon as it exists
+            const observer = new MutationObserver(() => {
+                if (document.body) {
+                    document.body.className = savedTheme;
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.documentElement, { childList: true });
+        })();
+    </script>
+    <script src="https://unpkg.com/lucide@0.418.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="theme-vercel">
 
     <!-- Landing View -->
     <div id="landing-content" class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
         <div class="logo-circle" style="margin-bottom: 2rem;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="GitWeaver Logo"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
         <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.06em; margin-bottom: 1rem;">GitWeaver</h1>
         <p style="color: var(--ds-accents-5); margin-bottom: 2.5rem; font-size: 1.25rem;">Develop. Preview. Ship.</p>
@@ -22,52 +39,52 @@
 
     <!-- App Content -->
     <div id="app-content" style="display: none;">
-        <nav class="navbar">
+        <nav class="navbar" role="navigation">
             <div class="nav-top">
                 <div class="nav-left">
                     <div class="logo-circle">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
                     </div>
-                    <span class="nav-slash">/</span>
+                    <span class="nav-slash" aria-hidden="true">/</span>
                     <span id="nav-username" class="nav-username">Developer</span>
                 </div>
                 
                 <div class="nav-right">
                     <!-- Theme Switcher -->
-                    <button class="btn-icon-nav desktop-only" id="theme-toggle" title="Toggle Theme">
+                    <button class="btn-icon-nav desktop-only" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">
                         <i data-lucide="moon"></i>
                     </button>
 
                     <!-- Omni Search Trigger -->
-                    <div class="search-box desktop-only" id="desktop-search-trigger" onclick="openOmniSearch()">
+                    <div class="search-box desktop-only" id="desktop-search-trigger" onclick="openOmniSearch()" role="search">
                         <i data-lucide="search" style="width: 14px;"></i>
                         <span class="search-placeholder">Omni Search...</span>
                         <span class="kbd">⌘K</span>
                     </div>
-                    <button class="mobile-only btn-icon-nav" id="mobile-search-trigger" onclick="openOmniSearch()"><i data-lucide="search"></i></button>
+                    <button class="mobile-only btn-icon-nav" id="mobile-search-trigger" onclick="openOmniSearch()" aria-label="Search"><i data-lucide="search"></i></button>
                     
                     <a href="/auth/logout" class="btn btn-secondary nav-logout-btn"><i data-lucide="log-out"></i> <span class="desktop-only">Logout</span></a>
                 </div>
             </div>
             
             <div class="nav-tabs-wrapper">
-                <div class="nav-tabs">
-                    <button class="nav-tab active" data-view="dashboard-view">Overview</button>
-                    <button class="nav-tab" data-view="create-view">Deploy</button>
-                    <button class="nav-tab" data-view="editor-view">Rapid Edit</button>
-                    <button class="nav-tab" data-view="analytics-view">Analytics</button>
+                <div class="nav-tabs" role="tablist">
+                    <button class="nav-tab active" data-view="dashboard-view" role="tab" aria-selected="true">Overview</button>
+                    <button class="nav-tab" data-view="create-view" role="tab" aria-selected="false">Deploy</button>
+                    <button class="nav-tab" data-view="editor-view" role="tab" aria-selected="false">Rapid Edit</button>
+                    <button class="nav-tab" data-view="analytics-view" role="tab" aria-selected="false">Analytics</button>
                 </div>
             </div>
         </nav>
 
         <main class="container">
             <!-- Dashboard -->
-            <div id="dashboard-view" class="view active">
+            <div id="dashboard-view" class="view active" role="tabpanel">
                 <div id="repo-list" class="project-grid"></div>
             </div>
 
             <!-- Enhanced Deploy Section -->
-            <div id="create-view" class="view">
+            <div id="create-view" class="view" role="tabpanel">
                 <div class="page-section-header">
                     <h2>Provision Infrastructure</h2>
                     <p>Select a blueprint or build from scratch.</p>
@@ -83,12 +100,20 @@
                 <div class="card-vercel">
                     <div class="card-body">
                         <div class="input-group">
-                            <label>Project Identity</label>
+                            <label for="repo-name">Project Identity</label>
                             <div class="input-with-action">
                                 <input type="text" id="repo-name" placeholder="enter-keyword-or-name">
-                                <button id="ai-name-forge" class="btn-icon-inside" title="Forge AI Name"><i data-lucide="sparkles"></i></button>
+                                <button id="ai-name-forge" class="btn-icon-inside" title="Forge AI Name" aria-label="Generate AI Name"><i data-lucide="sparkles"></i></button>
                             </div>
                             <div id="name-suggestions" class="suggestions-list"></div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="repo-visibility">Visibility</label>
+                            <select id="repo-visibility">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
                         </div>
 
                         <div class="stack-toggles">
@@ -104,7 +129,7 @@
 
                 <div id="provision-terminal" class="provision-terminal" style="display: none;">
                     <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">Provisioning Logs</span></div>
-                    <div id="terminal-output" class="terminal-content"></div>
+                    <div id="terminal-output" class="terminal-content" aria-live="polite"></div>
                 </div>
             </div>
 
