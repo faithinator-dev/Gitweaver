@@ -24,10 +24,13 @@ const switchView = (viewId) => {
     initIcons();
 };
 
+// Global State
+window.allRepos = [];
+window.currentRepoOwner = "";
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Theme Engine Logic (Icon Update only)
+    // 1. Theme Engine Logic
     const themeToggle = document.getElementById('theme-toggle');
-    
     const updateThemeIcon = () => {
         const isLinear = document.documentElement.classList.contains('theme-linear');
         if (themeToggle) {
@@ -148,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
-    // 5. Deployment Logic with Faster Terminal
+    // 5. Deployment Logic
     const deployBtn = document.getElementById('deploy-btn');
     const terminal = document.getElementById('provision-terminal');
     const terminalOutput = document.getElementById('terminal-output');
@@ -249,40 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initIcons();
     });
 
-    // 7. Navigation & Data Loading
-    window.allRepos = [];
-    window.currentRepoOwner = "";
-
+    // 7. Data Loading
     document.querySelectorAll('.nav-tab[data-view]').forEach(btn => btn.onclick = () => switchView(btn.dataset.view));
-
-    const fetchRepos = async () => {
-        try {
-            const res = await fetch('/api/repos');
-            if (!res.ok) throw new Error("Failed to fetch repos");
-            window.allRepos = await res.json();
-            renderRepos(window.allRepos);
-            document.getElementById('total-repos-count').textContent = window.allRepos.length;
-            window.allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
-        } catch (e) {
-            showToast("Failed to load repositories", "error");
-            document.getElementById('repo-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--ds-accents-5);">Failed to load repositories. Please try again.</div>';
-        }
-    };
-
-    const updateActionPulse = async (owner, name) => {
-        try {
-            const res = await fetch(`/api/repos/${owner}/${name}/actions`);
-            const data = await res.json();
-            const pulseEl = document.querySelector(`[data-pulse="${owner}/${name}"]`);
-            const cardEl = document.querySelector(`[data-card="${owner}/${name}"]`);
-            if (!pulseEl) return;
-            pulseEl.className = 'status-pulse';
-            if (data.status === 'in_progress' || data.status === 'queued') pulseEl.classList.add('pulse-running');
-            else if (data.conclusion === 'success') pulseEl.classList.add('pulse-success');
-            else if (data.conclusion === 'failure') { pulseEl.classList.add('pulse-failure'); cardEl?.classList.add('status-failing'); }
-            else pulseEl.classList.add('pulse-none');
-        } catch (e) {}
-    };
 
     const checkAuth = async () => {
         try {
@@ -297,24 +268,52 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     checkAuth();
 
-    // 7.1 Modal Tab Logic
+    // 8. Tab Logic
     document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal-tab-btn')) {
-            const btn = e.target;
+        const tabBtn = e.target.closest('.modal-tab-btn');
+        if (tabBtn) {
             document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            const pane = document.getElementById(`tab-${btn.dataset.tab}`);
+            tabBtn.classList.add('active');
+            const pane = document.getElementById(`tab-${tabBtn.dataset.tab}`);
             if (pane) pane.classList.add('active');
         }
     });
 });
 
+const fetchRepos = async () => {
+    try {
+        const res = await fetch('/api/repos');
+        if (!res.ok) throw new Error("Failed to fetch repos");
+        window.allRepos = await res.json();
+        renderRepos(window.allRepos);
+        document.getElementById('total-repos-count').textContent = window.allRepos.length;
+        window.allRepos.forEach(repo => updateActionPulse(repo.owner.login, repo.name));
+    } catch (e) {
+        showToast("Failed to load repositories", "error");
+    }
+};
+
+const updateActionPulse = async (owner, name) => {
+    try {
+        const res = await fetch(`/api/repos/${owner}/${name}/actions`);
+        const data = await res.json();
+        const pulseEl = document.querySelector(`[data-pulse="${owner}/${name}"]`);
+        const cardEl = document.querySelector(`[data-card="${owner}/${name}"]`);
+        if (!pulseEl) return;
+        pulseEl.className = 'status-pulse';
+        if (data.status === 'in_progress' || data.status === 'queued') pulseEl.classList.add('pulse-running');
+        else if (data.conclusion === 'success') pulseEl.classList.add('pulse-success');
+        else if (data.conclusion === 'failure') { pulseEl.classList.add('pulse-failure'); cardEl?.classList.add('status-failing'); }
+        else pulseEl.classList.add('pulse-none');
+    } catch (e) {}
+};
+
 function renderRepos(repos) {
     const container = document.getElementById('repo-list');
     if (!container) return;
     container.innerHTML = repos.map(r => `
-        <div class="project-card" data-card="${r.owner.login}/${r.name}" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
+        <div class="project-card" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <span class="status-pulse pulse-none" data-pulse="${r.owner.login}/${r.name}"></span>
@@ -336,6 +335,8 @@ function renderRepos(repos) {
 window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     window.currentRepoOwner = owner;
     const modal = document.getElementById('repo-modal');
+    if (!modal) return;
+    
     document.getElementById('modal-repo-name').textContent = name;
     
     // Reset tabs
@@ -344,50 +345,56 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     
     const infoTabBtn = document.querySelector('.modal-tab-btn[data-tab="info"]');
     const infoPane = document.getElementById('tab-info');
-    infoTabBtn.classList.add('active');
-    infoPane.classList.add('active');
+    if (infoTabBtn) infoTabBtn.classList.add('active');
+    if (infoPane) infoPane.classList.add('active');
 
     const repoData = window.allRepos.find(r => r.owner.login === owner && r.name === name);
     if (repoData) {
-        document.getElementById('repo-details-info').innerHTML = `
-            <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-value">${repoData.full_name}</span></div>
-            <div class="detail-item"><span class="detail-label">Description</span><span class="detail-value">${repoData.description || 'No description provided.'}</span></div>
-            <div class="detail-item"><span class="detail-label">Visibility</span><span class="detail-value">${repoData.private ? 'Private' : 'Public'}</span></div>
-            <div class="detail-item"><span class="detail-label">Stars</span><span class="detail-value">${repoData.stargazers_count}</span></div>
-            <div class="detail-item"><span class="detail-label">Forks</span><span class="detail-value">${repoData.forks_count}</span></div>
-            <div class="detail-item"><span class="detail-label">Language</span><span class="detail-value">${repoData.language || 'Unknown'}</span></div>
-            <div class="detail-item"><span class="detail-label">Created</span><span class="detail-value">${new Date(repoData.created_at).toLocaleDateString()}</span></div>
-            <div class="detail-item"><span class="detail-label">Last Push</span><span class="detail-value">${new Date(repoData.pushed_at).toLocaleDateString()}</span></div>
-            <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">GitHub URL</span><span class="detail-value"><a href="${repoData.html_url}" target="_blank">${repoData.html_url}</a></span></div>
-        `;
+        const infoGrid = document.getElementById('repo-details-info');
+        if (infoGrid) {
+            infoGrid.innerHTML = `
+                <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-value">${repoData.full_name}</span></div>
+                <div class="detail-item"><span class="detail-label">Description</span><span class="detail-value">${repoData.description || 'No description provided.'}</span></div>
+                <div class="detail-item"><span class="detail-label">Visibility</span><span class="detail-value">${repoData.private ? 'Private' : 'Public'}</span></div>
+                <div class="detail-item"><span class="detail-label">Stars</span><span class="detail-value">${repoData.stargazers_count}</span></div>
+                <div class="detail-item"><span class="detail-label">Forks</span><span class="detail-value">${repoData.forks_count}</span></div>
+                <div class="detail-item"><span class="detail-label">Language</span><span class="detail-value">${repoData.language || 'Unknown'}</span></div>
+                <div class="detail-item"><span class="detail-label">Created</span><span class="detail-value">${new Date(repoData.created_at).toLocaleDateString()}</span></div>
+                <div class="detail-item"><span class="detail-label">Last Push</span><span class="detail-value">${new Date(repoData.pushed_at).toLocaleDateString()}</span></div>
+                <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">GitHub URL</span><span class="detail-value"><a href="${repoData.html_url}" target="_blank">${repoData.html_url}</a></span></div>
+            `;
+        }
     }
 
     modal.classList.add('active');
     
-    // Setup Section
     const gitCmds = document.getElementById('git-commands');
-    gitCmds.innerHTML = `
-        <div style="margin-bottom: 1.5rem;">
-            <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Quick Start: Clone this repository</p>
-            <div class="code-terminal">git clone https://github.com/${owner}/${name}.git</div>
-        </div>
-        <div>
-            <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Push an existing repository from your command line</p>
-            <div class="code-terminal">
-                git remote add origin https://github.com/${owner}/${name}.git<br>
-                git branch -M main<br>
-                git push -u origin main
+    if (gitCmds) {
+        gitCmds.innerHTML = `
+            <div style="margin-bottom: 1.5rem;">
+                <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Quick Start: Clone this repository</p>
+                <div class="code-terminal">git clone https://github.com/${owner}/${name}.git</div>
             </div>
-        </div>
-    `;
+            <div>
+                <p style="font-size: 13px; color: var(--ds-accents-5); margin-bottom: 0.5rem;">Push an existing repository from your command line</p>
+                <div class="code-terminal">
+                    git remote add origin https://github.com/${owner}/${name}.git<br>
+                    git branch -M main<br>
+                    git push -u origin main
+                </div>
+            </div>
+        `;
+    }
     
     const commitsList = document.getElementById('commits-list');
-    commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);"><i data-lucide="loader-2" class="spin"></i> Syncing activity...</div>';
+    if (commitsList) {
+        commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);"><i data-lucide="loader-2" class="spin"></i> Syncing activity...</div>';
+    }
     initIcons();
 
     if (!isNew) {
         fetch(`/api/repos/${owner}/${name}/commits`).then(r => r.json()).then(commits => {
-            if (Array.isArray(commits) && commits.length > 0) {
+            if (commitsList && Array.isArray(commits) && commits.length > 0) {
                 commitsList.innerHTML = commits.slice(0, 10).map(c => `
                     <div class="activity-item">
                         <div class="activity-dot"></div>
@@ -400,11 +407,11 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
                         </div>
                     </div>
                 `).join('');
-            } else {
+            } else if (commitsList) {
                 commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);">No activity recorded yet.</div>';
             }
         }).catch(() => {
-            commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);">Failed to load activity.</div>';
+            if (commitsList) commitsList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--ds-accents-5);">Failed to load activity.</div>';
         });
         loadRepoBranches(owner, name);
     } else {
@@ -414,13 +421,19 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
 };
 
 async function loadRepoBranches(owner, name) {
-    const res = await fetch(`/api/repos/${owner}/${name}/branches`);
-    const branches = await res.json();
-    document.getElementById('branches-list').innerHTML = branches.map(b => `
-        <div class="branch-item-mini">
-            <span><i data-lucide="git-branch" style="width:14px;"></i> ${b.name}</span>
-            <span style="font-size:10px; color:#444;">FORGED</span>
-        </div>
-    `).join('');
-    initIcons();
+    const branchesList = document.getElementById('branches-list');
+    if (!branchesList) return;
+    try {
+        const res = await fetch(`/api/repos/${owner}/${name}/branches`);
+        const branches = await res.json();
+        if (Array.isArray(branches)) {
+            branchesList.innerHTML = branches.map(b => `
+                <div class="branch-item-mini">
+                    <span><i data-lucide="git-branch" style="width:14px;"></i> ${b.name}</span>
+                    <span style="font-size:10px; color:#444;">FORGED</span>
+                </div>
+            `).join('');
+            initIcons();
+        }
+    } catch (e) {}
 }
