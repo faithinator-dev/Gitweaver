@@ -6,6 +6,7 @@ const showToast = (message, type = 'success') => {
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
+    toast.setAttribute('role', 'alert');
     toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-triangle'}"></i> <span>${message}</span>`;
     container.appendChild(toast);
     initIcons();
@@ -19,8 +20,14 @@ const switchView = (viewId) => {
     document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
     const target = document.getElementById(viewId);
     if (target) target.style.display = 'block';
-    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll(`.nav-tab[data-view="${viewId}"]`).forEach(btn => btn.classList.add('active'));
+    document.querySelectorAll('.nav-tab').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll(`.nav-tab[data-view="${viewId}"]`).forEach(btn => {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+    });
     initIcons();
 };
 
@@ -51,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openOmniSearch = () => {
         const overlay = document.getElementById('omni-overlay');
         overlay.classList.add('active');
+        const trigger = document.getElementById('mobile-search-trigger');
+        if (trigger) trigger.classList.add('active');
         const input = document.getElementById('omni-input');
         input.value = "";
         input.focus();
@@ -59,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeOmniSearch = () => {
         document.getElementById('omni-overlay').classList.remove('active');
+        const trigger = document.getElementById('mobile-search-trigger');
+        if (trigger) trigger.classList.remove('active');
     };
 
     const omniInput = document.getElementById('omni-input');
@@ -79,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filteredCmds.length > 0) {
             html += `<div style="font-size:10px; color:var(--ds-accents-5); padding:8px 12px; text-transform:uppercase;">Actions</div>`;
             html += filteredCmds.map(c => `
-                <div class="omni-item" onclick="(${c.action.toString()})(); closeOmniSearch();">
+                <div class="omni-item" role="option" onclick="(${c.action.toString()})(); window.closeOmniSearch();">
                     <i data-lucide="${c.icon}"></i> <span>${c.label}</span>
                 </div>
             `).join('');
@@ -89,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filteredRepos.length > 0) {
             html += `<div style="font-size:10px; color:var(--ds-accents-5); padding:8px 12px; text-transform:uppercase; margin-top:8px;">Repositories</div>`;
             html += filteredRepos.slice(0, 5).map(r => `
-                <div class="omni-item" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private}); closeOmniSearch();">
+                <div class="omni-item" role="option" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private}); window.closeOmniSearch();">
                     <i data-lucide="github"></i> <span>${r.name}</span>
                 </div>
             `).join('');
@@ -126,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             if (res.ok) {
-                suggestionsList.innerHTML = data.suggestions.map(s => `<span class="suggestion-chip">${s}</span>`).join('');
+                suggestionsList.innerHTML = data.suggestions.map(s => `<span class="suggestion-chip" role="button" tabindex="0">${s}</span>`).join('');
                 document.querySelectorAll('.suggestion-chip').forEach(chip => {
                     chip.onclick = () => {
                         nameInput.value = chip.textContent;
@@ -166,7 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deployBtn?.addEventListener('click', async () => {
         const name = nameInput.value;
-        const visibility = document.getElementById('repo-visibility')?.value || 'public';
+        const visibilityEl = document.getElementById('repo-visibility');
+        const visibility = visibilityEl?.value || 'public';
         const activeTemplate = document.querySelector('.template-card.active');
         
         if (!name) return showToast("Project name required", "error");
@@ -272,9 +284,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const tabBtn = e.target.closest('.modal-tab-btn');
         if (tabBtn) {
-            document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.modal-tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
             tabBtn.classList.add('active');
+            tabBtn.setAttribute('aria-selected', 'true');
             const pane = document.getElementById(`tab-${tabBtn.dataset.tab}`);
             if (pane) pane.classList.add('active');
         }
@@ -313,7 +329,7 @@ function renderRepos(repos) {
     const container = document.getElementById('repo-list');
     if (!container) return;
     container.innerHTML = repos.map(r => `
-        <div class="project-card" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
+        <div class="project-card" role="button" aria-label="View details for ${r.name}" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <span class="status-pulse pulse-none" data-pulse="${r.owner.login}/${r.name}"></span>
@@ -340,12 +356,18 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
     document.getElementById('modal-repo-name').textContent = name;
     
     // Reset tabs
-    document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.modal-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+    });
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     
     const infoTabBtn = document.querySelector('.modal-tab-btn[data-tab="info"]');
     const infoPane = document.getElementById('tab-info');
-    if (infoTabBtn) infoTabBtn.classList.add('active');
+    if (infoTabBtn) {
+        infoTabBtn.classList.add('active');
+        infoTabBtn.setAttribute('aria-selected', 'true');
+    }
     if (infoPane) infoPane.classList.add('active');
 
     const repoData = window.allRepos.find(r => r.owner.login === owner && r.name === name);
@@ -361,7 +383,7 @@ window.openRepoModal = (owner, name, isPrivate, isNew = false) => {
                 <div class="detail-item"><span class="detail-label">Language</span><span class="detail-value">${repoData.language || 'Unknown'}</span></div>
                 <div class="detail-item"><span class="detail-label">Created</span><span class="detail-value">${new Date(repoData.created_at).toLocaleDateString()}</span></div>
                 <div class="detail-item"><span class="detail-label">Last Push</span><span class="detail-value">${new Date(repoData.pushed_at).toLocaleDateString()}</span></div>
-                <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">GitHub URL</span><span class="detail-value"><a href="${repoData.html_url}" target="_blank">${repoData.html_url}</a></span></div>
+                <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">GitHub URL</span><span class="detail-value"><a href="${repoData.html_url}" target="_blank" rel="noopener noreferrer">${repoData.html_url}</a></span></div>
             `;
         }
     }
@@ -436,4 +458,15 @@ async function loadRepoBranches(owner, name) {
             initIcons();
         }
     } catch (e) {}
+}
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('SW registered');
+        }).catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+        });
+    });
 }

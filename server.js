@@ -12,31 +12,39 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Security & Middleware
+const isProduction = process.env.NODE_ENV === "production";
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "script-src": ["'self'", "https://unpkg.com"],
-      "img-src": ["'self'", "https://github.com", "https://*.githubusercontent.com", "data:"],
+      "script-src": ["'self'", "https://unpkg.com", "'unsafe-inline'"], // unsafe-inline for the theme switcher script
+      "img-src": ["'self'", "https://github.com", "https://*.githubusercontent.com", "data:", "https://avatars.githubusercontent.com"],
+      "connect-src": ["'self'", "https://api.github.com"],
     },
   },
+  crossOriginEmbedderPolicy: false,
 }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: { error: "Too many requests, please try again later." }
 });
 app.use("/api/", limiter);
 
 const corsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
-  : ["http://localhost:3000", "http://localhost:3030"];
+  : ["http://localhost:3000"];
 
 app.use(
   cors({
-    origin: corsOrigins,
+    origin: isProduction ? (process.env.CORS_ORIGIN ? corsOrigins : false) : corsOrigins,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   }),
 );
 app.use(express.json());
