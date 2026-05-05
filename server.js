@@ -282,7 +282,13 @@ app.post("/api/generate-repo-name", async (req, res) => {
 
 // Logout
 app.get("/auth/logout", (req, res) => {
-  res.clearCookie("github_token");
+  res.clearCookie("github_token", {
+    httpOnly: true,
+    secure: isProduction,
+    signed: true,
+    sameSite: "lax",
+    path: "/",
+  });
   res.redirect("/");
 });
 

@@ -183,17 +183,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!name) return showToast("Project name required", "error");
 
-        deployBtn.disabled = true;
         const originalText = deployBtn.textContent;
+        deployBtn.disabled = true;
         deployBtn.textContent = "Provisioning...";
         terminal.style.display = 'block';
         terminalOutput.innerHTML = '';
         
-        log(`Initiating Forge for ${name}...`, 'forge');
-        await new Promise(r => setTimeout(r, 200));
-        log("Establishing GitHub Handshake...", 'system');
-        
         try {
+            log(`Initiating Forge for ${name}...`, 'forge');
+            await new Promise(r => setTimeout(r, 200));
+            log("Establishing GitHub Handshake...", 'system');
+            
             const res = await fetch('/api/create-repo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -214,20 +214,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     window.openRepoModal(data.repo.owner.login, data.repo.name, data.repo.private, true);
                     fetchRepos();
-                    deployBtn.disabled = false;
-                    deployBtn.textContent = originalText;
                 }, 500);
             } else {
                 log(`ERROR: ${data.error}`, 'system');
-                deployBtn.disabled = false;
-                deployBtn.textContent = originalText;
                 showToast(data.error || "Deployment failed", "error");
             }
         } catch (e) {
             log("CRITICAL ERROR: Connection Terminated.", 'system');
+            showToast("Connection Error", "error");
+        } finally {
             deployBtn.disabled = false;
             deployBtn.textContent = originalText;
-            showToast("Connection Error", "error");
         }
     });
 
@@ -329,7 +326,7 @@ function renderRepos(repos) {
     const container = document.getElementById('repo-list');
     if (!container) return;
     container.innerHTML = repos.map(r => `
-        <div class="project-card" role="button" aria-label="View details for ${r.name}" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private})">
+        <div class="project-card" role="button" aria-label="View details for ${r.name}" onclick="window.openRepoModal('${r.owner.login}', '${r.name}', ${r.private}, false)">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <span class="status-pulse pulse-none" data-pulse="${r.owner.login}/${r.name}"></span>

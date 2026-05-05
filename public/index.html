@@ -19,13 +19,9 @@
         (function() {
             const savedTheme = localStorage.getItem('gw-theme') || 'theme-vercel';
             document.documentElement.className = savedTheme;
-            const observer = new MutationObserver(() => {
-                if (document.body) {
-                    document.body.className = savedTheme;
-                    observer.disconnect();
-                }
+            window.addEventListener('DOMContentLoaded', () => {
+                document.body.className = savedTheme;
             });
-            observer.observe(document.documentElement, { childList: true });
         })();
     </script>
     <script src="https://unpkg.com/lucide@0.418.0/dist/umd/lucide.min.js"></script>
@@ -35,7 +31,7 @@
     <!-- Landing View -->
     <div id="landing-content" class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
         <div class="logo-circle" style="margin-bottom: 2rem;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="GitWeaver Logo"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="GitWeaver Logo"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
         <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.06em; margin-bottom: 1rem;">GitWeaver</h1>
         <p style="color: var(--ds-accents-5); margin-bottom: 2.5rem; font-size: 1.25rem;">Develop. Preview. Ship.</p>
@@ -61,14 +57,14 @@
                     </button>
 
                     <!-- Omni Search Trigger -->
-                    <button class="search-box desktop-only" id="desktop-search-trigger" onclick="window.openOmniSearch()" role="search" aria-label="Open search">
+                    <button class="search-box desktop-only" id="desktop-search-trigger" onclick="window.openOmniSearch()" role="button" aria-label="Open search">
                         <i data-lucide="search" style="width: 14px;" aria-hidden="true"></i>
                         <span class="search-placeholder">Omni Search...</span>
                         <span class="kbd">⌘K</span>
                     </button>
-                    <button class="mobile-only btn-icon-nav" id="mobile-search-trigger" onclick="window.openOmniSearch()" aria-label="Search"><i data-lucide="search"></i></button>
+                    <button class="mobile-only btn-icon-nav" id="mobile-search-trigger" onclick="window.openOmniSearch()" aria-label="Open mobile search"><i data-lucide="search"></i></button>
                     
-                    <a href="/auth/logout" class="btn btn-secondary nav-logout-btn" role="button"><i data-lucide="log-out"></i> <span class="desktop-only">Logout</span></a>
+                    <a href="/auth/logout" class="btn btn-secondary nav-logout-btn" role="button" aria-label="Logout"><i data-lucide="log-out"></i> <span class="desktop-only">Logout</span></a>
                 </div>
             </div>
             
@@ -84,7 +80,7 @@
 
         <main class="container">
             <!-- Dashboard -->
-            <div id="dashboard-view" class="view active" role="tabpanel" aria-labelledby="dashboard-tab">
+            <div id="dashboard-view" class="view active" role="tabpanel">
                 <div id="repo-list" class="project-grid"></div>
             </div>
 
