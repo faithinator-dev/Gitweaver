@@ -86,7 +86,7 @@ function renderRepositoryList() {
 
     // Create header row
     const header = `
-        <div class="bg-surface-container-low px-gutter py-3 grid grid-cols-12 items-center gap-4 sticky top-0">
+        <div class="bg-surface-container-low px-gutter py-3 grid grid-cols-12 items-center gap-4 sticky top-0 border-b border-[#30363d]">
             <div class="col-span-5 font-label-caps text-label-caps text-on-surface-variant uppercase">Repository Name</div>
             <div class="col-span-2 font-label-caps text-label-caps text-on-surface-variant uppercase">Visibility</div>
             <div class="col-span-2 font-label-caps text-label-caps text-on-surface-variant uppercase">Language</div>
@@ -97,7 +97,7 @@ function renderRepositoryList() {
 
     // Create repo rows
     const rows = repositories.map(repo => `
-        <div class="px-gutter py-4 grid grid-cols-12 items-center gap-4 border-t border-outline-variant hover:bg-surface-container-high/50 transition-colors group">
+        <div class="px-gutter py-4 grid grid-cols-12 items-center gap-4 border-t border-[#30363d] hover:bg-surface-container-high/50 transition-colors group">
             <div class="col-span-5 flex items-center gap-3">
                 <span class="material-symbols-outlined text-primary">${repo.private ? 'folder_lock' : 'folder'}</span>
                 <div class="flex flex-col">
@@ -116,7 +116,7 @@ function renderRepositoryList() {
                 <span class="font-code-sm text-code-sm text-on-surface-variant">${formatDate(repo.updated_at)}</span>
             </div>
             <div class="col-span-1 text-right">
-                <button onclick="openRepoModal('${repo.name}')" class="bg-surface-container border border-outline-variant text-on-surface px-3 py-1.5 rounded font-body-sm text-body-sm hover:border-outline transition-all active:scale-[0.98]">Manage</button>
+                <button onclick="openRepoModal('${repo.name}')" class="bg-[#21262d] border border-[#30363d] text-on-surface px-3 py-1.5 rounded font-body-sm text-body-sm hover:border-outline transition-all active:scale-[0.98]">Manage</button>
             </div>
         </div>
     `).join('');
