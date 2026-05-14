@@ -154,13 +154,16 @@ function switchView(viewName) {
     document.querySelectorAll('.view-content').forEach(v => v.style.display = 'none');
     
     // Remove active state from nav buttons
-    document.querySelectorAll('.view-nav-btn').forEach(btn => btn.classList.remove('active', 'bg-surface-container-high', 'text-primary', 'border-r-2', 'border-primary'));
+    document.querySelectorAll('.view-nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-surface-container-high', 'text-primary', 'border-r-2', 'border-primary');
+    });
     
     // Show selected view
     const viewId = `${viewName}-view`;
     const viewElement = document.getElementById(viewId);
     if (viewElement) {
-        viewElement.style.display = 'block';
+        // Use flex for editor view to maintain layout
+        viewElement.style.display = viewName === 'editor' ? 'flex' : 'block';
     }
     
     // Set active nav button
@@ -190,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (aiForge) {
         aiForge.addEventListener('click', async (ev) => {
             ev.preventDefault();
-            const input = document.getElementById('repo-name');
+            const input = document.getElementById('repo_name');
             const keyword = (input && input.value.trim()) || 'app';
             try {
                 aiForge.disabled = true;

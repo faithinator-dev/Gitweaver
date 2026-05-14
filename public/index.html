@@ -67,21 +67,21 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
-                        surface: "#10141a",
+                    "colors": {
+                        "surface": "#10141a",
                         "surface-dim": "#10141a",
-                        secondary: "#6bde80",
+                        "secondary": "#6bde80",
                         "surface-container-lowest": "#0a0e14",
                         "on-primary-fixed-variant": "#004493",
                         "on-surface": "#dfe2eb",
                         "surface-container-high": "#262a31",
-                        background: "#10141a",
+                        "background": "#10141a",
                         "on-surface-variant": "#c2c6d6",
                         "on-tertiary": "#3c0091",
                         "on-tertiary-container": "#f5ecff",
                         "primary-fixed-dim": "#adc6ff",
-                        primary: "#adc6ff",
-                        error: "#ffb4ab",
+                        "primary": "#adc6ff",
+                        "error": "#ffb4ab",
                         "inverse-on-surface": "#2d3137",
                         "on-tertiary-fixed-variant": "#5516be",
                         "on-secondary-fixed-variant": "#00531f",
@@ -92,7 +92,7 @@
                         "secondary-fixed-dim": "#6bde80",
                         "error-container": "#93000a",
                         "surface-tint": "#adc6ff",
-                        tertiary: "#d0bcff",
+                        "tertiary": "#d0bcff",
                         "inverse-primary": "#005bc0",
                         "tertiary-container": "#7c4ce6",
                         "secondary-container": "#2fa54f",
@@ -111,28 +111,28 @@
                         "surface-bright": "#353940",
                         "tertiary-fixed": "#e9ddff",
                         "primary-container": "#0969da",
-                        outline: "#8c909f",
+                        "outline": "#8c909f",
                         "inverse-surface": "#dfe2eb",
                         "tertiary-fixed-dim": "#d0bcff",
                         "on-tertiary-fixed": "#23005c"
                     },
-                    borderRadius: {
-                        DEFAULT: "0.125rem",
-                        lg: "0.25rem",
-                        xl: "0.5rem",
-                        full: "0.75rem"
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
                     },
-                    spacing: {
-                        gutter: "16px",
+                    "spacing": {
+                        "gutter": "16px",
                         "container-padding-desktop": "24px",
                         "stack-md": "16px",
                         "stack-sm": "8px",
                         "container-padding-mobile": "16px",
-                        unit: "4px",
+                        "unit": "4px",
                         "sidebar-width": "260px",
                         "stack-lg": "24px"
                     },
-                    fontFamily: {
+                    "fontFamily": {
                         "label-caps": ["Inter"],
                         "body-md": ["Inter"],
                         "headline-sm": ["Inter"],
@@ -143,16 +143,16 @@
                         "headline-lg": ["Inter"],
                         "body-lg": ["Inter"]
                     },
-                    fontSize: {
-                        "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
-                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-                        "headline-sm": ["18px", { lineHeight: "28px", fontWeight: "600" }],
-                        "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }],
-                        "code-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
-                        "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
-                        "code-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-                        "headline-lg": ["30px", { lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "600" }],
-                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }]
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-sm": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
                     }
                 }
             }
@@ -185,7 +185,7 @@
         <aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 z-40">
             <div class="px-6 mb-8">
                 <h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">GitWeaver</h1>
-                <div class="flex items-center gap-3 mt-4">
+                <div class="flex items-center gap-3 mt-4 px-2">
                     <img id="sidebar-avatar" alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant" src="">
                     <div class="flex flex-col min-w-0">
                         <span id="sidebar-username" class="font-body-sm text-body-sm font-bold text-on-surface truncate">--</span>
@@ -196,37 +196,37 @@
             
             <!-- Navigation -->
             <nav class="flex-1 px-2 space-y-1">
-                <button onclick="switchView('dashboard')" class="view-nav-btn active w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg" data-view="dashboard">
-                    <span class="material-symbols-outlined">dashboard</span>
+                <button onclick="switchView('dashboard')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg group" data-view="dashboard">
+                    <span class="material-symbols-outlined text-on-surface-variant group-[.active]:text-primary" data-icon="dashboard">dashboard</span>
                     <span class="font-body-md text-body-md font-medium">Dashboard</span>
                 </button>
-                <button onclick="switchView('provisioning')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg" data-view="provisioning">
-                    <span class="material-symbols-outlined">add_box</span>
+                <button onclick="switchView('provisioning')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg group" data-view="provisioning">
+                    <span class="material-symbols-outlined text-on-surface-variant group-[.active]:text-primary" data-icon="add_box">add_box</span>
                     <span class="font-body-md text-body-md font-medium">Provisioning</span>
                 </button>
-                <button onclick="switchView('editor')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg" data-view="editor">
-                    <span class="material-symbols-outlined">code</span>
+                <button onclick="switchView('editor')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg group" data-view="editor">
+                    <span class="material-symbols-outlined text-on-surface-variant group-[.active]:text-primary" data-icon="code">code</span>
                     <span class="font-body-md text-body-md font-medium">Headless Editor</span>
                 </button>
-                <button onclick="switchView('documentation')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg" data-view="documentation">
-                    <span class="material-symbols-outlined">menu_book</span>
+                <button onclick="switchView('documentation')" class="view-nav-btn w-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-lg group" data-view="documentation">
+                    <span class="material-symbols-outlined text-on-surface-variant group-[.active]:text-primary" data-icon="menu_book">menu_book</span>
                     <span class="font-body-md text-body-md font-medium">Documentation</span>
                 </button>
             </nav>
             
             <!-- Bottom Actions -->
             <div class="mt-auto px-4">
-                <button onclick="switchView('provisioning')" class="w-full bg-secondary-container text-on-secondary-container py-2 rounded-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform hover:brightness-110 mb-6">
-                    <span class="material-symbols-outlined">add</span>
+                <button onclick="switchView('provisioning')" class="w-full bg-[#238636] text-white py-2 rounded-lg font-body-md font-bold mb-6 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined" data-icon="add">add</span>
                     New Repository
                 </button>
                 <div class="border-t border-outline-variant pt-4 space-y-1">
-                    <button onclick="openSettings()" class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-2 rounded-lg transition-all w-full">
-                        <span class="material-symbols-outlined">settings</span>
+                    <button onclick="openSettings()" class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-2 rounded-lg transition-all w-full text-left">
+                        <span class="material-symbols-outlined" data-icon="settings">settings</span>
                         <span class="font-body-sm text-body-sm">Settings</span>
                     </button>
                     <a href="/auth/logout" class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-2 rounded-lg transition-all w-full text-left">
-                        <span class="material-symbols-outlined">logout</span>
+                        <span class="material-symbols-outlined" data-icon="logout">logout</span>
                         <span class="font-body-sm text-body-sm">Logout</span>
                     </a>
                 </div>
@@ -235,11 +235,11 @@
 
         <!-- Main Content -->
         <main class="ml-sidebar-width flex-1 flex flex-col bg-surface min-h-screen">
-            <!-- Top Bar -->
+            <!-- TopAppBar -->
             <header class="sticky top-0 right-0 z-30 flex items-center justify-between px-gutter h-14 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant">
                 <div class="flex items-center gap-stack-md w-1/2">
                     <div class="relative w-full max-w-md">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
                         <input id="search-input" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 font-code-md text-code-md focus:outline-none focus:border-primary placeholder:text-outline-variant" placeholder="Search repositories..." type="text">
                     </div>
                 </div>
@@ -250,11 +250,14 @@
                         <a href="#" class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">Deployments</a>
                     </nav>
                     <div class="flex items-center gap-4 text-on-surface-variant">
-                        <button class="hover:bg-surface-container-highest p-1.5 rounded-lg transition-colors">
-                            <span class="material-symbols-outlined">notifications</span>
+                        <button class="hover:bg-surface-container-highest p-1.5 rounded-lg transition-colors cursor-pointer active:opacity-70">
+                            <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
                         </button>
-                        <button class="hover:bg-surface-container-highest p-1.5 rounded-lg transition-colors">
-                            <span class="material-symbols-outlined">settings_input_component</span>
+                        <button class="hover:bg-surface-container-highest p-1.5 rounded-lg transition-colors cursor-pointer active:opacity-70">
+                            <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+                        </button>
+                        <button class="hover:bg-surface-container-highest p-1.5 rounded-lg transition-colors cursor-pointer active:opacity-70">
+                            <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
                         </button>
                     </div>
                 </div>
@@ -264,12 +267,12 @@
             <div class="flex-1 overflow-auto">
                 <!-- Dashboard View -->
                 <div id="dashboard-view" class="view-content p-stack-lg space-y-stack-lg">
-                    <!-- Metrics -->
+                    <!-- Dashboard Metrics (Bento Style) -->
                     <div class="grid grid-cols-12 gap-stack-md">
                         <div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant rounded-lg p-stack-md">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active Repositories</span>
-                                <span class="material-symbols-outlined text-primary text-sm">source</span>
+                                <span class="material-symbols-outlined text-primary text-sm" data-icon="source">source</span>
                             </div>
                             <div class="font-headline-md text-headline-md text-on-surface" id="repo-count">0</div>
                             <div class="mt-2 flex items-center gap-2">
@@ -279,7 +282,7 @@
                         <div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant rounded-lg p-stack-md">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">System Health</span>
-                                <span class="material-symbols-outlined text-secondary text-sm">verified_user</span>
+                                <span class="material-symbols-outlined text-secondary text-sm" data-icon="verified_user">verified_user</span>
                             </div>
                             <div class="font-headline-md text-headline-md text-on-surface">Optimal</div>
                             <div class="mt-2 flex items-center gap-2">
@@ -289,7 +292,7 @@
                         <div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant rounded-lg p-stack-md">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">API Calls (24h)</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm">analytics</span>
+                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="analytics">analytics</span>
                             </div>
                             <div class="font-headline-md text-headline-md text-on-surface" id="api-calls">--</div>
                             <div class="mt-2 w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
@@ -304,6 +307,7 @@
                         <button class="px-4 py-1.5 bg-surface-container border border-outline-variant text-on-surface hover:bg-surface-container-high rounded-full font-body-sm text-body-sm transition-colors">TypeScript</button>
                         <button class="px-4 py-1.5 bg-surface-container border border-outline-variant text-on-surface hover:bg-surface-container-high rounded-full font-body-sm text-body-sm transition-colors">Python</button>
                         <button class="px-4 py-1.5 bg-surface-container border border-outline-variant text-on-surface hover:bg-surface-container-high rounded-full font-body-sm text-body-sm transition-colors">Rust</button>
+                        <button class="px-4 py-1.5 bg-surface-container border border-outline-variant text-on-surface hover:bg-surface-container-high rounded-full font-body-sm text-body-sm transition-colors">Go</button>
                         <button class="px-4 py-1.5 bg-surface-container border border-outline-variant text-on-surface hover:bg-surface-container-high rounded-full font-body-sm text-body-sm transition-colors">JavaScript</button>
                     </div>
 
@@ -311,7 +315,7 @@
                     <div id="repo-list" class="bg-surface-container-low border border-outline-variant rounded-lg overflow-hidden">
                         <div id="repo-list-content">
                             <div class="px-gutter py-8 text-center text-on-surface-variant">
-                                <span class="material-symbols-outlined text-4xl mb-2 block opacity-50">folder_open</span>
+                                <span class="material-symbols-outlined text-4xl mb-2 block opacity-50" data-icon="folder_open">folder_open</span>
                                 <p class="font-body-md text-body-md">No repositories yet. Create one to get started.</p>
                             </div>
                         </div>
@@ -322,49 +326,56 @@
                 <div id="provisioning-view" class="view-content p-container-padding-desktop space-y-stack-lg" style="display: none;">
                     <div class="mb-stack-lg">
                         <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Create a new repository</h2>
-                        <p class="font-body-lg text-body-lg text-on-surface-variant">A repository contains all project files, including the revision history.</p>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">A repository contains all project files, including the revision history. Already have a project repository elsewhere? <a class="text-primary hover:underline" href="#">Import a repository.</a></p>
                     </div>
 
                     <form id="provision-form" class="max-w-4xl space-y-8">
-                        <!-- Repository Identity -->
+                        <!-- Repository Identity Section -->
                         <section class="bg-surface-container-low border border-outline-variant p-stack-lg rounded-xl">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
                                 <div class="space-y-2">
                                     <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Owner</label>
                                     <div class="flex items-center gap-2 bg-surface-container p-3 rounded border border-outline-variant">
-                                        <span class="material-symbols-outlined text-on-surface-variant text-[20px]">account_circle</span>
-                                        <span id="owner-name" class="font-body-md text-body-md font-medium">--</span>
+                                        <span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="account_circle">account_circle</span>
+                                        <span id="owner-name" class="font-body-md text-body-md font-medium">octocat</span>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="repo_name">Repository Name</label>
-                                    <input class="w-full bg-surface-container-lowest border border-outline-variant p-3 rounded font-code-md text-code-md form-input-focus transition-all" id="repo_name" placeholder="my-awesome-tool" type="text" required>
-                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Great names are short and memorable.</p>
+                                    <div class="flex items-center justify-between">
+                                        <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="repo_name">Repository Name</label>
+                                        <button id="ai-name-forge" type="button" class="text-secondary text-[11px] font-bold flex items-center gap-1 hover:underline">
+                                            <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                                            AI FORGE
+                                        </button>
+                                    </div>
+                                    <input class="w-full bg-surface-container-lowest border border-outline-variant p-3 rounded font-code-md text-code-md form-input-focus transition-all" id="repo_name" placeholder="my-awesome-tool" type="text" required/>
+                                    <div id="name-suggestions" class="flex flex-wrap mt-2"></div>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Great repository names are short and memorable.</p>
                                 </div>
                             </div>
                             <div class="mt-stack-md space-y-2">
-                                <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="description">Description (optional)</label>
+                                <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="description">Description <span class="normal-case opacity-60">(optional)</span></label>
                                 <textarea class="w-full bg-surface-container-lowest border border-outline-variant p-3 rounded font-body-md text-body-md form-input-focus transition-all" id="description" placeholder="Explain what this repository is for..." rows="3"></textarea>
                             </div>
                         </section>
 
-                        <!-- Visibility -->
+                        <!-- Visibility Section -->
                         <section class="border-t border-outline-variant pt-stack-lg">
                             <div class="space-y-4">
                                 <div class="flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
-                                    <input checked="" class="mt-1" id="public" name="visibility" type="radio" value="public">
-                                    <label class="flex items-start gap-3 cursor-pointer flex-1" for="public">
-                                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">public</span>
+                                    <input checked="" class="mt-1 text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="public" name="visibility" type="radio" value="public"/>
+                                    <label class="flex items-start gap-3 cursor-pointer" for="public">
+                                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="public">public</span>
                                         <div>
                                             <span class="block font-body-md text-body-md font-bold text-on-surface">Public</span>
-                                            <span class="block font-body-sm text-body-sm text-on-surface-variant">Anyone can see this repository. You choose who can commit.</span>
+                                            <span class="block font-body-sm text-body-sm text-on-surface-variant">Anyone on the internet can see this repository. You choose who can commit.</span>
                                         </div>
                                     </label>
                                 </div>
                                 <div class="flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
-                                    <input class="mt-1" id="private" name="visibility" type="radio" value="private">
-                                    <label class="flex items-start gap-3 cursor-pointer flex-1" for="private">
-                                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">lock</span>
+                                    <input class="mt-1 text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="private" name="visibility" type="radio" value="private"/>
+                                    <label class="flex items-start gap-3 cursor-pointer" for="private">
+                                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="lock">lock</span>
                                         <div>
                                             <span class="block font-body-md text-body-md font-bold text-on-surface">Private</span>
                                             <span class="block font-body-sm text-body-sm text-on-surface-variant">You choose who can see and commit to this repository.</span>
@@ -374,67 +385,67 @@
                             </div>
                         </section>
 
-                        <!-- Configuration -->
+                        <!-- Configuration Section -->
                         <section class="bg-surface-container border border-outline-variant p-stack-lg rounded-xl space-y-6">
                             <div>
                                 <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Initialize this repository with:</h3>
-                                <p class="font-body-sm text-body-sm text-on-surface-variant">Skip this step if you're importing an existing repository.</p>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant">Skip this step if you’re importing an existing repository.</p>
                             </div>
                             <div class="space-y-4">
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input class="w-4 h-4 rounded" id="init_readme" type="checkbox" checked>
+                                    <input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="init_readme" type="checkbox" checked/>
                                     <div class="flex flex-col">
                                         <span class="font-body-md text-body-md font-medium text-on-surface">Add a README file</span>
-                                        <span class="font-body-sm text-body-sm text-on-surface-variant">Write a description for your project.</span>
+                                        <span class="font-body-sm text-body-sm text-on-surface-variant">This is where you can write a long description for your project.</span>
                                     </div>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input class="w-4 h-4 rounded" id="init_gitignore" type="checkbox" checked>
+                                    <input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="init_gitignore" type="checkbox" checked/>
                                     <div class="flex flex-col">
                                         <span class="font-body-md text-body-md font-medium text-on-surface">Add .gitignore</span>
-                                        <span class="font-body-sm text-body-sm text-on-surface-variant">Choose which files not to track.</span>
+                                        <span class="font-body-sm text-body-sm text-on-surface-variant">Choose which files not to track from a list of templates.</span>
                                     </div>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input class="w-4 h-4 rounded" id="init_license" type="checkbox">
+                                    <input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="init_license" type="checkbox"/>
                                     <div class="flex flex-col">
                                         <span class="font-body-md text-body-md font-medium text-on-surface">Choose a license</span>
-                                        <span class="font-body-sm text-body-sm text-on-surface-variant">Tell others what they can do with your code.</span>
+                                        <span class="font-body-sm text-body-sm text-on-surface-variant">A license tells others what they can and can't do with your code.</span>
                                     </div>
                                 </label>
                             </div>
                             <div class="pt-4 border-t border-outline-variant">
                                 <div class="space-y-2">
                                     <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="default_branch">Default Branch Name</label>
-                                    <input class="w-full bg-surface-container-lowest border border-outline-variant p-2 rounded font-code-sm text-code-sm form-input-focus transition-all" id="default_branch" type="text" value="main">
+                                    <input class="w-full bg-surface-container-lowest border border-outline-variant p-2 rounded font-code-sm text-code-sm form-input-focus transition-all" id="default_branch" type="text" value="main"/>
                                 </div>
                             </div>
                         </section>
 
-                        <!-- Actions -->
+                        <!-- Final Action Section -->
                         <div class="flex items-center justify-between border-t border-outline-variant pt-stack-lg">
                             <p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
                                 You are creating a <span id="visibility-text" class="font-bold text-on-surface">public</span> repository.
                             </p>
                             <div class="flex items-center gap-4">
                                 <button class="px-6 py-2.5 rounded-lg border border-outline-variant font-medium text-on-surface hover:bg-surface-container-high transition-colors" type="reset">Cancel</button>
-                                <button class="px-8 py-2.5 rounded-lg bg-secondary text-on-secondary font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center gap-2" type="submit">
-                                    <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+                                <button class="px-8 py-2.5 rounded-lg bg-[#238636] text-white font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center gap-2" type="submit">
+                                    <span class="material-symbols-outlined text-[20px]" data-icon="rocket_launch">rocket_launch</span>
                                     Create Repository
                                 </button>
                             </div>
                         </div>
                     </form>
 
-                    <!-- Health Score -->
+                    <!-- Secondary Visual Anchor (Bento Style) -->
                     <div class="max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-stack-md">
                         <div class="md:col-span-2 p-6 rounded-xl bg-surface-container-low border border-outline-variant flex items-center gap-6">
                             <div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center">
-                                <span class="material-symbols-outlined text-secondary text-3xl">auto_awesome</span>
+                                <span class="material-symbols-outlined text-secondary text-3xl" data-icon="auto_awesome">auto_awesome</span>
                             </div>
                             <div>
                                 <h4 class="font-headline-sm text-headline-sm text-on-surface">Automation Ready</h4>
-                                <p class="font-body-sm text-body-sm text-on-surface-variant">Your repository will be connected to GitWeaver's CI/CD pipeline.</p>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant">Your new repository will be automatically connected to GitWeaver's CI/CD pipeline for instant headless deployments.</p>
                             </div>
                         </div>
                         <div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant flex flex-col justify-between">
@@ -450,127 +461,229 @@
                     </div>
                 </div>
 
-                <!-- Editor View -->
-                <div id="editor-view" class="view-content p-container-padding-desktop space-y-stack-lg" style="display: none;">
-                    <div class="mb-stack-lg">
-                        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Headless File Editor</h2>
-                        <p class="font-body-lg text-body-lg text-on-surface-variant">Edit files in your repositories without cloning.</p>
+                <!-- Headless Editor View -->
+                <div id="editor-view" class="view-content h-full flex flex-col" style="display: none;">
+                    <!-- Editor Toolbar -->
+                    <div class="flex items-center justify-between px-gutter h-14 bg-surface-container border-b border-outline-variant">
+                        <div class="flex items-center gap-4 flex-1">
+                            <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded border border-outline-variant flex-1 max-w-sm">
+                                <span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="folder">folder</span>
+                                <input id="file-repo" class="bg-transparent border-none outline-none font-code-sm text-code-sm text-on-surface w-full" placeholder="owner/repo" type="text"/>
+                            </div>
+                            <span class="text-outline-variant">/</span>
+                            <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded border border-outline-variant flex-1 max-w-md">
+                                <span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="description">description</span>
+                                <input id="file-path" class="bg-transparent border-none outline-none font-code-sm text-code-sm text-on-surface w-full" placeholder="path/to/file.ext" type="text"/>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-stack-md">
+                            <button onclick="previewFile()" class="px-4 py-2 font-body-sm text-body-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all rounded">Preview</button>
+                            <button onclick="commitFile()" class="px-6 py-2 bg-primary text-on-primary font-bold font-body-sm text-body-sm rounded hover:brightness-110 active:scale-[0.98] transition-all flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]" data-icon="publish">publish</span>
+                                Commit Changes
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden">
-                        <!-- File Nav -->
-                        <div class="flex items-center gap-2 px-gutter h-12 bg-surface-container-high border-b border-outline-variant">
-                            <span class="material-symbols-outlined text-on-surface-variant">folder</span>
-                            <input type="text" id="file-repo" placeholder="owner/repo" class="bg-transparent border-0 outline-none font-code-md text-code-md text-on-surface" style="flex: 1;">
-                            <span class="text-on-surface-variant">/</span>
-                            <input type="text" id="file-path" placeholder="path/to/file.js" class="bg-transparent border-0 outline-none font-code-md text-code-md text-on-surface" style="flex: 2;">
+                    <!-- Editor Workspace -->
+                    <div class="flex-1 flex overflow-hidden">
+                        <!-- File Tree (Placeholder) -->
+                        <div class="w-64 bg-surface-container-low border-r border-outline-variant flex flex-col hidden lg:flex">
+                            <div class="p-4 border-b border-outline-variant">
+                                <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Explorer</span>
+                            </div>
+                            <div class="flex-1 overflow-y-auto p-2 space-y-1">
+                                <div class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-container-high cursor-pointer group">
+                                    <span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+                                    <span class="material-symbols-outlined text-[18px] text-primary" data-icon="folder_open">folder_open</span>
+                                    <span class="font-body-sm text-body-sm text-on-surface">src</span>
+                                </div>
+                                <div class="ml-4 space-y-1">
+                                    <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-surface-container-highest cursor-pointer">
+                                        <span class="material-symbols-outlined text-[18px] text-secondary" data-icon="javascript">javascript</span>
+                                        <span class="font-body-sm text-body-sm text-on-surface">app.js</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-container-high cursor-pointer">
+                                        <span class="material-symbols-outlined text-[18px] text-on-surface-variant" data-icon="css">css</span>
+                                        <span class="font-body-sm text-body-sm text-on-surface">styles.css</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Editor -->
-                        <div class="relative" style="height: 500px;">
-                            <textarea id="file-content" class="w-full h-full bg-surface-container-lowest border-0 outline-none font-code-md text-code-md text-on-surface p-4 resize-none" placeholder="// Start coding..." spellcheck="false"></textarea>
-                        </div>
-
-                        <!-- Editor Footer -->
-                        <div class="flex items-center justify-between px-gutter py-3 bg-surface-container-high border-t border-outline-variant">
-                            <div class="text-on-surface-variant font-body-sm text-body-sm">
-                                <span id="file-lines">0</span> lines • <span id="file-size">0</span> bytes
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button onclick="previewFile()" class="px-4 py-2 rounded-lg border border-outline-variant font-medium text-on-surface hover:bg-surface-container-high transition-colors">Preview</button>
-                                <button onclick="commitFile()" class="px-6 py-2 rounded-lg bg-primary text-on-primary font-bold hover:brightness-110 active:scale-[0.98] transition-all flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[18px]">check</span>
-                                    Commit
-                                </button>
-                            </div>
+                        <!-- Main Code Area -->
+                        <div class="flex-1 flex flex-col bg-surface-container-lowest relative">
+                            <textarea id="file-content" class="flex-1 bg-transparent border-none outline-none p-6 font-code-md text-code-md text-on-surface resize-none leading-relaxed placeholder:text-outline-variant" placeholder="// Select a file or enter path to start editing..." spellcheck="false"></textarea>
+                            
+                            <!-- Editor Status Bar -->
+                            <footer class="h-8 bg-surface-container border-t border-outline-variant flex items-center justify-between px-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-1.5 text-on-surface-variant">
+                                        <span class="material-symbols-outlined text-[14px]" data-icon="reorder">reorder</span>
+                                        <span class="font-code-sm text-code-sm uppercase"><span id="file-lines">0</span> Lines</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-on-surface-variant">
+                                        <span class="material-symbols-outlined text-[14px]" data-icon="storage">storage</span>
+                                        <span class="font-code-sm text-code-sm uppercase"><span id="file-size">0</span> Bytes</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-1.5 text-on-surface-variant">
+                                        <span class="material-symbols-outlined text-[14px]" data-icon="code_blocks">code_blocks</span>
+                                        <span class="font-code-sm text-code-sm uppercase">UTF-8</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 text-secondary">
+                                        <span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                                        <span class="font-code-sm text-code-sm uppercase">Ready</span>
+                                    </div>
+                                </div>
+                            </footer>
                         </div>
                     </div>
                 </div>
 
                 <!-- Documentation View -->
-                <div id="documentation-view" class="view-content p-container-padding-desktop space-y-stack-lg" style="display: none;">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
-                        <div class="md:col-span-2">
-                            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">GitWeaver Technical Documentation</h2>
-                            <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg">Professional tools for GitHub repository orchestration, headless content management, and automated provisioning.</p>
-
-                            <div class="space-y-stack-lg">
-                                <!-- Auth Section -->
-                                <section class="bg-surface-container-low border border-outline-variant p-stack-lg rounded-xl">
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 flex items-center gap-2">
-                                        <span class="material-symbols-outlined">security</span>
-                                        Authentication & Security (OAuth 2.0)
-                                    </h3>
-                                    <p class="font-body-md text-body-md text-on-surface-variant mb-3">GitWeaver uses secure OAuth 2.0 authentication to manage user authorization with GitHub:</p>
-                                    <ul class="space-y-2 ml-4 text-on-surface-variant">
-                                        <li class="font-body-md text-body-md">✓ Authorization Request with repo and user scopes</li>
-                                        <li class="font-body-md text-body-md">✓ Secure token exchange via server-to-server POST</li>
-                                        <li class="font-body-md text-body-md">✓ HTTP-only cookies prevent XSS attacks</li>
-                                    </ul>
-                                </section>
-
-                                <!-- Provisioning Section -->
-                                <section class="bg-surface-container-low border border-outline-variant p-stack-lg rounded-xl">
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 flex items-center gap-2">
-                                        <span class="material-symbols-outlined">rocket_launch</span>
-                                        Repository Provisioning Logic
-                                    </h3>
-                                    <p class="font-body-md text-body-md text-on-surface-variant mb-3">Create repositories with dynamic initialization:</p>
-                                    <ul class="space-y-2 ml-4 text-on-surface-variant">
-                                        <li class="font-body-md text-body-md">✓ Auto-initialize with README, .gitignore, License</li>
-                                        <li class="font-body-md text-body-md">✓ Specify Public/Private visibility</li>
-                                        <li class="font-body-md text-body-md">✓ Configure default branch (main/develop)</li>
-                                    </ul>
-                                </section>
-
-                                <!-- Headless CMS Section -->
-                                <section class="bg-surface-container-low border border-outline-variant p-stack-lg rounded-xl">
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 flex items-center gap-2">
-                                        <span class="material-symbols-outlined">code</span>
-                                        Headless Content Management
-                                    </h3>
-                                    <p class="font-body-md text-body-md text-on-surface-variant mb-3">Edit repository content without cloning:</p>
-                                    <ul class="space-y-2 ml-4 text-on-surface-variant">
-                                        <li class="font-body-md text-body-md">✓ SHA-based optimistic locking for data integrity</li>
-                                        <li class="font-body-md text-body-md">✓ Base64-encoded content uploads</li>
-                                        <li class="font-body-md text-body-md">✓ Support for multi-segment file paths</li>
-                                    </ul>
-                                </section>
+                <div id="documentation-view" class="view-content" style="display: none;">
+                    <div class="max-w-5xl mx-auto px-container-padding-desktop py-stack-lg">
+                        <!-- Page Hero -->
+                        <section class="mb-12">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="px-2 py-0.5 rounded text-secondary-container bg-secondary-container/10 border border-secondary-container/20 font-label-caps text-label-caps uppercase">System Docs v1.0</span>
                             </div>
-                        </div>
+                            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">GitWeaver Technical Documentation</h2>
+                            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl leading-relaxed">
+                                Surgical tools for GitHub repository orchestration, headless content management, and automated provisioning. Designed for technical precision.
+                            </p>
+                        </section>
 
-                        <!-- Sidebar -->
-                        <aside class="md:col-span-1">
-                            <div class="sticky top-20 space-y-stack-md">
-                                <div class="bg-primary-container text-on-primary-container p-stack-md rounded-xl">
-                                    <span class="font-label-caps text-label-caps uppercase block mb-2">CURRENT STATUS</span>
-                                    <div class="font-headline-md text-headline-md">Stability Matrix</div>
-                                    <p class="font-body-sm text-body-sm mt-2">Production ready for enterprise-grade repository mirroring.</p>
-                                    <div class="mt-4 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                        <span class="font-body-sm text-body-sm">99.9% Uptime</span>
+                        <!-- Origin Story Section -->
+                        <section class="mb-16 grid grid-cols-1 md:grid-cols-12 gap-gutter" id="origin-story">
+                            <div class="md:col-span-8 bg-surface-container-low border border-outline-variant p-8 rounded-lg relative overflow-hidden group">
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <h3 class="font-headline-md text-headline-md text-on-surface">The Origin Story: From Chaos to GitWeaver</h3>
+                                    </div>
+                                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-6">
+                                        It started with a crashing laptop and <span class="text-primary font-semibold">47 unpublished projects</span>. 3 AM, Windows bluescreen. I needed backup insurance. So I built GitWeaver—a surgical tool for GitHub ops. OAuth-secured, headless editing, one-click deploys.
+                                    </p>
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col">
+                                            <span class="font-label-caps text-label-caps text-outline uppercase">Motivation</span>
+                                            <span class="font-body-sm text-body-sm text-on-surface">Data Redundancy</span>
+                                        </div>
+                                        <div class="w-px h-8 bg-outline-variant"></div>
+                                        <div class="flex flex-col">
+                                            <span class="font-label-caps text-label-caps text-outline uppercase">Context</span>
+                                            <span class="font-body-sm text-body-sm text-on-surface">GitHub REST API</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    <span class="material-symbols-outlined text-[120px]" data-icon="history_edu">history_edu</span>
+                                </div>
+                            </div>
+                            <div class="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+                                <div>
+                                    <span class="font-label-caps text-label-caps text-secondary mb-2 block uppercase">Current Status</span>
+                                    <h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Stability Matrix</h4>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Production ready for enterprise-grade repository mirroring.</p>
+                                </div>
+                                <div class="mt-6 space-y-3">
+                                    <div class="flex justify-between items-center text-body-sm">
+                                        <span class="text-on-surface-variant">Uptime</span>
+                                        <span class="text-secondary font-code-sm">99.98%</span>
+                                    </div>
+                                    <div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+                                        <div class="bg-secondary h-full w-[99.98%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
-                                <div class="bg-surface-container-low border border-outline-variant p-stack-md rounded-xl">
-                                    <span class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-2">TECH STACK</span>
-                                    <ul class="space-y-1 text-body-sm text-body-sm">
-                                        <li class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                            Node.js + Express 5.x
-                                        </li>
-                                        <li class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                            GitHub Octokit SDK
-                                        </li>
-                                        <li class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                            OAuth 2.0 Security
-                                        </li>
+                        <!-- System Architecture Section -->
+                        <section class="mb-16" id="architecture">
+                            <div class="flex items-center justify-between mb-8">
+                                <h3 class="font-headline-md text-headline-md text-on-surface">System Architecture</h3>
+                                <div class="text-on-surface-variant flex items-center gap-2 font-code-sm text-code-sm">
+                                    <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                    Node.js / Express / GitHub Octokit SDK
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                                <div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+                                    <span class="material-symbols-outlined text-primary mb-4" data-icon="lock">lock</span>
+                                    <h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">1. Auth & Security</h4>
+                                    <ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+                                        <li>Secure OAuth 2.0 handshake.</li>
+                                        <li>Tokens in <code class="font-code-sm bg-surface-container-highest px-1 rounded text-primary">HTTP-only</code> cookies.</li>
+                                    </ul>
+                                </div>
+                                <div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+                                    <span class="material-symbols-outlined text-primary mb-4" data-icon="auto_settings">auto_mode</span>
+                                    <h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">2. Provisioning Logic</h4>
+                                    <ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+                                        <li>Dynamic Initialization (auto_init).</li>
+                                        <li>Full Config Control (Public/Private).</li>
+                                    </ul>
+                                </div>
+                                <div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+                                    <span class="material-symbols-outlined text-primary mb-4" data-icon="edit_note">edit_note</span>
+                                    <h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">3. Headless CMS</h4>
+                                    <ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+                                        <li>SHA-Based Updates for data integrity.</li>
+                                        <li>Base64-encoded updates via REST API.</li>
                                     </ul>
                                 </div>
                             </div>
-                        </aside>
+                        </section>
+
+                        <!-- Technical Specs Area -->
+                        <section class="mb-16" id="specs">
+                            <div class="flex items-center gap-4 mb-6">
+                                <h3 class="font-headline-md text-headline-md text-on-surface">Technical Specifications</h3>
+                                <div class="flex-1 h-px bg-outline-variant"></div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+                                <div class="lg:col-span-1 space-y-6">
+                                    <div class="p-4 border border-outline-variant rounded-lg bg-surface-container-low">
+                                        <span class="font-label-caps text-label-caps text-outline uppercase mb-3 block">Backend Stack</span>
+                                        <p class="font-body-md text-body-md text-on-surface">Node.js, Express 5.x, Octokit</p>
+                                    </div>
+                                    <div class="p-4 border border-outline-variant rounded-lg bg-surface-container-low">
+                                        <span class="font-label-caps text-label-caps text-outline uppercase mb-3 block">Frontend Layer</span>
+                                        <p class="font-body-md text-body-md text-on-surface">Vanilla JS (ES6+), CSS Grid/Flexbox, Prism.js</p>
+                                    </div>
+                                </div>
+                                <div class="lg:col-span-2 bg-[#010409] border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+                                    <div class="bg-surface-container-low px-4 py-2 border-b border-outline-variant flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-3 h-3 rounded-full bg-error/40"></span>
+                                            <span class="w-3 h-3 rounded-full bg-secondary/40"></span>
+                                            <span class="w-3 h-3 rounded-full bg-primary/40"></span>
+                                            <span class="ml-4 font-code-sm text-code-sm text-on-surface-variant">OctokitInitializer.js</span>
+                                        </div>
+                                        <span class="material-symbols-outlined text-outline text-[18px]" data-icon="content_copy">content_copy</span>
+                                    </div>
+                                    <div class="p-6 font-code-md text-code-md leading-relaxed overflow-x-auto">
+                                        <pre><code class="language-javascript">const { Octokit } = require("@octokit/rest");
+
+async function provisionNewRepo(name, isPrivate) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  
+  /* Surgical Provisioning Logic */
+  const response = await octokit.repos.createForAuthenticatedUser({
+    name,
+    private: isPrivate,
+    auto_init: true
+  });
+
+  return response.data;
+}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
