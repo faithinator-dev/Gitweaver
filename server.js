@@ -123,6 +123,23 @@ app.get("/auth/github/callback", async (req, res) => {
 
 // --- API Endpoints ---
 
+// Get current user info
+app.get("/api/user", async (req, res) => {
+  const octokit = getOctokit(req);
+  if (!octokit) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const { data } = await octokit.rest.users.getAuthenticated();
+    res.json(data);
+  } catch (error) {
+    if (error.status === 401) {
+      res.clearCookie("github_token");
+      return res.status(401).json({ error: "GitHub session expired. Please sign in again." });
+    }
+    res.status(error.status || 500).json({ error: "Failed to fetch user info" });
+  }
+});
+
 // Check authentication status
 app.get("/api/auth-status", (req, res) => {
   const token = req.signedCookies.github_token;
@@ -158,7 +175,7 @@ app.post("/api/create-repo", async (req, res) => {
   const octokit = getOctokit(req);
   if (!octokit) return res.status(401).json({ error: "Unauthorized" });
 
-  const { name, description, private: isPrivate, default_branch, license_template, gitignore_template } = req.body;
+  const { name, description, private: isPrivate, default_branch, readme, gitignore, license } = req.body;
   if (!name) return res.status(400).json({ error: "Repository name is required" });
 
   try {
@@ -167,18 +184,61 @@ app.post("/api/create-repo", async (req, res) => {
       description: description || "",
       private: isPrivate === true,
       default_branch: default_branch || "main",
-      auto_init: !!(license_template || gitignore_template),
-      license_template: license_template || undefined,
-      gitignore_template: gitignore_template || undefined,
+      auto_init: readme || gitignore || license,
     });
-    res.status(201).json({ message: "Repository created successfully", repo: data });
+    res.status(201).json(data);
   } catch (error) {
-    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
-    res.status(error.status || 500).json({ error: `GitHub API Error: ${errorMessage}` });
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    res.status(error.status || 500).json({ error: `Failed to create repository: ${errorMessage}` });
   }
 });
 
-// Update or Create a file
+// Edit file in repository
+app.post("/api/edit-file", async (req, res) => {
+  const octokit = getOctokit(req);
+  if (!octokit) return res.status(401).json({ error: "Unauthorized" });
+
+  const { repo, path: filePath, content, message } = req.body;
+  if (!repo || !filePath || content === undefined) {
+    return res.status(400).json({ error: "Missing required parameters: repo, path, or content" });
+  }
+
+  try {
+    const [owner, repoName] = repo.split("/");
+    if (!owner || !repoName) {
+      return res.status(400).json({ error: "Repository format should be 'owner/repo'" });
+    }
+
+    // Get existing file SHA if it exists
+    let sha;
+    try {
+      const { data } = await octokit.rest.repos.getContent({
+        owner,
+        repo: repoName,
+        path: filePath,
+      });
+      sha = data.sha;
+    } catch (e) {
+      // File doesn't exist, which is fine
+    }
+
+    const { data } = await octokit.rest.repos.createOrUpdateFileContents({
+      owner,
+      repo: repoName,
+      path: filePath,
+      message: message || `Update ${filePath}`,
+      content: Buffer.from(content).toString("base64"),
+      sha: sha,
+    });
+
+    res.json({ message: "File updated successfully", data });
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || error.message;
+    res.status(error.status || 500).json({ error: `Failed to update file: ${errorMessage}` });
+  }
+});
+
+// Update or Create a file (legacy endpoint)
 app.post("/api/update-file", async (req, res) => {
   const octokit = getOctokit(req);
   if (!octokit) return res.status(401).json({ error: "Unauthorized" });

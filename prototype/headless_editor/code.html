@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #10141a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #31353c;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #424753;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface": "#10141a",
+            "surface-dim": "#10141a",
+            "secondary": "#6bde80",
+            "surface-container-lowest": "#0a0e14",
+            "on-primary-fixed-variant": "#004493",
+            "on-surface": "#dfe2eb",
+            "surface-container-high": "#262a31",
+            "background": "#10141a",
+            "on-surface-variant": "#c2c6d6",
+            "on-tertiary": "#3c0091",
+            "on-tertiary-container": "#f5ecff",
+            "primary-fixed-dim": "#adc6ff",
+            "primary": "#adc6ff",
+            "error": "#ffb4ab",
+            "inverse-on-surface": "#2d3137",
+            "on-tertiary-fixed-variant": "#5516be",
+            "on-secondary-fixed-variant": "#00531f",
+            "primary-fixed": "#d8e2ff",
+            "on-primary": "#002e68",
+            "on-error": "#690005",
+            "surface-container-highest": "#31353c",
+            "secondary-fixed-dim": "#6bde80",
+            "error-container": "#93000a",
+            "surface-tint": "#adc6ff",
+            "tertiary": "#d0bcff",
+            "inverse-primary": "#005bc0",
+            "tertiary-container": "#7c4ce6",
+            "secondary-container": "#2fa54f",
+            "on-background": "#dfe2eb",
+            "on-secondary": "#003913",
+            "on-primary-container": "#ecefff",
+            "surface-container-low": "#181c22",
+            "outline-variant": "#424753",
+            "on-secondary-container": "#003210",
+            "on-secondary-fixed": "#002108",
+            "surface-variant": "#31353c",
+            "secondary-fixed": "#88fb99",
+            "surface-container": "#1c2026",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed": "#001a41",
+            "surface-bright": "#353940",
+            "tertiary-fixed": "#e9ddff",
+            "primary-container": "#0969da",
+            "outline": "#8c909f",
+            "inverse-surface": "#dfe2eb",
+            "tertiary-fixed-dim": "#d0bcff",
+            "on-tertiary-fixed": "#23005c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "16px",
+            "container-padding-desktop": "24px",
+            "stack-md": "16px",
+            "stack-sm": "8px",
+            "container-padding-mobile": "16px",
+            "unit": "4px",
+            "sidebar-width": "260px",
+            "stack-lg": "24px"
+          },
+          "fontFamily": {
+            "label-caps": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-sm": ["Inter"],
+            "code-sm": ["JetBrains Mono"],
+            "headline-md": ["Inter"],
+            "code-md": ["JetBrains Mono"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+            "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-lg": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary/30 overflow-hidden h-screen flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width flex flex-col h-full py-6 w-[260px] bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-outline-variant z-40">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">GitWeaver</h1>
+<div class="mt-2 flex items-center gap-3">
+<img alt="octocat" class="w-6 h-6 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO3SLh7HqAzpIHOR3HBfnTkGUbFgDYWK04EIJFttXJUgrhHOa0WYfe3KM2Gu9d1Rw74jUJWjs0W4IfTcl0J6GNiI2_gqITNxgxuwUYy4EtNESslFxLGORlVHPbjytuk7tPiM3UM-pcsIx_K8wTFk7lPk4xKFZG4m6hkc4851qf7GRdweDCcC2jQtx1-9q3ekmp7XW3DDNlXCEy1FgLeyqGOsWj-1-c4ZAt6lbbF3Q7XnryMNi4rO081CRlKwQSblJyZrBDn54v4QU"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-medium text-on-surface">Connected: octocat</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        Dashboard
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+        Provisioning
+      </a>
+<a class="bg-surface-container-high text-primary border-r-2 border-primary flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+        Headless Editor
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+        Documentation
+      </a>
+</nav>
+<div class="mt-auto px-4 space-y-1">
+<button class="w-full mb-4 bg-primary text-on-primary py-2 px-4 rounded-lg font-body-md font-semibold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+        New Repository
+      </button>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+        Settings
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 font-body-md text-body-md font-medium transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+        Support
+      </a>
+</div>
+</aside>
+<!-- Main View Area -->
+<div class="ml-[260px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-gutter h-14 w-full bg-surface/80 backdrop-blur-md sticky top-0 right-0 z-30 border-b border-outline-variant">
+<div class="flex items-center gap-6 flex-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">GitWeaver</span>
+</div>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 w-full font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary" placeholder="Search repositories..." type="text"/>
+</div>
+<nav class="flex items-center gap-4">
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Repositories</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Activity</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Deployments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-highest p-1.5 rounded-lg" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-highest p-1.5 rounded-lg" data-icon="settings_input_component">settings_input_component</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-highest p-1.5 rounded-lg" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Editor Header (Sub-navigation) -->
+<div class="h-12 border-b border-outline-variant bg-surface-container-lowest flex items-center justify-between px-gutter">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="account_tree">account_tree</span>
+<div class="flex items-center text-on-surface font-body-sm">
+<span class="text-on-surface-variant">gitweaver</span>
+<span class="mx-1 text-outline-variant">/</span>
+<span class="text-on-surface-variant font-medium">src</span>
+<span class="mx-1 text-outline-variant">/</span>
+<span class="font-bold">index.js</span>
+</div>
+<div class="h-4 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-1.5 text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="call_split">call_split</span>
+<span class="font-code-sm text-code-sm">main</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<input class="bg-surface-container-low border border-outline-variant rounded px-3 py-1 font-body-sm text-body-sm w-64 focus:outline-none focus:border-primary transition-all" placeholder="Commit message..." type="text"/>
+<button class="bg-[#238636] hover:bg-[#2ea043] text-[#ffffff] px-4 py-1.5 rounded font-body-sm font-semibold transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+          Commit Changes
+        </button>
+</div>
+</div>
+<!-- Main Editor Interface -->
+<main class="flex-1 flex overflow-hidden">
+<!-- File Explorer Panel -->
+<nav class="w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col overflow-y-auto">
+<div class="px-4 py-2 border-b border-outline-variant bg-surface-container-low">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">EXPLORER</span>
+</div>
+<div class="py-2">
+<!-- Folder -->
+<div class="flex items-center gap-2 px-4 py-1.5 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="folder">folder</span>
+<span class="font-body-sm">src</span>
+</div>
+<!-- Nested Files -->
+<div class="flex items-center gap-2 px-4 py-1.5 pl-10 bg-surface-container-high border-r-2 border-primary text-primary cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="javascript">javascript</span>
+<span class="font-body-sm font-medium">index.js</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-1.5 pl-10 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="javascript">javascript</span>
+<span class="font-body-sm">router.js</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-1.5 pl-10 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="css">css</span>
+<span class="font-body-sm">styles.css</span>
+</div>
+<!-- Root Files -->
+<div class="flex items-center gap-2 px-4 py-1.5 mt-2 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px] opacity-0" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary" data-icon="description">description</span>
+<span class="font-body-sm">package.json</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-1.5 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px] opacity-0" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary" data-icon="description">description</span>
+<span class="font-body-sm">README.md</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-1.5 text-on-surface-variant hover:bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined text-[18px] opacity-0" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-error" data-icon="lock">lock</span>
+<span class="font-body-sm">.env</span>
+</div>
+</div>
+</nav>
+<!-- Code Editor Content Area -->
+<section class="flex-1 bg-surface-container-lowest flex flex-col relative overflow-hidden">
+<!-- Editor Viewport -->
+<div class="flex-1 overflow-auto flex bg-[#0d1117]">
+<!-- Gutter -->
+<div class="w-12 bg-surface-container-lowest border-r border-outline-variant flex flex-col items-center py-4 font-code-sm text-outline-variant select-none">
+<span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span class="text-on-surface">16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+</div>
+<!-- Code Content -->
+<div class="flex-1 py-4 px-6 font-code-md text-code-md leading-6 whitespace-pre">
+<span class="text-tertiary">const</span> <span class="text-secondary">express</span> = <span class="text-primary">require</span>(<span class="text-[#88fb99]">'express'</span>);
+<span class="text-tertiary">const</span> <span class="text-secondary">app</span> = <span class="text-primary">express</span>();
+<span class="text-tertiary">const</span> <span class="text-secondary">PORT</span> = <span class="text-primary">process</span>.<span class="text-on-surface">env</span>.<span class="text-secondary">PORT</span> || <span class="text-[#d8e2ff]">3000</span>;
+
+<span class="text-outline">/* GitWeaver Auto-Generated Middleware */</span>
+<span class="text-secondary">app</span>.<span class="text-primary">use</span>(<span class="text-primary">express</span>.<span class="text-primary">json</span>());
+
+<span class="text-secondary">app</span>.<span class="text-primary">get</span>(<span class="text-[#88fb99]">'/'</span>, (<span class="text-secondary">req</span>, <span class="text-secondary">res</span>) =&gt; {
+    <span class="text-secondary">res</span>.<span class="text-primary">json</span>({
+        <span class="text-on-surface">status:</span> <span class="text-[#88fb99]">'healthy'</span>,
+        <span class="text-on-surface">orchestrator:</span> <span class="text-[#88fb99]">'GitWeaver Engine'</span>,
+        <span class="text-on-surface">uptime:</span> <span class="text-primary">process</span>.<span class="text-primary">uptime</span>()
+    });
+});
+
+<span class="bg-surface-container-high w-full block -mx-6 px-6 border-l-4 border-primary">
+<span class="text-secondary">app</span>.<span class="text-primary">listen</span>(<span class="text-secondary">PORT</span>, () =&gt; {
+    <span class="text-primary">console</span>.<span class="text-primary">log</span>(<span class="text-[#88fb99]">'Server running on port'</span>, <span class="text-secondary">PORT</span>);
+});</span>
+<span class="text-outline">// TODO: Implement automated headless deployment pipeline</span>
+<span class="text-tertiary">async function</span> <span class="text-primary">initOrchestration</span>() {
+    <span class="text-tertiary">try</span> {
+        <span class="text-tertiary">await</span> <span class="text-primary">weaver</span>.<span class="text-primary">connect</span>();
+    } <span class="text-tertiary">catch</span> (<span class="text-secondary">err</span>) {
+        <span class="text-primary">console</span>.<span class="text-primary">error</span>(<span class="text-secondary">err</span>);
+    }
+}
+          </div>
+</div>
+<!-- Terminal / Status Bar -->
+<div class="h-32 border-t border-outline-variant bg-surface-container-lowest flex flex-col">
+<div class="flex items-center px-4 py-1.5 border-b border-outline-variant gap-4">
+<button class="font-label-caps text-label-caps text-on-surface border-b border-primary pb-0.5">TERMINAL</button>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">DEBUG CONSOLE</button>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">OUTPUT</button>
+<div class="ml-auto flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-pointer" data-icon="add">add</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-pointer" data-icon="delete">delete</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-pointer" data-icon="close">close</span>
+</div>
+</div>
+<div class="flex-1 overflow-auto p-3 font-code-sm text-code-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="text-secondary">octocat@gitweaver</span>
+<span class="text-on-surface">:</span>
+<span class="text-primary">~/src</span>
+<span class="text-on-surface">$</span>
+<span>npm start</span>
+</div>
+<div class="text-on-surface mt-1 opacity-70">
+              &gt; gitweaver@1.0.0 start /app<br/>
+              &gt; node src/index.js<br/><br/>
+              Server running on port 3000<br/>
+              [GitWeaver] Connection established to orchestration engine...<br/>
+              [GitWeaver] Ready for headless operations.
+            </div>
+</div>
+</div>
+</section>
+<!-- Right Properties Panel -->
+<aside class="w-64 bg-surface-container-lowest border-l border-outline-variant flex flex-col p-4 gap-6">
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-3">FILE PROPERTIES</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Language</span>
+<span class="font-body-sm font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">JavaScript</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Size</span>
+<span class="font-body-sm text-on-surface">1.2 KB</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Lines</span>
+<span class="font-body-sm text-on-surface">42</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-3">VERSION CONTROL</h3>
+<div class="p-3 bg-surface-container-low border border-outline-variant rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="history">history</span>
+<span class="font-body-sm font-medium text-on-surface">Last Modified</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-1">2 hours ago</p>
+<p class="font-body-sm text-on-surface text-[12px] opacity-70">"Initial api setup for core services"</p>
+</div>
+</div>
+<div class="mt-auto">
+<div class="p-4 bg-tertiary-container/10 border border-tertiary-container/30 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-sm text-tertiary font-bold leading-tight">AI Assistant</h4>
+<p class="font-body-sm text-on-surface-variant mt-2 mb-3">Optimize this file for high-traffic headless requests?</p>
+<button class="w-full bg-tertiary text-on-tertiary py-2 rounded font-body-sm font-bold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="bolt">bolt</span>
+                Optimize Now
+              </button>
+</div>
+<div class="absolute top-0 right-0 p-2 opacity-20">
+<span class="material-symbols-outlined text-[48px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Global Footer Bar -->
+<footer class="h-6 bg-primary-container text-on-primary-container flex items-center px-4 justify-between select-none">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 font-body-sm text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]" data-icon="sync">sync</span>
+<span>In Sync with GitHub</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]" data-icon="error">error</span>
+<span>0</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+<span>2</span>
+</div>
+</div>
+<div class="flex items-center gap-4 font-body-sm text-[11px]">
+<span>Ln 16, Col 24</span>
+<span>Spaces: 4</span>
+<span>UTF-8</span>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Ready</span>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

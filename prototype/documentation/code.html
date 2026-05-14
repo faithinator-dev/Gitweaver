@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GitWeaver Documentation | Origin Story</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #10141a;
+            color: #dfe2eb;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0e14;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #31353c;
+            border-radius: 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#10141a",
+                      "surface-dim": "#10141a",
+                      "secondary": "#6bde80",
+                      "surface-container-lowest": "#0a0e14",
+                      "on-primary-fixed-variant": "#004493",
+                      "on-surface": "#dfe2eb",
+                      "surface-container-high": "#262a31",
+                      "background": "#10141a",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-tertiary": "#3c0091",
+                      "on-tertiary-container": "#f5ecff",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary": "#adc6ff",
+                      "error": "#ffb4ab",
+                      "inverse-on-surface": "#2d3137",
+                      "on-tertiary-fixed-variant": "#5516be",
+                      "on-secondary-fixed-variant": "#00531f",
+                      "primary-fixed": "#d8e2ff",
+                      "on-primary": "#002e68",
+                      "on-error": "#690005",
+                      "surface-container-highest": "#31353c",
+                      "secondary-fixed-dim": "#6bde80",
+                      "error-container": "#93000a",
+                      "surface-tint": "#adc6ff",
+                      "tertiary": "#d0bcff",
+                      "inverse-primary": "#005bc0",
+                      "tertiary-container": "#7c4ce6",
+                      "secondary-container": "#2fa54f",
+                      "on-background": "#dfe2eb",
+                      "on-secondary": "#003913",
+                      "on-primary-container": "#ecefff",
+                      "surface-container-low": "#181c22",
+                      "outline-variant": "#424753",
+                      "on-secondary-container": "#003210",
+                      "on-secondary-fixed": "#002108",
+                      "surface-variant": "#31353c",
+                      "secondary-fixed": "#88fb99",
+                      "surface-container": "#1c2026",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed": "#001a41",
+                      "surface-bright": "#353940",
+                      "tertiary-fixed": "#e9ddff",
+                      "primary-container": "#0969da",
+                      "outline": "#8c909f",
+                      "inverse-surface": "#dfe2eb",
+                      "tertiary-fixed-dim": "#d0bcff",
+                      "on-tertiary-fixed": "#23005c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-padding-desktop": "24px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "container-padding-mobile": "16px",
+                      "unit": "4px",
+                      "sidebar-width": "260px",
+                      "stack-lg": "24px"
+              },
+              "fontFamily": {
+                      "label-caps": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "code-sm": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 z-40">
+<!-- Brand Header -->
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">GitWeaver</h1>
+<div class="flex items-center gap-2 mt-2">
+<img alt="User GitHub Profile Avatar" class="w-5 h-5 rounded-full border border-outline-variant" data-alt="A professional, high-resolution portrait of a software engineer profile avatar. The person has a neutral, focused expression. The background is a clean, dark studio setting with subtle blue rim lighting, creating a high-tech, professional atmosphere that fits a developer tool interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwxe5CX0TGaWnZRFT_SHjb3Giik-HFGNmlKS5B5KS7PxYgX9Rrk-4UQnyS15mxYLCujN3kMX_J6Rw7Up6WrSC9Awk95nArIErm3IU2nThIlb8AmxrSLChMZXR-sS2GtNICKhb1LKwIjcI51FtpwCr0W4Kl1oSR5u-6kUwiDNnwFAlBCPvJvv0hvlOdQMOn_8MbC0bQ4PI96bQPcqH33Cd4AriCVRyh48-OjIr9IbnZWwI3Msr4sBvLHA45S2c1NV9bzUeTC9SzAvs"/>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Connected: octocat</p>
+</div>
+</div>
+<!-- Main Nav -->
+<nav class="flex-1 space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md font-medium">Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+<span class="font-body-md text-body-md font-medium">Provisioning</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-body-md text-body-md font-medium">Headless Editor</span>
+</a>
+<!-- Active State: Documentation -->
+<a class="bg-surface-container-high text-primary border-r-2 border-primary flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-body-md text-body-md font-medium">Documentation</span>
+</a>
+</nav>
+<!-- CTA -->
+<div class="px-4 mb-6">
+<button class="w-full py-2 bg-[#238636] text-white rounded-[4px] font-body-sm text-body-sm font-semibold hover:brightness-110 active:scale-[0.98] transition-all">
+                New Repository
+            </button>
+</div>
+<!-- Footer Nav -->
+<div class="border-t border-outline-variant pt-4">
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md font-medium">Settings</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-3 transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-body-md text-body-md font-medium">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width flex-1 h-screen overflow-y-auto custom-scrollbar bg-surface relative">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-30 flex items-center justify-between px-gutter h-14 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex items-center gap-6">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">GitWeaver</span>
+<nav class="hidden md:flex items-center gap-4">
+<a class="font-body-sm text-body-sm font-medium text-on-surface-variant hover:text-on-surface" href="#">Repositories</a>
+<a class="font-body-sm text-body-sm font-medium text-on-surface-variant hover:text-on-surface" href="#">Activity</a>
+<a class="font-body-sm text-body-sm font-medium text-on-surface-variant hover:text-on-surface" href="#">Deployments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden lg:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[18px]" data-icon="search">search</span>
+<input class="bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 text-body-sm font-code-sm focus:outline-none focus:border-primary w-64 transition-all" placeholder="Search documentation..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+</button>
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="max-w-5xl mx-auto px-container-padding-desktop py-stack-lg">
+<!-- Page Hero -->
+<section class="mb-12">
+<div class="flex items-center gap-2 mb-4">
+<span class="px-2 py-0.5 rounded text-secondary-container bg-secondary-container/10 border border-secondary-container/20 font-label-caps text-label-caps uppercase">System Docs v1.0</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">GitWeaver Technical Documentation</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl leading-relaxed">
+                    Surgical tools for GitHub repository orchestration, headless content management, and automated provisioning. Designed for technical precision.
+                </p>
+</section>
+<!-- Origin Story: Bento Section -->
+<section class="mb-16 grid grid-cols-1 md:grid-cols-12 gap-gutter" id="origin-story">
+<div class="md:col-span-8 bg-surface-container-low border border-outline-variant p-8 rounded-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">The Origin Story: From Chaos to GitWeaver</h3>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-6">
+                            It started with a crashing laptop and <span class="text-primary font-semibold">47 unpublished projects</span>. 3 AM, Windows bluescreen. I needed backup insurance. So I built GitWeaver—a surgical tool for GitHub ops. OAuth-secured, headless editing, one-click deploys.
+                        </p>
+<div class="flex gap-4">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Motivation</span>
+<span class="font-body-sm text-body-sm text-on-surface">Data Redundancy</span>
+</div>
+<div class="w-px h-8 bg-outline-variant"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Context</span>
+<span class="font-body-sm text-body-sm text-on-surface">GitHub REST API</span>
+</div>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[120px]" data-icon="history_edu">history_edu</span>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-secondary mb-2 block uppercase">Current Status</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Stability Matrix</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Production ready for enterprise-grade repository mirroring.</p>
+</div>
+<div class="mt-6 space-y-3">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Uptime</span>
+<span class="text-secondary font-code-sm">99.98%</span>
+</div>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[99.98%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- System Architecture: Technical Grid -->
+<section class="mb-16" id="architecture">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface">System Architecture</h3>
+<div class="text-on-surface-variant flex items-center gap-2 font-code-sm text-code-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Node.js / Express / GitHub Octokit SDK
+                    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Auth -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="lock">lock</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">1. Auth &amp; Security</h4>
+<ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+<li>Secure OAuth 2.0 handshake.</li>
+<li>Tokens in <code class="font-code-sm bg-surface-container-highest px-1 rounded text-primary">HTTP-only</code> cookies.</li>
+</ul>
+</div>
+<!-- Provisioning -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="auto_settings">auto_mode</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">2. Provisioning Logic</h4>
+<ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+<li>Dynamic Initialization (auto_init).</li>
+<li>Full Config Control (Public/Private).</li>
+</ul>
+</div>
+<!-- CMS -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="edit_note">edit_note</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">3. Headless CMS</h4>
+<ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+<li>SHA-Based Updates for data integrity.</li>
+<li>Base64-encoded updates via REST API.</li>
+</ul>
+</div>
+<!-- Sync -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="sync">sync</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">4. Remote Sync</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Context-aware Git command generation for alignment.</p>
+<div class="bg-surface-container-lowest p-3 rounded font-code-sm text-code-sm text-secondary border border-outline-variant">
+                            git remote add origin ...
+                        </div>
+</div>
+<!-- Metadata -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="data_object">data_object</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">5. Metadata Insights</h4>
+<ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+<li>Real-time inventory of assets.</li>
+<li>Linguist language surfacing.</li>
+</ul>
+</div>
+<!-- Advanced Ops -->
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="terminal">terminal</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">6. Advanced Ops</h4>
+<ul class="font-body-sm text-body-sm text-on-surface-variant space-y-2 list-disc pl-4">
+<li>Commit history activity tracking.</li>
+<li>Branch lifecycle management (refs).</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Technical Specifications & Code Block -->
+<section class="mb-16" id="specs">
+<div class="flex items-center gap-4 mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Technical Specifications</h3>
+<div class="flex-1 h-px bg-outline-variant"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Text Specs -->
+<div class="lg:col-span-1 space-y-6">
+<div class="p-4 border border-outline-variant rounded-lg bg-surface-container-low">
+<span class="font-label-caps text-label-caps text-outline uppercase mb-3 block">Backend Stack</span>
+<p class="font-body-md text-body-md text-on-surface">Node.js, Express 5.x, Octokit</p>
+</div>
+<div class="p-4 border border-outline-variant rounded-lg bg-surface-container-low">
+<span class="font-label-caps text-label-caps text-outline uppercase mb-3 block">Frontend Layer</span>
+<p class="font-body-md text-body-md text-on-surface">Vanilla JS (ES6+), CSS Grid/Flexbox, Prism.js</p>
+</div>
+<div class="p-4 border border-outline-variant rounded-lg bg-surface-container-low">
+<span class="font-label-caps text-label-caps text-outline uppercase mb-3 block">Primary API</span>
+<p class="font-body-md text-body-md text-on-surface">GitHub REST API v3</p>
+</div>
+</div>
+<!-- Code Sample Area -->
+<div class="lg:col-span-2 bg-[#010409] border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<div class="bg-surface-container-low px-4 py-2 border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error/40"></span>
+<span class="w-3 h-3 rounded-full bg-secondary/40"></span>
+<span class="w-3 h-3 rounded-full bg-primary/40"></span>
+<span class="ml-4 font-code-sm text-code-sm text-on-surface-variant">OctokitInitializer.js</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="content_copy">content_copy</span>
+</div>
+<div class="p-6 font-code-md text-code-md leading-relaxed overflow-x-auto custom-scrollbar">
+<pre class="text-[#c9d1d9]"><span class="text-[#ff7b72]">const</span> { Octokit } = <span class="text-[#d2a8ff]">require</span>(<span class="text-[#a5d6ff]">"@octokit/rest"</span>);
+
+<span class="text-[#ff7b72]">async function</span> <span class="text-[#d2a8ff]">provisionNewRepo</span>(name, isPrivate) {
+  <span class="text-[#ff7b72]">const</span> octokit = <span class="text-[#ff7b72]">new</span> <span class="text-[#d2a8ff]">Octokit</span>({ auth: process.env.GITHUB_TOKEN });
+  
+  <span class="text-[#8b949e]">/* Surgical Provisioning Logic */</span>
+  <span class="text-[#ff7b72]">const</span> response = <span class="text-[#ff7b72]">await</span> octokit.repos.<span class="text-[#d2a8ff]">createForAuthenticatedUser</span>({
+    name,
+    private: isPrivate,
+    auto_init: <span class="text-[#79c0ff]">true</span>
+  });
+
+  <span class="text-[#ff7b72]">return</span> response.data;
+}</pre>
+</div>
+</div>
+</div>
+</section>
+<!-- Interface Philosophy -->
+<section class="mb-16" id="philosophy">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6">Interface Design Philosophy</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="flex flex-col items-center text-center p-6 border border-outline-variant rounded-lg bg-surface-container-lowest">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined" data-icon="side_navigation">side_navigation</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold mb-2">Sidebar-Driven</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Persistent navigation anchors for high-frequency switching between repositories.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6 border border-outline-variant rounded-lg bg-surface-container-lowest">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4">
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold mb-2">Modal-Based Deep Dives</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Context-focused editing environments without losing global application state.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6 border border-outline-variant rounded-lg bg-surface-container-lowest">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary mb-4">
+<span class="material-symbols-outlined" data-icon="integration_instructions">integration_instructions</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold mb-2">Integrated Tooling</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Prism.js syntax highlighting for true code-first content management.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Floating Action Component (Internal Navigation) -->
+<div class="fixed bottom-8 right-8 flex flex-col gap-3 items-end">
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high border border-outline-variant rounded-full text-body-sm font-medium text-on-surface shadow-lg backdrop-blur-xl">
+<span class="material-symbols-outlined text-[16px]" data-icon="keyboard_arrow_up">keyboard_arrow_up</span>
+                 Jump to top
+             </div>
+<button class="flex items-center gap-3 px-6 py-4 bg-primary text-on-primary rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+<span class="font-body-md text-body-md font-bold">Edit these Docs</span>
+</button>
+</div>
+</main>
+</body></html>

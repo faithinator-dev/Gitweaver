@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GitWeaver - Provisioning</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #10141a;
+            color: #dfe2eb;
+            margin: 0;
+        }
+        .form-input-focus:focus {
+            border-color: #0969da;
+            outline: none;
+            box-shadow: 0 0 0 1px #0969da;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#10141a",
+                        "surface-dim": "#10141a",
+                        "secondary": "#6bde80",
+                        "surface-container-lowest": "#0a0e14",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-surface": "#dfe2eb",
+                        "surface-container-high": "#262a31",
+                        "background": "#10141a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary": "#3c0091",
+                        "on-tertiary-container": "#f5ecff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary": "#adc6ff",
+                        "error": "#ffb4ab",
+                        "inverse-on-surface": "#2d3137",
+                        "on-tertiary-fixed-variant": "#5516be",
+                        "on-secondary-fixed-variant": "#00531f",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary": "#002e68",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#31353c",
+                        "secondary-fixed-dim": "#6bde80",
+                        "error-container": "#93000a",
+                        "surface-tint": "#adc6ff",
+                        "tertiary": "#d0bcff",
+                        "inverse-primary": "#005bc0",
+                        "tertiary-container": "#7c4ce6",
+                        "secondary-container": "#2fa54f",
+                        "on-background": "#dfe2eb",
+                        "on-secondary": "#003913",
+                        "on-primary-container": "#ecefff",
+                        "surface-container-low": "#181c22",
+                        "outline-variant": "#424753",
+                        "on-secondary-container": "#003210",
+                        "on-secondary-fixed": "#002108",
+                        "surface-variant": "#31353c",
+                        "secondary-fixed": "#88fb99",
+                        "surface-container": "#1c2026",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#001a41",
+                        "surface-bright": "#353940",
+                        "tertiary-fixed": "#e9ddff",
+                        "primary-container": "#0969da",
+                        "outline": "#8c909f",
+                        "inverse-surface": "#dfe2eb",
+                        "tertiary-fixed-dim": "#d0bcff",
+                        "on-tertiary-fixed": "#23005c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-padding-desktop": "24px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "container-padding-mobile": "16px",
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-sm": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 z-40">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">GitWeaver</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Connected: octocat</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-6 py-3 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md font-medium">Dashboard</span>
+</a>
+<!-- Active State: Provisioning -->
+<a class="bg-surface-container-high text-primary border-r-2 border-primary flex items-center gap-3 px-6 py-3" href="#">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+<span class="font-body-md text-body-md font-medium">Provisioning</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-6 py-3 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-body-md text-body-md font-medium">Headless Editor</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-6 py-3 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-body-md text-body-md font-medium">Documentation</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full bg-secondary-container text-on-secondary-container py-2 rounded-lg font-medium flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Repository
+            </button>
+<div class="mt-6 border-t border-outline-variant pt-4 space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen bg-surface">
+<!-- TopAppBar -->
+<header class="sticky top-0 right-0 z-30 flex items-center justify-between px-gutter h-14 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="rebase_edit">rebase_edit</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Provisioning</span>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Repositories</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Activity</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium" href="#">Deployments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="bg-surface-container-low border border-outline-variant rounded-full pl-10 pr-4 py-1.5 text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 transition-all" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings_input_component">settings_input_component</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[12px] font-bold text-on-primary-container cursor-pointer">
+                        OC
+                    </div>
+</div>
+</div>
+</header>
+<!-- Provisioning Form Container -->
+<div class="max-w-4xl mx-auto px-container-padding-desktop py-stack-lg">
+<div class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Create a new repository</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">A repository contains all project files, including the revision history. Already have a project repository elsewhere? <a class="text-primary hover:underline" href="#">Import a repository.</a></p>
+</div>
+<form class="space-y-8">
+<!-- Repository Identity Section -->
+<section class="bg-surface-container-low border border-outline-variant p-stack-lg rounded-xl">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Owner</label>
+<div class="flex items-center gap-2 bg-surface-container p-3 rounded border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="account_circle">account_circle</span>
+<span class="font-body-md text-body-md font-medium">octocat</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="repo_name">Repository Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-3 rounded font-code-md text-code-md form-input-focus transition-all" id="repo_name" placeholder="my-awesome-tool" type="text"/>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Great repository names are short and memorable. Need inspiration? <span class="text-secondary italic">jubilant-octo-disco</span></p>
+</div>
+</div>
+<div class="mt-stack-md space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="description">Description <span class="normal-case opacity-60">(optional)</span></label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant p-3 rounded font-body-md text-body-md form-input-focus transition-all" id="description" placeholder="Explain what this repository is for..." rows="3"></textarea>
+</div>
+</section>
+<!-- Visibility Section -->
+<section class="border-t border-outline-variant pt-stack-lg">
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
+<input checked="" class="mt-1 text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="public" name="visibility" type="radio"/>
+<label class="flex items-start gap-3 cursor-pointer" for="public">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="public">public</span>
+<div>
+<span class="block font-body-md text-body-md font-bold text-on-surface">Public</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Anyone on the internet can see this repository. You choose who can commit.</span>
+</div>
+</label>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
+<input class="mt-1 text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" id="private" name="visibility" type="radio"/>
+<label class="flex items-start gap-3 cursor-pointer" for="private">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="lock">lock</span>
+<div>
+<span class="block font-body-md text-body-md font-bold text-on-surface">Private</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">You choose who can see and commit to this repository.</span>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Configuration Section -->
+<section class="bg-surface-container border border-outline-variant p-stack-lg rounded-xl space-y-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Initialize this repository with:</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Skip this step if you’re importing an existing repository.</p>
+</div>
+<div class="space-y-4">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-medium text-on-surface">Add a README file</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">This is where you can write a long description for your project.</span>
+</div>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-medium text-on-surface">Add .gitignore</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Choose which files not to track from a list of templates.</span>
+</div>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary bg-surface-container-lowest border-outline-variant" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-medium text-on-surface">Choose a license</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">A license tells others what they can and can't do with your code.</span>
+</div>
+</label>
+</div>
+<div class="pt-4 border-t border-outline-variant grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="default_branch">Default Branch Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-2 rounded font-code-sm text-code-sm form-input-focus transition-all" id="default_branch" type="text" value="main"/>
+</div>
+</div>
+</section>
+<!-- Final Action Section -->
+<div class="flex items-center justify-between border-t border-outline-variant pt-stack-lg">
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+                        You are creating a public repository in <span class="font-bold text-on-surface">octocat</span>.
+                    </p>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded-lg border border-outline-variant font-medium text-on-surface hover:bg-surface-container-high transition-colors" type="button">Cancel</button>
+<button class="px-8 py-2.5 rounded-lg bg-[#238636] text-white font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[20px]" data-icon="rocket_launch">rocket_launch</span>
+                            Create Repository
+                        </button>
+</div>
+</div>
+</form>
+</div>
+<!-- Secondary Visual Anchor (Bento Style) -->
+<div class="max-w-4xl mx-auto px-container-padding-desktop pb-24 grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="md:col-span-2 p-6 rounded-xl bg-surface-container-low border border-outline-variant flex items-center gap-6">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Automation Ready</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Your new repository will be automatically connected to GitWeaver's CI/CD pipeline for instant headless deployments.</p>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Health Score</span>
+<div class="mt-2 flex items-end gap-2">
+<span class="font-headline-md text-headline-md text-secondary">A+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant pb-1">Ready</span>
+</div>
+<div class="mt-4 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[92%]"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Backdrop Asset -->
+<div class="fixed bottom-0 right-0 p-8 pointer-events-none opacity-10">
+<img alt="Developer Branding" class="w-64 grayscale" data-alt="A macro photograph of a high-end mechanical keyboard with glowing RGB backlighting reflecting off dark, brushed metal surfaces. The aesthetic is extremely technical and precise, with sharp focus on the textures of the keycaps and the subtle teal and violet light bleed. This image evokes the professional atmosphere of a software developer's high-performance workspace in a dimly lit room. The mood is focused, surgical, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0CJ0dyo6JfRfX86w4FZq4Q6WyVhAbODlbvCbcvhIqpaoX9Y1KPbSxCo3LykiF8I8Q5as9r9zsGboeRFfck_onz6svhWcSzHB6qlpZrpaBr69JJgStBkahtzcnMl4rg50zKZQEFA9dpOZmBzMLNwTHWMFW2tB3zlEJnSkFKbYqEW-9E2XLitAQGtGcS2MXzOM5uCjNZhiH-y13N1ZGk_7snePnW2CnD1LE6qkbarK09AStvCvUjq4TUNkqfzzAqTDByBe17SIiFKM"/>
+</div>
+</body></html>

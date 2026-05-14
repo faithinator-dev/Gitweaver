@@ -78,3 +78,20 @@ The GitWeaver interface is designed for high-signal engineering workflows:
 - **Frontend**: Vanilla JavaScript (ES6+), CSS3 (Custom Variables/Grid/Flexbox), Prism.js.
 - **API Integration**: GitHub REST API v3.
 - **Security Protocols**: OAuth 2.0, Signed HTTP-Only Cookies, Environment Variable Encapsulation.
+
+## Getting Started
+
+1. Copy `.env.example` to `.env` and fill in your GitHub OAuth credentials.
+
+2. Install dependencies and start the server:
+
+```bash
+npm install
+npm start
+```
+
+3. Open the app at `http://localhost:3030` and use "Continue with GitHub" to authenticate.
+
+Notes:
+- The OAuth redirect URI must match the one configured in your GitHub OAuth app (`GITHUB_REDIRECT_URI`).
+- Tokens are stored in signed, HTTP-only cookies; no database is required for basic usage.
